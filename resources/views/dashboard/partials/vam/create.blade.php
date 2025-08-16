@@ -28,12 +28,9 @@
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
                                                             <label class="form-label">نام و نام خانوادگی</label>
-<<<<<<< HEAD
-                                                            <input name="name" type="text" class="form-control" value="{{ old('name') }}">
-=======
+
                                                             <input name="name" type="text" class="form-control"
                                                                   value="{{ old('name', Auth::user()->name) }}" readonly>
->>>>>>> 26b23e8 (final)
                                                             @error('name')
                                                             <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                             @enderror
@@ -42,11 +39,7 @@
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
                                                             <label class="form-label">کدملی</label>
-<<<<<<< HEAD
-                                                            <input name="idCard" type="text" class="form-control" value="">
-=======
                                                             <input name="idCard" type="text" class="form-control" value="{{ old('idCard', Auth::user()->idCard) }}" readonly>
->>>>>>> 26b23e8 (final)
                                                             @error('idCard')
                                                             <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                             @enderror
@@ -68,7 +61,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
-                                                            <label class="form-label">سرپرست واحد</label>
+                                                            <label class="form-label">مدیر واحد</label>
                                                             <select class="form-select" name="supervisors_id" aria-label="Default select example">
                                                                   <option value="" disabled selected>لطفاً انتخاب کنید</option>
                                                                   @forelse($supervisors as $supervisor)
@@ -86,14 +79,8 @@
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
                                                             <label class="form-label">مبلغ درخواستی (تومان)</label>
-<<<<<<< HEAD
-                                                            <input name="price" type="text" class="form-control" value="">
-=======
-
                                                             <input name="price" type="text" class="form-control" id="priceInput"
                                                                   value="{{ old('price') }}">
-
->>>>>>> 26b23e8 (final)
                                                             @error('price')
                                                             <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                             @enderror
@@ -103,6 +90,7 @@
                                                       <div class="mb-3">
                                                             <label class="form-label">دلیل درخواست</label>
                                                             <select name="resone" class="form-select">
+                                                                  <option value="" selected disabled>یک گزینه را انتخاب کنید</option>
                                                                   <option value="تحصیل">تحصیل</option>
                                                                   <option value="ازدواج">ازدواج</option>
                                                                   <option value="جهیزیه">جهیزیه</option>
@@ -120,11 +108,7 @@
                                                 <div class="col-md-6">
                                                       <div class="mb-3">
                                                             <label class="form-label">توضیحات</label>
-<<<<<<< HEAD
-                                                            <textarea class="form-control" name="descriptionUser" rows="3"></textarea>
-=======
                                                             <textarea class="form-control" name="descriptionUser" rows="3">{{ old('descriptionUser') }}</textarea>
->>>>>>> 26b23e8 (final)
                                                             @error('descriptionUser')
                                                             <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                             @enderror

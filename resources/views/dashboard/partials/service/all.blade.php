@@ -4,11 +4,7 @@
                   <div class="col-12">
                         <!-- Title -->
                         <div class="d-sm-flex justify-content-sm-between align-items-center">
-<<<<<<< HEAD
-                              <h1 class="mb-2 mb-sm-0 h3">درخواست تعمیرگاه ها
-=======
-                              <h1 class="mb-2 mb-sm-0 h3">درخواست خرید از کویر
->>>>>>> 26b23e8 (final)
+                              <h1 class="mb-2 mb-sm-0 h3">همه درخواست های خرید از کویر
                                     <span class="badge bg-primary bg-opacity-10 text-primary">{{$serviceCount}}</span>
                               </h1>
                               <a href="{{route('service.create')}}" class="btn btn-sm btn-primary mb-0"><i class="fas fa-plus me-2"></i>ثبت درخواست</a>
@@ -62,19 +58,20 @@
                                                             <th scope="col" class="border-0">دپارتمان</th>
                                                             <th scope="col" class="border-0">مدیرواحد</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
+                                                            <th scope="col" class="border-0">دسته بندی</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
                                                             <th scope="col" class="border-0">اعتبارسنجی</th>
                                                             <th scope="col" class="border-0">عملیات</th>
                                                             <th scope="col" class="border-0">حذف</th>
-
-
                                                       </tr>
                                                 </thead>
                                                 <tbody class="border-top-0">
                                                       @if($services)
+
                                                       @foreach($services as $service)
+
+                                                      @if($service->status==='Yes')
                                                       <tr>
-                                                            @if($service->status==='Yes')
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$service->id}}</h6>
                                                             </td>
@@ -94,30 +91,40 @@
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$service->price}}</a></h6>
                                                             </td>
                                                             <td>
+                                                                  <h6 class="course-title mb-0">{{$service->category}}</h6>
+                                                            </td>
+
+                                                            <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">
                                                                         {{ jdate($service->created_at)->format('Y/m/d') }}
                                                                   </h6>
                                                             </td>
-                                                            <!-- humanResources validation -->
-                                                            @if($service->validationHr === 'No')
+
+                                                            @if($service->validationHr === 'Pending')
                                                             <td>
-                                                                  <h6 class="badge text-bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبار سنجی نشده</h6>
+                                                                  <h6 class="badge bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>بررسی نشده</h6>
                                                             </td>
-                                                            @elseif($service->validationHr==='Yes')
+                                                            @elseif($service->validationHr === 'No')
                                                             <td>
-                                                                  <h6 class="badge text-bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
+                                                                  <h6 class="badge bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>عدم اعتبار سنجی</h6>
+                                                            </td>
+                                                            @elseif($service->validationHr === 'Yes')
+                                                            <td>
+                                                                  <h6 class="badge bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
                                                             </td>
                                                             @endif
-<<<<<<< HEAD
 
-=======
->>>>>>> 26b23e8 (final)
+                                                            @if(auth()->check() && (
+                                                            auth()->user()->role === 'humanResources' ||
+                                                            (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes')
+                                                            ))
+
                                                             <td>
-                                                                  <h6>
-                                                                        <a href="{{route('service.edit',$service->id)}}" class="text-success mb-0 me-2"><i class="fas fa-edit"></i></a>
-                                                                  </h6>
+
+                                                                  <a href="{{route('service.edit',$service->id)}}" class="text-success mb-0 me-2"><i class="fas fa-edit"></i></a>
+
                                                             </td>
-                                                            @if(in_array(auth()->user()->role, ['admin', 'humanResources']))
+
                                                             <td>
                                                                   <div class="d-flex justify-align-content-between align-items-center">
                                                                         <form action="{{ route('service.destroy', $service->id) }}" method="post">
@@ -129,19 +136,18 @@
                                                                         </form>
                                                                   </div>
                                                             </td>
+                                                            @else
+                                                            <td></td>
+                                                            <td></td>
                                                             @endif
-
-                                                            @endif
-
                                                       </tr>
+                                                      @endif
                                                       @endforeach
                                                       @else
                                                       <div class="alert alert-info">
                                                             تا این لحظه دسته بندی ثبت نشده است !
                                                       </div>
                                                       @endif
-
-
                                                 </tbody>
                                           </table>
                                     </div>

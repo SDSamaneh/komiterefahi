@@ -29,7 +29,6 @@
                               <div class="card-header">
                                     <h3>افزودن مدیر واحد</h3>
                               </div>
-
                               <div class="card-body">
                                     <form action="{{route('supervisor.store')}}" method="post" enctype="multipart/form-data">
                                           @csrf
@@ -56,11 +55,11 @@
                                                       <div class="mb-3">
                                                             <label class="form-label">دپارتمان</label>
                                                             <select class="form-select" name="departmans_id" aria-label="Default select example">
+                                                                  <option value="" selected disabled>یک گزینه را انتخاب کنید</option>
                                                                   @forelse($departmans as $departman)
                                                                   <option value="{{$departman->id}}">{{$departman->name}}</option>
                                                                   @empty
                                                                   <option>دسته بندی پیدا نشد</option>
-
                                                                   @endforelse
                                                             </select>
                                                             @error('departmans_id')
@@ -68,7 +67,6 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-
                                                 <div class="col-sm-12 text-end">
                                                       <button class="btn btn-success" type="submit">ثبت درخواست</button>
                                                 </div>
@@ -81,16 +79,8 @@
             <div class="row g-4">
                   <div class="col-md-6 col-xl-12">
                         <div class="card border bg-transparent rounded-3">
-<<<<<<< HEAD
-                                <div class="card-header d-flex justify-content-between border-bottom p-3">
-=======
-<<<<<<< HEAD
-
                               <div class="card-header d-flex justify-content-between border-bottom p-3">
-=======
-                                <div class="card-header d-flex justify-content-between border-bottom p-3">
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)
+
                                     <div class="d-flex">
                                           <h1 class="mb-2 mb-sm-0 h3">لیست مدیران واحد
                                                 <span class="badge bg-primary bg-opacity-10 text-primary">{{$supervisorCount}}</span>
@@ -106,24 +96,18 @@
                                     </div>
                               </div>
                               <div class="card-body p-3">
-                                    <!-- Post list table START -->
                                     <div class="table-responsive border-0">
                                           <table class="table align-middle p-1 mb-0 table-hover table-shrink">
-                                                <!-- Table head -->
                                                 <thead class="table-dark">
                                                       <tr>
                                                             <th scope="col" class="border-0 rounded-start">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
                                                             <th scope="col" class="border-0">دپارتمان</th>
                                                             <th scope="col" class="border-0">جزئیات</th>
-
-
                                                       </tr>
                                                 </thead>
                                                 <tbody class="border-top-0">
-
                                                       @if($supervisors)
-
                                                       @foreach($supervisors as $supervisor)
                                                       <tr>
                                                             <td>
@@ -152,23 +136,10 @@
                                                             تا این لحظه دسته بندی ثبت نشده است !
                                                       </div>
                                                       @endif
-<<<<<<< HEAD
-
-
                                                 </tbody>
                                           </table>
                                     </div>
-					 <div class="d-flex justify-content-center mt-4">
-=======
-                                                </tbody>
-                                          </table>
-                                    </div>
-<<<<<<< HEAD
                                     <div class="d-flex justify-content-center mt-4">
-=======
-					 <div class="d-flex justify-content-center mt-4">
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)
                                           {{ $supervisors->appends(request()->query())->links() }}
                                     </div>
                               </div>

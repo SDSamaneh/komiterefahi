@@ -12,20 +12,12 @@ class DepartmanController extends Controller
 
     public function index(Request $request)
     {
-<<<<<<< HEAD
-             $query = Departmans::query();
-=======
-<<<<<<< HEAD
+
         $query = Departmans::query();
-        // اگر فیلد جستجو پر شده بود
-=======
-             $query = Departmans::query();
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)
+
         if ($request->filled('search')) {
 
             $search = $request->search;
-
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%$search%");
             });
@@ -33,10 +25,6 @@ class DepartmanController extends Controller
 
         $departmans = $query->latest('departmans.created_at')->paginate(10);
         $departmanCount = Departmans::count();
-<<<<<<< HEAD
-=======
-
->>>>>>> 26b23e8 (final)
         return view('dashboard/departman', compact('departmans', 'departmanCount'));
     }
 

@@ -26,19 +26,12 @@ class Maadiran extends Model
         'lastSalary',
         'debt',
         'validationDate',
-<<<<<<< HEAD
-        'validationHr',
-        'validationManager1',
-        'finalPrice',
-        'description',
-=======
         'descriptionHr',
         'validationHr',
         'descriptionManager1',
         'validationManager1',
         'finalPrice',
         'descriptionManager2',
->>>>>>> 26b23e8 (final)
         'validationManager2'
     ];
 

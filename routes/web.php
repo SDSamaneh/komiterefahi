@@ -1,10 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-<<<<<<< HEAD
-use App\Http\Controllers\dashboard\AnnouncementController;
-=======
->>>>>>> 26b23e8 (final)
 use App\Http\Controllers\dashboard\DepartmanController;
 use App\Http\Controllers\dashboard\IndexController;
 use App\Http\Controllers\dashboard\MaadiranController;
@@ -35,7 +31,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         Route::resource('supervisor', SupervisorController::class);
     });
 
-    Route::middleware('role:author|manager1|admin|humanResources|manager2|subscriber')->group(function () {
+    Route::middleware('role:author|manager1|admin|humanResources|managerHr|manager2|subscriber')->group(function () {
 
         // Dashboard home
         Route::get('/', [IndexController::class, 'index'])->name('index');
@@ -44,10 +40,6 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         Route::resource('service', ServiceController::class);
         Route::resource('vam', VamController::class);
         Route::resource('maadiran', MaadiranController::class);
-<<<<<<< HEAD
-        Route::resource('announcement', AnnouncementController::class);
-=======
->>>>>>> 26b23e8 (final)
 
         // Profile routes
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

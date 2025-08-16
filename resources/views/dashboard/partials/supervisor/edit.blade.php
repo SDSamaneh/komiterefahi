@@ -4,7 +4,6 @@
                   <div class="col-12">
                         <div class="card border">
                               <div class="card-header text-center mb-3 mt-3">
-
                                     <h1 class="mb-3">ویرایش مدیر واحد</h1>
                               </div>
                               <div class="card-body">

@@ -11,11 +11,7 @@
                                <div class="card-body">
                                      <div class="table-responsive border-0">
                                            <table class="table align-middle p-4 mb-0 table-hover table-shrink">
-<<<<<<< HEAD
-                                                 <thead class="table-dark">
-=======
                                                  <thead class="flex justify-center items-center table-dark">
->>>>>>> 26b23e8 (final)
                                                        <tr>
                                                              <th scope="col" class="border-0 rounded-start">نوع درخواست</th>
                                                              <th scope="col" class="border-0">تاریخ درخواست</th>
@@ -26,51 +22,35 @@
                                                  <tbody class="border-top-0">
                                                        @forelse($allRequests as $item)
                                                        <tr>
-                                                             <td>{{ $item['type'] }}</td>
-                                                             <td>{{ jdate($item['created_at'])->format('Y/m/d') }}</td>
-<<<<<<< HEAD
-
-                                                             @if($item['status'] === 'No')
+                                                             <td>{{ $item->type }}</td>
+                                                             <td>{{ jdate($item->created_at)->format('Y/m/d') }}</td>
                                                              <td>
-                                                                   <h6 class="badge text-bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>عدم تایید مدیر واحد</h6>
-                                                             </td>
-                                                             @elseif($item['status']==='Yes')
-                                                             <td>
-                                                                   <h6 class="badge text-bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>تایید مدیر واحد</h6>
-                                                             </td>
-                                                             @endif
-                                                             <td>
-                                                                   <a href="{{ $item['edit_route'] }}" class="btn btn-light btn-round mb-0" title="ویرایش">
-                                                                         <i class="fas fa-edit"></i>
-                                                                   </a>
-=======
-                                                             <td>
-                                                                   @if($item['status'] === 'No')
+                                                                   @if(isset($item->accept) && $item->accept === 'Yes')
                                                                    <h6 class="badge text-black bg-body-secondary mb-2">ثبت اولیه</h6>
                                                                    @endif
-                                                                   @if($item['status'] === 'Yes')
-                                                                   <h6 class="badge text-bg-success mb-2"> مدیر واحد</h6>
+
+                                                                   @if(isset($item->status) && $item->status === 'Yes')
+                                                                   <h6 class="badge text-black bg-body-secondary mb-2">مدیر واحد</h6>
                                                                    @endif
 
-                                                                   @if(isset($item['validationHr']) && $item['validationHr'] === 'Yes')
+                                                                   @if(isset($item->validationHr) && $item->validationHr === 'Yes')
                                                                    <h6 class="badge text-bg-success mb-2">اعتبارسنجی </h6>
                                                                    @endif
 
-                                                                   @if(isset($item['validationManager1']) && $item['validationManager1'] === 'Yes')
+                                                                   @if(isset($item->validationManager1) && $item->validationManager1 === 'Yes')
                                                                    <h6 class="badge text-bg-success mb-2">مدیر مالی</h6>
                                                                    @endif
 
-                                                                   @if(isset($item['validationManager2']) && $item['validationManager2'] === 'Yes')
+                                                                   @if(isset($item->validationManager2) && $item->validationManager2 === 'Yes')
                                                                    <h6 class="badge text-bg-success mb-2">تایید نهایی</h6>
                                                                    @endif
                                                              </td>
                                                              <td>
-                                                                   @if($item['status'] === 'No')
-                                                                   <a href="{{ $item['edit_route'] }}" class="btn btn-light btn-round mb-0" title="ویرایش">
+                                                                   @if(!($item->status === 'yes'))
+                                                                   <a href="{{ $item->edit_route }}" class="btn btn-light btn-round mb-0" title="ویرایش">
                                                                          <i class="fas fa-edit"></i>
                                                                    </a>
                                                                    @endif
->>>>>>> 26b23e8 (final)
                                                              </td>
                                                        </tr>
                                                        @empty

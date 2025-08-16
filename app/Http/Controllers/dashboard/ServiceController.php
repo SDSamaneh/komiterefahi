@@ -55,12 +55,8 @@ class ServiceController extends Controller
             'idCard' => ['required', 'ir_national_id'],
             'departmans_id' => ['required', 'exists:departmans,id'],
             'supervisors_id' => ['required', 'exists:supervisors,id'],
-<<<<<<< HEAD
-            'price' => ['required', 'numeric'],
-=======
             'category' => ['required', 'in:خدمات تعمیرگاهی,موتورسیکلت بنزینی, موتورسیکلت برقی,محصولات کودک ,دوچرخه,اکسسوری و لوازم جانبی,تفریحات آبی,چهار چرخ,سایر'],
             'price' => ['required'],
->>>>>>> 26b23e8 (final)
             'descriptionUser' => ['nullable', 'string'],
             'accept' => ['required', 'in:No,Yes'],
 
@@ -70,10 +66,6 @@ class ServiceController extends Controller
             'departmans_id.required' => 'دپارتمان خود را وارد کنید',
             'supervisors_id.required' => 'مدیر واحد خود را انتخاب کنید',
             'price.required' => 'مبلغ درخواست را وارد کنید',
-<<<<<<< HEAD
-            'price.numeric' => 'مبلغ باید به صورت عدد باشد',
-=======
->>>>>>> 26b23e8 (final)
             'accept.required' => 'قوانین را میپذیرم'
         ]);
 
@@ -90,11 +82,7 @@ class ServiceController extends Controller
 
         $services = Service::create($fields);
         return $services
-<<<<<<< HEAD
-            ? redirect()->route('service.create')->with('success', 'دسته‌بندی شما با موفقیت ثبت شد.')
-=======
             ? redirect()->route('service.create')->with('success', 'درخواست شما با موفقیت ثبت شد.')
->>>>>>> 26b23e8 (final)
             : redirect()->route('service.create')->with('error', 'مشکلی رخ داده است.');
     }
     public function show(string $id)
@@ -113,33 +101,21 @@ class ServiceController extends Controller
     {
         $user = auth()->user();
 
+        $request->merge([
+            'accept' => $request->has('accept') ? 'Yes' : 'No',
+        ]);
+
         switch ($user->role) {
             case 'subscriber':
-<<<<<<< HEAD
+                if ($service->status !== 'Yes') {
 
-=======
->>>>>>> 26b23e8 (final)
-                if ($service->status === 'No') {
-                    $request->merge([
-                        'accept' => $request->has('accept') ? 'Yes' : 'No',
-                    ]);
-<<<<<<< HEAD
-
-                    $request->validate([
-                        'name' => 'required|string|max:255|persian_alpha',
-                        'idCard' => 'required|string|ir_national_id',
-                        'price' => 'required|numeric',
-                        'departmans_id' => 'required|exists:departmans,id',
-                        'supervisors_id' => 'required|exists:supervisors,id',
-=======
                     $request->validate([
                         'name' => 'required|string|max:255|persian_alpha',
                         'idCard' => 'required|string|ir_national_id',
                         'departmans_id' => 'required|exists:departmans,id',
                         'supervisors_id' => 'required|exists:supervisors,id',
                         'category' => 'required|in:خدمات تعمیرگاهی,موتورسیکلت بنزینی,موتورسیکلت برقی,محصولات کودک,دوچرخه,اکسسوری و لوازم جانبی,تفریحات آبی,چهار چرخ,سایر',
-                        'price' => 'required',
->>>>>>> 26b23e8 (final)
+                        'price' => 'required|min:0',
                         'descriptionUser' => 'nullable|string',
                         'accept' => 'required|in:Yes,No',
                     ]);
@@ -147,10 +123,7 @@ class ServiceController extends Controller
                     $service->update([
                         'name' => $request->name,
                         'idCard' => $request->idCard,
-<<<<<<< HEAD
-=======
                         'category' => $request->category,
->>>>>>> 26b23e8 (final)
                         'price' => $request->price,
                         'departmans_id' => $request->departmans_id,
                         'supervisors_id' => $request->supervisors_id,
@@ -164,34 +137,26 @@ class ServiceController extends Controller
 
             case 'author':
 
-                $request->merge([
-                    'accept' => $request->has('accept') ? 'Yes' : 'No',
-                ]);
+                if ($service->status === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
+                }
 
                 $request->validate([
                     'name' => 'required|string|max:255|persian_alpha',
                     'idCard' => 'required|string|ir_national_id',
-<<<<<<< HEAD
-                    'price' => 'required|numeric',
-                    'departmans_id' => 'required|exists:departmans,id',
-                    'supervisors_id' => 'required|exists:supervisors,id',
-=======
                     'departmans_id' => 'required|exists:departmans,id',
                     'supervisors_id' => 'required|exists:supervisors,id',
                     'category' => 'required|in:خدمات تعمیرگاهی,موتورسیکلت بنزینی,موتورسیکلت برقی,محصولات کودک,دوچرخه,اکسسوری و لوازم جانبی,تفریحات آبی,چهار چرخ,سایر',
                     'price' => 'required',
->>>>>>> 26b23e8 (final)
                     'descriptionUser' => 'nullable|string',
                     'accept' => 'required|in:Yes,No',
+                    'status' => 'required|in:Pending,Yes,No',
 
                 ]);
                 $service->update([
                     'name' => $request->name,
                     'idCard' => $request->idCard,
-<<<<<<< HEAD
-=======
                     'category' => $request->category,
->>>>>>> 26b23e8 (final)
                     'price' => $request->price,
                     'departmans_id' => $request->departmans_id,
                     'supervisors_id' => $request->supervisors_id,
@@ -201,15 +166,12 @@ class ServiceController extends Controller
                 break;
 
             case 'humanResources':
+
+                if ($service->validationHr === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
+                }
+
                 $request->validate([
-<<<<<<< HEAD
-                    'memberDate' => 'required|date_format:Y/m/d|persian_date',
-                    'memberPrice' => 'required|numeric',
-                    'lastSalary' => 'required|numeric',
-                    'debt' => 'required|numeric',
-                    'validationDate' => 'required|date_format:Y/m/d|persian_date',
-                    'validationHr' => 'required|in:Yes,No',
-=======
                     'memberDate' => 'required',
                     'memberPrice' => 'required',
                     'lastSalary' => 'required',
@@ -217,7 +179,6 @@ class ServiceController extends Controller
                     'validationDate' => 'required',
                     'descriptionHr' => 'nullable|string',
                     'validationHr' => 'required|in:Pending,Yes,No',
->>>>>>> 26b23e8 (final)
                 ]);
                 $service->update([
                     'memberDate' => $request->memberDate,
@@ -225,53 +186,38 @@ class ServiceController extends Controller
                     'lastSalary' => $request->lastSalary,
                     'debt' => $request->debt,
                     'validationDate' => $request->validationDate,
-<<<<<<< HEAD
-                    'validationHr' => $request->validationHr,
-=======
+
                     'descriptionHr' => $request->descriptionHr,
                     'validationHr' => $request->validationHr ?? 'Pending',
->>>>>>> 26b23e8 (final)
+
                 ]);
                 break;
 
-            case 'manager1': // مدیر مالی            
-                $request->validate([
-<<<<<<< HEAD
-                    'finalPrice' => 'required|numeric',
-                    'description' => 'nullable|string|max:1000',
-                    'validationManager1' => 'required|in:Yes,No',
-                ]);
+            case 'manager1':
 
-                $service->update([
-                    'finalPrice' => $request->finalPrice,
-                    'description' => $request->description,
-                    'validationManager1' => $request->validationManager1,
-                ]);
-
-                break;
-            case 'manager2': // رییس کمیته رفاهی
+                if ($service->validationManager1 === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
+                }
 
                 $request->validate([
-                    'validationManager2' => 'required|in:Yes,No',
-                ]);
-
-                $service->update([
-                    'validationManager2' => $request->validationManager2,
-                ]);
-
-=======
                     'descriptionManager1' => 'nullable|string',
                     'validationManager1' => 'required|in:Pending,Yes,No',
                 ]);
-
                 $service->update([
                     'descriptionManager1' => $request->descriptionManager1,
                     'validationManager1' => $request->validationManager1 ?? 'Pending',
 
                 ]);
-
                 break;
-             case 'manager2': // رییس کمیته رفاهی
+
+            case 'manager2':
+
+
+                if ($service->validationManager2 === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
+                }
+
+
                 $request->validate([
                     'finalPrice' => 'required',
                     'descriptionManager2' => 'nullable|string',
@@ -284,11 +230,10 @@ class ServiceController extends Controller
 
                     'validationManager2' => $request->validationManager2 ?? 'Pending',
                 ]);
->>>>>>> 26b23e8 (final)
                 break;
 
             default:
-                return abort(403, 'شما اجازه دسترسی به این عملیات را ندارید.');
+                return redirect()->back()->with('error', 'شما اجازه دسترسی به این عملیات را ندارید.');
         }
         return redirect()->back()->with('success', 'تغییرات با موفقیت ذخیره شد.');
     }

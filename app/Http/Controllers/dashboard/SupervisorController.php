@@ -52,7 +52,7 @@ class SupervisorController extends Controller
 
         $request->validate([
 
-            'status' => 'required|in:No,Yes',
+            'status' => 'required|in:Pending,Yes,No',
         ]);
 
         try {
@@ -79,6 +79,7 @@ class SupervisorController extends Controller
 
     public function editService(Service $service)
     {
+
         // اطمینان از اینکه این وام متعلق به کاربر زیرمجموعه مدیر است:
         $supervisorId = auth()->user()->supervisor_id;
         $supervisors = Supervisor::all();
@@ -100,7 +101,7 @@ class SupervisorController extends Controller
         }
         $request->validate([
 
-            'status' => 'required|in:No,Yes',
+            'status' => 'required|in:Pending,Yes,No',
         ]);
 
         try {
@@ -150,7 +151,7 @@ class SupervisorController extends Controller
         }
         $request->validate([
 
-            'status' => 'required|in:No,Yes',
+            'status' => 'required|in:Pending,Yes,No',
         ]);
 
         try {
@@ -167,15 +168,8 @@ class SupervisorController extends Controller
 
     public function index(Request $request)
     {
-<<<<<<< HEAD
-          $query = Supervisor::query();
-=======
-<<<<<<< HEAD
         $query = Supervisor::query();
-=======
-          $query = Supervisor::query();
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -184,14 +178,7 @@ class SupervisorController extends Controller
             });
         }
         $supervisors = $query->latest('supervisors.created_at')->paginate(10);
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-=======
-
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)
         $departmans = Departmans::all();
         $supervisorCount = Supervisor::count();
         return view('dashboard/supervisor', compact('supervisors', 'departmans', 'supervisorCount'));

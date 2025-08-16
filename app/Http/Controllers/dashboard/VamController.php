@@ -4,17 +4,13 @@ namespace App\Http\Controllers\dashboard;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-
 use App\Http\Controllers\Controller;
-
-use App\Http\Requests\dashboard\vam\EditVam;
 use App\Http\Requests\dashboard\vam\StoreVam;
 use App\Models\dashboard\Departmans;
 use App\Models\dashboard\Supervisor;
 use App\Models\dashboard\Vam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use App\Models\dashboard\Vam as DashboardVam;
 
 class VamController extends Controller
@@ -67,17 +63,10 @@ class VamController extends Controller
         // اعتبارسنجی داده‌ها
         $fields = $request->validated();
         $fields['author_id'] = Auth::id();
-<<<<<<< HEAD
-        $fields['accept'] = $request->has('accept') ? 'Yes' : 'No';
-        $fields['status'] = $request->has('status') ? 'Yes' : 'No';
-=======
         $fields['price'] = str_replace(',', '', $fields['price']);
         $fields['accept'] = $request->has('accept') ? 'Yes' : 'No';
->>>>>>> 26b23e8 (final)
-
         // ایجاد رکورد
         $vams = Vam::create($fields);
-
         // بازگشت نتیجه
         return $vams
             ? redirect()->route('vam.create')->with('success', 'درخواست وام با موفقیت ثبت شد.')
@@ -102,22 +91,20 @@ class VamController extends Controller
     {
         $user = auth()->user();
 
+        $request->merge([
+            'accept' => $request->has('accept') ? 'Yes' : 'No',
+        ]);
+
         switch ($user->role) {
+
             case 'subscriber':
 
-                if ($vam->status === 'No') {
-                    $request->merge([
-                        'accept' => $request->has('accept') ? 'Yes' : 'No',
-                    ]);
+                if ($vam->status !== 'Yes') {
 
                     $request->validate([
                         'name' => 'required|string|max:255|persian_alpha',
                         'idCard' => 'required|string|ir_national_id',
-<<<<<<< HEAD
-                        'price' => 'required|numeric',
-=======
-                        'price' => 'required',
->>>>>>> 26b23e8 (final)
+                        'price' => 'required|min:0',
                         'departmans_id' => 'required|exists:departmans,id',
                         'supervisors_id' => 'required|exists:supervisors,id',
                         'resone' => 'required|in:تحصیل,ازدواج,جهیزیه,درمان,تصادف,بیمه,فوت اقوام,سایر',
@@ -136,35 +123,28 @@ class VamController extends Controller
                         'accept' => $request->accept,
                     ]);
                 } else {
-<<<<<<< HEAD
-                    return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
-=======
-                    return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است ');
->>>>>>> 26b23e8 (final)
+                    return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است');
                 }
                 break;
 
             case 'author':
 
-                $request->merge([
-                    'accept' => $request->has('accept') ? 'Yes' : 'No',
-                ]);
+                if ($vam->status === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
+                }
 
                 $request->validate([
                     'name' => 'required|string|max:255|persian_alpha',
                     'idCard' => 'required|string|ir_national_id',
-<<<<<<< HEAD
-                    'price' => 'required|numeric',
-=======
-                    'price' => 'required',
->>>>>>> 26b23e8 (final)
+                    'price' => 'required|min:0',
                     'departmans_id' => 'required|exists:departmans,id',
                     'supervisors_id' => 'required|exists:supervisors,id',
                     'resone' => 'required|in:تحصیل,ازدواج,جهیزیه,درمان,تصادف,بیمه,فوت اقوام,سایر',
                     'descriptionUser' => 'nullable|string',
                     'accept' => 'required|in:Yes,No',
-
+                    'status' => 'required|in:Pending,Yes,No',
                 ]);
+
                 $vam->update([
                     'name' => $request->name,
                     'idCard' => $request->idCard,
@@ -174,71 +154,63 @@ class VamController extends Controller
                     'resone' => $request->resone,
                     'descriptionUser' => $request->descriptionUser,
                     'accept' => $request->accept,
+                    'status' => $request->status,
                 ]);
                 break;
 
             case 'humanResources':
+
+                if ($vam->validationHr === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
+                }
+
                 $request->validate([
-<<<<<<< HEAD
-                    'memberDate' => 'required|date_format:Y/m/d|persian_date',
-                    'memberPrice' => 'required|numeric',
-                    'lastSalary' => 'required|numeric',
-                    'debt' => 'required|numeric',
-                    'validationDate' => 'required|date_format:Y/m/d|persian_date',
-                    'validationHr' => 'required|in:Yes,No',
-=======
                     'memberDate' => 'required',
-                    'memberPrice' => 'required',
-                    'lastSalary' => 'required',
-                    'debt' => 'required|numeric',
+                    'memberPrice' => 'required|min:0',
+                    'lastSalary' => 'required|min:0',
+                    'debt_company' => 'required|min:0',
+                    'debt_madiran' => 'required|min:0',
+                    'debt_fund' => 'required|min:0',
+                    'debt_purchase' => 'required',
                     'validationDate' => 'required',
                     'descriptionHr' => 'nullable|string',
                     'validationHr' => 'required|in:Pending,Yes,No',
-
->>>>>>> 26b23e8 (final)
                 ]);
                 $vam->update([
                     'memberDate' => $request->memberDate,
                     'memberPrice' => $request->memberPrice,
                     'lastSalary' => $request->lastSalary,
-                    'debt' => $request->debt,
+                    'debt_company' => $request->debt_company,
+                    'debt_madiran' => $request->debt_madiran,
+                    'debt_fund' => $request->debt_fund,
+                    'debt_purchase' => $request->debt_purchase,
                     'validationDate' => $request->validationDate,
-<<<<<<< HEAD
-                    'validationHr' => $request->validationHr,
-=======
                     'descriptionHr' => $request->descriptionHr,
                     'validationHr' => $request->validationHr ?? 'Pending',
->>>>>>> 26b23e8 (final)
                 ]);
                 break;
 
-            case 'manager1': // مدیر مالی            
+            case 'managerHr':
+
+                if ($vam->validation_managerHr === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
+                }
+
                 $request->validate([
-<<<<<<< HEAD
-                    'finalPrice' => 'required|numeric',
-                    'description' => 'nullable|string|max:1000',
-                    'validationManager1' => 'required|in:Yes,No',
+                    'validation_managerHr' => 'required|in:Pending,Yes,No',
                 ]);
-
                 $vam->update([
-                    'finalPrice' => $request->finalPrice,
-                    'description' => $request->description,
-                    'validationManager1' => $request->validationManager1,
+                    'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
                 ]);
-
                 break;
 
-            case 'manager2': // رییس کمیته رفاهی
+            case 'manager1':
+
+                if ($vam->validationManager1 === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
+                }
 
                 $request->validate([
-                    'validationManager2' => 'required|in:Yes,No',
-                ]);
-
-                $vam->update([
-                    'validationManager2' => $request->validationManager2,
-                ]);
-
-=======
                     'descriptionManager1' => 'nullable|string',
                     'validationManager1' => 'required|in:Pending,Yes,No',
                 ]);
@@ -248,24 +220,26 @@ class VamController extends Controller
                 ]);
                 break;
 
-            case 'manager2': // رییس کمیته رفاهی
-                $request->validate([
-                    'finalPrice' => 'required',
-                    'descriptionManager2' => 'nullable|string',
+            case 'manager2':
 
+                if ($vam->validationManager2 === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
+                }
+
+                $request->validate([
+                    'finalPrice' => 'required|min:0',
+                    'descriptionManager2' => 'nullable|string',
                     'validationManager2' => 'required|in:Pending,Yes,No',
                 ]);
                 $vam->update([
                     'finalPrice' => $request->finalPrice,
                     'descriptionManager2' => $request->descriptionManager2,
-
                     'validationManager2' => $request->validationManager2 ?? 'Pending',
                 ]);
->>>>>>> 26b23e8 (final)
                 break;
 
             default:
-                return abort(403, 'شما اجازه دسترسی به این عملیات را ندارید.');
+                return redirect()->back()->with('error', 'شما اجازه دسترسی به این عملیات را ندارید.');
         }
 
         return redirect()->back()->with('success', 'تغییرات با موفقیت ذخیره شد.');

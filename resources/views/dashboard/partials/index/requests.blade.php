@@ -28,11 +28,7 @@
                                     <!-- Content -->
                                     <div class="ms-3">
                                           <h3>{{$serviceCount}} درخواست</h3>
-<<<<<<< HEAD
-                                          <h6 class="mb-0">درخواست تعمیرگاه</h6>
-=======
                                           <h6 class="mb-0">درخواست از کویر</h6>
->>>>>>> 26b23e8 (final)
                                     </div>
                               </div>
                         </a>
@@ -74,28 +70,9 @@
                         </a>
                   </div>
             </div>
-<<<<<<< HEAD
-            <!-- <div class="col-sm-6 col-lg-3">
-                  <div class="card card-body border p-3">
-                        <a href="{{route('announcement.index')}}">
 
-                              <div class="d-flex align-items-center">
-                                    <div class="icon-xl fs-1 bg-primary bg-opacity-10 rounded-3 text-primary">
-                                          <i class="far fa-newspaper"></i>
-                                    </div>
-                                    <div class="ms-3">
-                                          <h3>{{$announcementCount}}</h3>
-                                          <h6 class="mb-0"> اخبار</h6>
-                                    </div>
-                              </div>
-                        </a>
-                  </div>
-            </div> -->
-=======
-
->>>>>>> 26b23e8 (final)
             @if(auth()->check() && auth()->user()->role==='author')
-  <hr />
+            <hr />
             <div class="text-center mt-4 mb-4">
                   <h4>کارتابل درخواست مدیران</h4>
             </div>
@@ -125,15 +102,7 @@
                                     </div>
                                     <!-- Content -->
                                     <div class="ms-3">
-<<<<<<< HEAD
-                                          <h6 class="mb-0">درخواست های  تعمیرگاه</h6>
-=======
-<<<<<<< HEAD
                                           <h6 class="mb-0">درخواست ها از کویر</h6>
-=======
-                                          <h6 class="mb-0">درخواست های  تعمیرگاه</h6>
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)
                                     </div>
                               </div>
                         </a>

@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="col-md-4 mb-3">
-                              <label class="form-label">سرپرست واحد</label>
+                              <label class="form-label">مدیر واحد</label>
                               <select class="form-select" disabled>
                                     <option selected>{{$vam->supervisor->name}}</option>
                               </select>
@@ -36,7 +36,7 @@
                         <div class="col-md-4 mb-3">
                               <label class="form-label">علت</label>
                               <select class="form-select" name="resone" aria-label="Default select example" disabled>
-                                    @foreach(['تحصیل', 'ازدواج', 'جهیزیه', 'درمان', 'تصادف', 'بیمه', 'فوت اقوام', 'سایر'] as $resone)
+                                    @foreach(['تحصیل', 'ازدواج', 'جهیزیه', 'درمان', 'تصادف', 'بیمه', 'فوت اقوام', 'مسکن','سایر'] as $resone)
                                     <option value="{{ $resone }}" {{ old('resone', $vam->resone) == $resone ? 'selected' : '' }}>{{ $resone }}</option>
                                     @endforeach
                               </select>
@@ -47,6 +47,12 @@
                         </div>
 
                         <div class="col-md-4 mt-4 d-flex gap-4">
+                              <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" value="Pending"
+                                          {{ old('status', $vam->status) == 'Pending' ? 'checked' : '' }}>
+                                    <label class="form-check-label">در حال بررسی</label>
+                              </div>
+
                               <div class="form-check">
                                     <input class="form-check-input" type="radio" name="status" value="Yes"
                                           {{ old('status', $vam->status) == 'Yes' ? 'checked' : '' }}>

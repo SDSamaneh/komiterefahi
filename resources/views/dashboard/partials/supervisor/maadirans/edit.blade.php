@@ -27,11 +27,13 @@
                         </div>
 
                         <div class="col-md-4 mb-3">
-                              <label class="form-label">سرپرست واحد</label>
+                              <label class="form-label">مدیر واحد</label>
                               <select class="form-select" disabled>
                                     <option selected>{{$maadiran->supervisor->name}}</option>
                               </select>
                               <input type="hidden" name="supervisors_id" value="{{ $maadiran->supervisors_id }}">
+
+
                         </div>
                         <div class="col-md-4 mb-3">
                               <label class="form-label">دسته بندی</label>
@@ -49,6 +51,11 @@
                         </div>
 
                         <div class="col-md-4 mt-4 d-flex gap-4">
+                              <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" value="Pending"
+                                          {{ old('status', $maadiran->status) == 'Pending' ? 'checked' : '' }}>
+                                    <label class="form-check-label">در حال بررسی</label>
+                              </div>
                               <div class="form-check">
                                     <input class="form-check-input" type="radio" name="status" value="Yes"
                                           {{ old('status', $maadiran->status) == 'Yes' ? 'checked' : '' }}>

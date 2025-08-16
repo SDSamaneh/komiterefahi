@@ -1,28 +1,11 @@
 @extends('layouts.dashboard.master')
 @section('content')
-<<<<<<< HEAD
-
-<!-- **************** MAIN CONTENT START **************** -->
 <main>
       <section>
             <div class="container">
                  <div class="row bg-form">
                         <div class="custom-box-shadow py-5">
                               <div class="col-md-12 col-lg-8 col-xl-8 mx-auto pt-5">
-=======
-<main>
-      <section>
-            <div class="container">
-<<<<<<< HEAD
-                  <div class="row">
-                        <div class="custom-box-shadow py-5">
-                              <div class="col-md-12 col-lg-8 col-xl-8 mx-auto p-5 p-sm-5">
-=======
-                 <div class="row bg-form">
-                        <div class="custom-box-shadow py-5">
-                              <div class="col-md-12 col-lg-8 col-xl-8 mx-auto pt-5">
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)
                                     <h2 class="text-center font-bold">ثبت نام</h2>
                                     @if ($errors->any())
                                     <div class="alert alert-danger">
@@ -33,14 +16,6 @@
                                           </ul>
                                     </div>
                                     @endif
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)
                                     <form class="mt-4 pt-5" method="post" action="{{route('register')}}">
                                           @csrf
                                           <div class="row">
@@ -54,8 +29,6 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-
-                                                <!-- Email -->
                                                 <div class="col-md-6">
                                                       <div class="mb-3">
                                                             <label class="form-label" for="exampleInputEmail1">ایمیل</label>
@@ -65,7 +38,6 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                                <!-- idCard -->
                                                 <div class="col-md-6">
                                                       <div class="mb-3">
                                                             <label class="form-label" for="exampleInputId">کدملی</label>
@@ -75,7 +47,6 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                                <!-- Number -->
                                                 <div class="col-md-6">
                                                       <div class="mb-3">
                                                             <label class="form-label" for="exampleInputMobail">شماره همراه</label>
@@ -85,7 +56,6 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                                <!-- Password -->
                                                 <div class="col-md-6">
                                                       <div class="mb-3">
                                                             <label class="form-label" for="exampleInputPassword1">رمز عبور</label>
@@ -95,7 +65,6 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                                <!-- Password Confirmation-->
                                                 <div class="col-md-6">
                                                       <div class="mb-3">
                                                             <label class="form-label" for="exampleInputPassword2">تایید رمز عبور</label>
@@ -112,27 +81,11 @@
                                                 </div>
                                           </div>
                                     </form>
-<<<<<<< HEAD
-                                    <!-- Form END -->
-=======
->>>>>>> 26b23e8 (final)
                               </div>
                         </div>
                   </div>
             </div>
       </section>
-<<<<<<< HEAD
-      <!-- Inner intro END -->
+</main>
 
-</main>
-<!-- **************** MAIN CONTENT END **************** -->
 @endsection
-=======
-</main>
-<<<<<<< HEAD
-@endsection
-=======
-<!-- **************** MAIN CONTENT END **************** -->
-@endsection
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)

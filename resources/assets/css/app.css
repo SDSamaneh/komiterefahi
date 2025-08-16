@@ -1,10 +1,6 @@
 @import "../vendor/font-awesome/css/all.min.css";
 @import "../vendor/bootstrap-icons/bootstrap-icons.css";
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 26b23e8 (final)
 @import "./style-rtl.css";
 
 .bg-form {
@@ -14,9 +10,7 @@
     background-repeat: no-repeat;
     min-height: 70vh;
 }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
 .step-progress {
     display: flex;
     justify-content: space-between;
@@ -84,14 +78,24 @@
     min-width: 50px;
     text-align: center;
 }
-=======
->>>>>>> 26b23e8 (final)
 
-
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-<<<<<<< HEAD
-=======
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)
+.debt-table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background: #fff;
+}
+.debt-table thead {
+    background: #f7f9fc;
+}
+.debt-table th {
+    font-weight: 600;
+    text-align: center;
+}
+.debt-table td {
+    vertical-align: middle;
+}
+.debt-table input {
+    text-align: center;
+    direction: ltr;
+}

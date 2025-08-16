@@ -1,6 +1,6 @@
 <section class="py-4">
       <div class="container">
-            <h1>ویرایش درخواست تعمیرگاه</h1>
+            <h1>ویرایش درخواست خرید از کویر</h1>
             <form action="{{ route('supervisor.service.update', $service->id) }}" method="POST">
                   @csrf
                   @method('PUT')
@@ -26,19 +26,30 @@
                         </div>
 
                         <div class="col-md-3 mb-3">
-                              <label class="form-label">سرپرست واحد</label>
+                              <label class="form-label">مدیر واحد</label>
                               <select class="form-select" disabled>
                                     <option selected>{{$service->supervisors->name}}</option>
                               </select>
                               <input type="hidden" name="supervisors_id" value="{{ $service->supervisors_id }}">
                         </div>
+                        <div class="col-md-3 mb-3">
+                              <label class="form-label">دسته بندی</label>
+                              <select class="form-select" disabled>
+                                    <option selected>{{$service->category}}</option>
+                              </select>
+                        </div>
 
-                        <div class="col-md-9 mb-3">
+                        <div class="col-md-6 mb-3">
                               <label class="form-label">توضیحات</label>
                               <textarea class="form-control" name="descriptionUser" rows="3" disabled>{{ old('descriptionUser', $service->descriptionUser) }}</textarea>
                         </div>
 
                         <div class="col-md-4 mt-4 d-flex gap-4">
+                              <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" value="Pending"
+                                          {{ old('status', $service->status) == 'Pending' ? 'checked' : '' }}>
+                                    <label class="form-check-label">در حال بررسی</label>
+                              </div>
                               <div class="form-check">
                                     <input class="form-check-input" type="radio" name="status" value="Yes"
                                           {{ old('status', $service->status) == 'Yes' ? 'checked' : '' }}>

@@ -4,11 +4,7 @@
                   <div class="col-12">
                         <div class="card border">
                               <div class="col-12 text-center mb-3 mt-3">
-<<<<<<< HEAD
-                                    <h1 class="mb-0 h3">ثبت درخواست تعمیرگاه</h1>
-=======
                                     <h1 class="mb-0 h3">ثبت درخواست خرید از کویر</h1>
->>>>>>> 26b23e8 (final)
                               </div>
                               <div class="card-body">
                                     <form action="{{route('service.store')}}" method="post" enctype="multipart/form-data">
@@ -30,28 +26,16 @@
                                           </div>
                                           <div class="row">
                                                 <div class="col-md-3 mb-3">
-
                                                       <label class="form-label">نام و نام خانوادگی</label>
-<<<<<<< HEAD
-                                                      <input name="name" type="text" class="form-control" value="{{ old('name') }}">
-=======
-
                                                       <input name="name" type="text" class="form-control"
                                                             value="{{ old('name', Auth::user()->name) }}" readonly>
->>>>>>> 26b23e8 (final)
                                                       @error('name')
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror
-
                                                 </div>
                                                 <div class="col-md-3 mb-3">
-
                                                       <label class="form-label">کدملی</label>
-<<<<<<< HEAD
-                                                      <input name="idCard" type="text" class="form-control" value="{{ old('idCard') }}">
-=======
                                                       <input name="idCard" type="text" class="form-control" value="{{ old('idCard', Auth::user()->idCard) }}" readonly>
->>>>>>> 26b23e8 (final)
                                                       @error('idCard')
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror
@@ -87,12 +71,10 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-<<<<<<< HEAD
-
-=======
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">دسته بندی</label>
                                                       <select name="category" class="form-select">
+                                                            <option value="" selected disabled>یک گزینه را انتخاب کنید</option>
                                                             <option value="خدمات تعمیرگاهی">خدمات تعمیرگاهی</option>
                                                             <option value="موتورسیکلت بنزینی">موتورسیکلت بنزینی</option>
                                                             <option value="موتورسیکلت برقی">موتورسیکلت برقی</option>
@@ -108,7 +90,6 @@
                                                       @enderror
 
                                                 </div>
->>>>>>> 26b23e8 (final)
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">مبلغ درخواستی (تومان)</label>
                                                       <input name="price" type="text" class="form-control" value="{{ old('price') }}">
@@ -135,7 +116,6 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-
                                                 <div class="col-md-12 mt-3 text-end">
                                                       <button class="btn btn-primary" type="submit">ثبت درخواست</button>
                                                       <a href="{{route('index')}}" class="btn btn-warning">انصراف</a>

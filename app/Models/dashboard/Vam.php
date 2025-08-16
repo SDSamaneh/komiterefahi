@@ -23,30 +23,27 @@ class Vam extends Model
         'memberDate',
         'memberPrice',
         'lastSalary',
-        'debt',
+        'debt_company',
+        'debt_madiran',
+        'debt_fund',
+        'debt_purchase',
         'validationDate',
-<<<<<<< HEAD
-        'validationHr',
-        'validationManager1',
-        'finalPrice',
-        'description',
-=======
         'descriptionHr',
         'validationHr',
+        'validation_managerHr',
         'descriptionManager1',
         'validationManager1',
         'finalPrice',
         'descriptionManager2',
->>>>>>> 26b23e8 (final)
         'validationManager2'
     ];
 
- 
+
     public function departmans(): BelongsTo
     {
         return $this->belongsTo(Departmans::class, 'departmans_id');
     }
-   
+
     public function user()
     {
         return $this->belongsTo(User::class, 'author_id');

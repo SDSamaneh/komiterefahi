@@ -1,36 +1,16 @@
-
 @extends('layouts.dashboard.master')
 @section('content')
-<!-- **************** MAIN CONTENT START **************** -->
 <main>
-<<<<<<< HEAD
-      <!-- Inner intro START -->
       <section>
-=======
-      <section>
-<<<<<<< HEAD
             <div class="container">
                   <div class="row bg-form">
                         <div class="custom-box-shadow py-5">
-                              <div class="col-md-12 col-lg-8 col-xl-8 mx-auto p-4 p-sm-5">
-                                    <h2 class="text-center">ورود به حساب کاربری</h2>
-                                    <form method="post" action="{{route('login')}}" class="mt-4">
-=======
->>>>>>> 26b23e8 (final)
-            <div class="container"> 
-		<div class="row bg-form">
-                        <div class="custom-box-shadow py-5">
-                              <div class="col-md-12 col-lg-8 col-xl-8 mx-auto p-4 p-sm-5">
-                                    <h2 class="text-center">ورود به حساب کاربری</h2>
+                              <div class="col-md-12 col-lg-8 col-xl-8 mx-auto pt-5">
+                                    <h2 class="text-center font-bold">ورود به حساب کاربری</h2>
                                     <form method="post" action="{{route('login')}}" class="mt-4 pt-5">
-<<<<<<< HEAD
+
                                           @csrf
                                           <div class="row">
-=======
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
-                                          @csrf
-                                          <div class="row py-5">
->>>>>>> 26b23e8 (final)
                                                 <!-- idCard -->
                                                 <div class="col-md-6">
                                                       <div class="mb-3">
@@ -72,26 +52,11 @@
                                                 </div>
                                           </div>
                                     </form>
-<<<<<<< HEAD
-                                    <!-- Form END -->
-=======
->>>>>>> 26b23e8 (final)
                               </div>
                         </div>
                   </div>
             </div>
       </section>
-<<<<<<< HEAD
-      <!-- Inner intro END -->
 </main>
-<!-- **************** MAIN CONTENT END **************** -->
+
 @endsection
-=======
-</main>
-<<<<<<< HEAD
-@endsection
-=======
-<!-- **************** MAIN CONTENT END **************** -->
-@endsection
->>>>>>> 81081fa35ab13447141f5de902fc110a4dd26b65
->>>>>>> 26b23e8 (final)

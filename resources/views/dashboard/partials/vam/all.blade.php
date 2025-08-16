@@ -4,7 +4,7 @@
                   <div class="col-12">
                         <!-- Title -->
                         <div class="d-sm-flex justify-content-sm-between align-items-center">
-                              <h1 class="mb-2 mb-sm-0 h3">افزودن وام
+                              <h1 class="mb-2 mb-sm-0 h3">همه درخواست های وام
                                     <span class="badge bg-primary bg-opacity-10 text-primary">{{$vamCount}}</span>
                               </h1>
                               <a href="{{route('vam.create')}}" class="btn btn-sm btn-primary mb-0"><i class="fas fa-plus me-2"></i>ثبت درخواست وام جدید</a>
@@ -52,7 +52,7 @@
                                           <table class="table align-middle p-1 mb-0 table-hover table-shrink">
                                                 <thead class="table-dark">
                                                       <tr>
-                                                            <th scope="col" class="border-0  rounded-start">شناسه</th>
+                                                            <th scope="col" class="border-0 rounded-start">شناسه</th>
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
                                                             <th scope="col" class="border-0">دپارتمان</th>
@@ -67,53 +67,74 @@
                                                 </thead>
                                                 <tbody class="border-top-0">
                                                       @if($vams)
+
                                                       @foreach($vams as $vam)
-                                                      <tr>
-                                                            @if($vam->status==='Yes')
+
+                                                      @if($vam->status === 'Yes')
+
+                                                      @php
+                                                      $isFullyApproved = (
+                                                      $vam->validationHr === 'Yes' &&
+                                                      $vam->validation_managerHr === 'Yes' &&
+                                                      $vam->validationManager1 === 'Yes' &&
+                                                      $vam->validationManager2 === 'Yes'
+                                                      );
+                                                      @endphp
+
+                                                      <tr @if($isFullyApproved) style="background-color: #d4edda !important;" @endif>
+
                                                             <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$vam->id}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$vam->id}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$vam->name}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$vam->name}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$vam->idCard}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$vam->idCard}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$vam->departmans->name}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$vam->departmans->name}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$vam->supervisor->name}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$vam->supervisor->name}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$vam->price}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$vam->price}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$vam->resone}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$vam->resone}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">
-                                                                        {{ jdate($vam->created_at)->format('Y/m/d') }}
-                                                                  </h6>
+                                                                  <h6 class="course-title mb-0">{{ jdate($vam->created_at)->format('Y/m/d') }}</h6>
                                                             </td>
-                                                            <!-- humanResources validation -->
-                                                            @if($vam->validationHr === 'No')
+
+                                                          
+                                                            @if($vam->validationHr === 'Pending')
                                                             <td>
-                                                                  <h6 class="badge text-bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبار سنجی نشده</h6>
+                                                                  <h6 class="badge bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>بررسی نشده</h6>
                                                             </td>
-                                                            @elseif($vam->validationHr==='Yes')
+                                                            @elseif($vam->validationHr === 'No')
                                                             <td>
-                                                                  <h6 class="badge text-bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
+                                                                  <h6 class="badge bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>عدم اعتبار سنجی</h6>
+                                                            </td>
+                                                            @elseif($vam->validationHr === 'Yes')
+                                                            <td>
+                                                                  <h6 class="badge bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
                                                             </td>
                                                             @endif
+
+                                                            {{-- عملیات --}}
+                                                            @if(auth()->check() && (
+                                                            auth()->user()->role === 'humanResources' ||
+                                                            (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes')
+                                                            ))
                                                             <td>
-                                                                  <h6>
-                                                                        <a href="{{route('vam.edit',$vam->id)}}" class="text-success mb-0 me-2"><i class="fas fa-edit"></i></a>
-                                                                  </h6>
+                                                                  <a href="{{ route('vam.edit', $vam->id) }}" class="text-success mb-0 me-2">
+                                                                        <i class="fas fa-edit"></i>
+                                                                  </a>
                                                             </td>
-                                                            @if(in_array(auth()->user()->role, ['admin', 'humanResources']))
                                                             <td>
-                                                                  <div class="d-flex justify-align-content-between align-items-center">
+                                                                  <div class="d-flex align-items-center">
                                                                         <form action="{{ route('vam.destroy', $vam->id) }}" method="post">
                                                                               @csrf
                                                                               @method('DELETE')
@@ -123,10 +144,12 @@
                                                                         </form>
                                                                   </div>
                                                             </td>
-                                                            @endif
-
+                                                            @else
+                                                            <td></td>
+                                                            <td></td>
                                                             @endif
                                                       </tr>
+                                                      @endif
                                                       @endforeach
                                                       @else
                                                       <div class="alert alert-info">

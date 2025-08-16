@@ -17,36 +17,28 @@ return new class extends Migration
             $table->string('name');
             $table->string('idCard');
             $table->foreignId('departmans_id')->constrained()->OnDelete('cascade');
-<<<<<<< HEAD
-            $table->foreignId('supervisors_id')->constrained()->OnDelete('cascade');
-=======
             $table->foreignId('supervisors_id')->constrained()->OnDelete('cascade');        
             $table->enum('category', ['خدمات تعمیرگاهی', 'موتورسیکلت بنزینی', 'موتورسیکلت برقی', 'محصولات کودک', 'دوچرخه', 'اکسسوری و لوازم جانبی', 'تفریحات آبی', 'چهار چرخ', 'سایر'])->default('سایر');
->>>>>>> 26b23e8 (final)
             $table->string('price');
             $table->string('descriptionUser')->nullable();
             $table->enum('accept', ['No', 'Yes'])->default('No');
-            $table->enum('status', ['No', 'Yes'])->default('No');
+            $table->enum('status', ['Pending', 'No', 'Yes'])->default('Pending');
             $table->string('memberDate')->nullable();
             $table->string('memberPrice')->nullable();
             $table->string('lastSalary')->nullable();
-            $table->string('debt')->nullable();
+            $table->string('debt_company')->nullable();
+            $table->string('debt_madiran')->nullable();
+            $table->string('debt_fund')->nullable();
+            $table->string('debt_purchase')->nullable();
             $table->string('validationDate')->nullable();
-<<<<<<< HEAD
-            $table->enum('validationHr', ['No', 'Yes'])->default('No');
-            $table->enum('validationManager1', ['No', 'Yes'])->default('No');
-            $table->string('finalPrice');
-            $table->text('description')->nullable();
-            $table->enum('validationManager2', ['No', 'Yes'])->default('No');
-=======
             $table->text('descriptionHr')->nullable();
             $table->enum('validationHr', ['Pending', 'No', 'Yes'])->default('Pending');
+            $table->enum('validation_managerHr', ['Pending', 'No', 'Yes'])->default('Pending');
             $table->text('descriptionManager1')->nullable();
             $table->enum('validationManager1', ['Pending', 'No', 'Yes'])->default('Pending');
             $table->string('finalPrice')->nullable()->default(null);
             $table->text('descriptionManager2')->nullable();
             $table->enum('validationManager2', ['Pending', 'No', 'Yes'])->default('Pending');
->>>>>>> 26b23e8 (final)
             $table->timestamps();
         });
     }

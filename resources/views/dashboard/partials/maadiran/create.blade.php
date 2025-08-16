@@ -28,11 +28,7 @@
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
                                                             <label class="form-label">نام و نام خانوادگی</label>
-<<<<<<< HEAD
-                                                            <input name="name" type="text" class="form-control" value="{{ old('name') }}">
-=======
                                                             <input name="name" type="text" class="form-control" value="{{ old('name', Auth::user()->name) }}" readonly>
->>>>>>> 26b23e8 (final)
                                                             @error('name')
                                                             <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                             @enderror
@@ -41,11 +37,7 @@
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
                                                             <label class="form-label">کدملی</label>
-<<<<<<< HEAD
-                                                            <input name="idCard" type="text" class="form-control" value="">
-=======
                                                             <input name="idCard" type="text" class="form-control" value="{{ old('idCard', Auth::user()->idCard) }}" readonly>
->>>>>>> 26b23e8 (final)
                                                             @error('idCard')
                                                             <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                             @enderror

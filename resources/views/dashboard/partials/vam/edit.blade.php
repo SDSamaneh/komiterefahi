@@ -2,14 +2,23 @@
       <div class="container">
             <div class="row">
                   <div class="col-12">
-<<<<<<< HEAD
-=======
-
                         @php
+
+                        $user = auth()->user();
+
+                        // مجوزهای دسترسی
+                        $canEditUserFields = $user && in_array($user->role, ['subscriber', 'author']) && $vam->status !== 'Yes';
+                        $canEditHR = $user && $user->role === 'humanResources';
+                        $canEditManagerHr = $user && $user->role === 'managerHr';
+                        $canEditManager1 = $user && $user->role === 'manager1';
+                        $canEditManager2 = $user && in_array($user->role, ['manager2', 'admin']);
+
+
                         $steps = [
                         ['key' => 'accept', 'label' => 'ثبت درخواست'],
                         ['key' => 'status', 'label' => 'تأیید مدیر واحد'],
                         ['key' => 'validationHr', 'label' => 'اعتبارسنجی'],
+                        ['key' => 'validation_managerHr', 'label' => 'تاییدیه منابع انسانی'],
                         ['key' => 'validationManager1', 'label' => 'تأیید مدیر مالی'],
                         ['key' => 'validationManager2', 'label' => 'تأیید نهایی'],
                         ];
@@ -23,8 +32,10 @@
                         break;
                         }
                         }
+
                         @endphp
 
+                        <!-- راهنمای مراحل -->
                         <div class="col-md-12 border p-3 rounded-3 mb-3">
                               @php
                               $fillWidth = ($currentStep - 1) / (count($steps) - 1) * 100;
@@ -46,67 +57,57 @@
                                           @endforeach
                               </ul>
                         </div>
->>>>>>> 26b23e8 (final)
+
                         <div class="card border">
                               <div class="card-header text-center mb-3 mt-3">
                                     <h1 class="mb-3">ویرایش درخواست وام</h1>
                               </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> 26b23e8 (final)
                               <div class="card-body">
                                     <form action="{{ route('vam.update', $vam->id) }}" method="post">
                                           @csrf
                                           @method('PUT')
                                           <div class="row">
-                                                @php
-<<<<<<< HEAD
-                                                $readonly = !(auth()->check() && in_array(auth()->user()->role, ['subscriber', 'author']) && $vam->status === 'No');
-=======
-                                                $readonly = !(auth()->check() && in_array(auth()->user()->role, ['subscriber', 'author','admin']) && $vam->status === 'No');
->>>>>>> 26b23e8 (final)
-                                                @endphp
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">نام و نام خانوادگی</label>
-                                                      <input name="name" type="text" class="form-control" value="{{ old('name', $vam->name) }}" {{ $readonly ? 'readonly' : '' }}>
+                                                      <input name="name" type="text" class="form-control" value="{{ old('name', $vam->name) }}" {{ $canEditUserFields ? '' : 'readonly' }}>
                                                       @error('name') <small class="text-danger">{{ $message }}</small> @enderror
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">کدملی</label>
-                                                      <input name="idCard" type="text" class="form-control" value="{{ old('idCard', $vam->idCard) }}" {{ $readonly ? 'readonly' : '' }}>
+                                                      <input name="idCard" type="text" class="form-control" value="{{ old('idCard', $vam->idCard) }}" {{ $canEditUserFields ? '' : 'readonly' }}>
                                                       @error('idCard') <small class="text-danger">{{ $message }}</small> @enderror
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">مبلغ درخواستی (تومان)</label>
-<<<<<<< HEAD
-                                                      <input name="price" type="text" class="form-control" value="{{ old('price', $vam->price) }}" {{ $readonly ? 'readonly' : '' }}>
-=======
-                                                      <input name="price" type="text" class="form-control" id="priceInput" value="{{ old('price', $vam->price) }}" {{ $readonly ? 'readonly' : '' }}>
-
->>>>>>> 26b23e8 (final)
+                                                      <input name="price" type="text" class="form-control" id="priceInput" value="{{ old('price', $vam->price) }}" {{ $canEditUserFields ? '' : 'readonly' }}>
                                                       @error('price') <small class="text-danger">{{ $message }}</small> @enderror
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">دپارتمان</label>
-                                                      <select class="form-select" name="departmans_id" aria-label="Default select example">
-                                                            <option value="" disabled selected>{{$vam->departmans->name}}</option>
-
+                                                      @if($canEditUserFields)
+                                                      <select class="form-select" name="departmans_id">
+                                                            <option value="" disabled>دپارتمان را انتخاب کنید</option>
                                                             @foreach($departmans as $departman)
                                                             <option value="{{$departman->id}}" {{ old('departmans_id', $vam->departmans_id) == $departman->id ? 'selected' : '' }}>
                                                                   {{$departman->name}}
                                                             </option>
                                                             @endforeach
-
                                                       </select>
+                                                      @else
+                                                      <select class="form-select" disabled>
+                                                            <option selected>{{ $vam->departmans->name }}</option>
+                                                      </select>
+                                                      @endif
+
                                                       @error('departmans_id')
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror
                                                 </div>
                                                 <div class="col-md-3 mb-3">
-                                                      <label class="form-label">سرپرست واحد</label>
-                                                      <select class="form-select" name="supervisors_id" aria-label="Default select example">
-                                                            <option value="" disabled selected>{{$vam->supervisor->name}}</option>
+                                                      <label class="form-label">مدیر واحد</label>
+                                                      @if($canEditUserFields)
+                                                      <select class="form-select" name="supervisors_id">
+                                                            <option value="" disabled>مدیر واحد را انتخاب کنید</option>
 
                                                             @foreach($supervisors as $supervisor)
                                                             <option value="{{$supervisor->id}}" {{ old('supervisors_id', $vam->supervisors_id) == $supervisor->id ? 'selected' : '' }}>
@@ -115,6 +116,13 @@
                                                             @endforeach
 
                                                       </select>
+                                                      @else
+
+                                                      <select class="form-select" disabled>
+                                                            <option selected>{{ $vam->supervisor->name }}</option>
+                                                      </select>
+                                                      @endif
+
                                                       @error('supervisors_id')
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror
@@ -122,12 +130,19 @@
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
                                                             <label class="form-label">دلیل درخواست</label>
+                                                            @if($canEditUserFields)
                                                             <select class="form-select" name="resone" aria-label="Default select example" required>
-                                                                  <option value="" disabled {{ old('resone', $vam->resone) ? '' : 'selected' }}>دلیل درخواست وام را انتخاب کنید</option>
-                                                                  @foreach(['تحصیل', 'ازدواج', 'جهیزیه', 'درمان', 'تصادف', 'بیمه', 'فوت اقوام', 'سایر'] as $resone)
+                                                                  <option value="" disabled>دلیل درخواست وام را انتخاب کنید</option>
+                                                                  @foreach(['تحصیل','ازدواج','جهیزیه','درمان','تصادف','بیمه','فوت اقوام','مسکن','سایر'] as $resone)
                                                                   <option value="{{ $resone }}" {{ old('resone', $vam->resone) == $resone ? 'selected' : '' }}>{{ $resone }}</option>
                                                                   @endforeach
                                                             </select>
+                                                            @else
+                                                            <select class="form-select" disabled>
+                                                                  <option selected>{{ $vam->resone }}</option>
+                                                            </select>
+                                                            @endif
+
                                                             @error('resone')
                                                             <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                             @enderror
@@ -136,7 +151,7 @@
                                                 <div class="col-md-6">
                                                       <div class="mb-3">
                                                             <label class="form-label">توضیحات</label>
-                                                            <textarea class="form-control" name="descriptionUser" rows="3">{{ old('descriptionUser', $vam->descriptionUser) }}</textarea>
+                                                            <textarea class="form-control" name="descriptionUser" rows="3" {{ $canEditUserFields ? '' : 'readonly' }}>{{ old('descriptionUser', $vam->descriptionUser) }}</textarea>
                                                             @error('descriptionUser')
                                                             <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                             @enderror
@@ -154,127 +169,111 @@
                                                       </div>
                                                 </div>
                                           </div>
-<<<<<<< HEAD
 
-                                          @if($vam->status === 'No')
-                                          <div class="alert alert-warning text-center mt-4">
-                                                درخواست هنوز توسط مدیر واحد تأیید نشده است.
-                                          </div>
-                                          @endif
+                                          <!-- اعتبارسنجی -->
+                                          @if($vam->status === 'Yes')
 
-                                          @if($vam->validationHr === 'No')
-                                          <div class="alert alert-warning text-center mt-2">
-                                                درخواست هنوز توسط منابع انسانی اعتبارسنجی نشده است.
-                                          </div>
-                                          @endif
-
-                                          @php
-                                          $isHR = auth()->check() && auth()->user()->role === 'humanResources';
-                                          @endphp
-
-=======
-                                          @php
-                                          $isHR = auth()->check() && auth()->user()->role === 'humanResources';
-                                          @endphp
->>>>>>> 26b23e8 (final)
-                                          @if($vam->status === 'Yes' && !empty($vam->validationHr) || $isHR)
                                           <hr />
-                                          <div class="text-center mt-4 mb-4">
-                                                <h4>فرم اعتبارسنجی منابع انسانی</h4>
-                                          </div>
+                                          <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                           <div class="row">
-                                                <div class="col-md-4 mb-3">
-<<<<<<< HEAD
-                                                      <label class="form-label">تاریخ عضویت در صندوق</label>
-                                                      <input name="memberDate" type="text" class="form-control"
-                                                            value="{{ old('memberDate', $vam->memberDate) }}"
-                                                            placeholder="به طور مثال : 1402/02/30"
-                                                            {{ $isHR ? '' : 'readonly' }}>
-=======
+                                                <div class="col-md-3 mb-3">
                                                       <label class="form-label">تاریخ ورود به سازمان</label>
                                                       <div class="input-container">
-                                                            <input type="text" name="memberDate"
-                                                                  class="form-control input-field persian-date" value="{{ old('memberDate', $vam->memberDate) }}" placeholder="به طور مثال : 1402/02/30"
-                                                                  {{ $isHR ? '' : 'readonly' }} autocomplete="off">
-                                                            <i class="fas fa-calendar-minus icon"></i>
+                                                            <input type="text" name="memberDate" class="form-control persian-date"
+                                                                  value="{{ old('memberDate', $vam->memberDate) }}"
+                                                                  placeholder="به طور مثال : 1402/02/30"
+                                                                  {{ $canEditHR ? '' : 'readonly' }} autocomplete="off">
                                                       </div>
->>>>>>> 26b23e8 (final)
                                                       @error('memberDate')
                                                       <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-4 mb-3">
-<<<<<<< HEAD
-                                                      <label class="form-label">مبلغ سرمایه گذاری در صندوق</label>
-=======
+                                                <div class="col-md-3 mb-3">
                                                       <label class="form-label">مبلغ سرمایه گذاری در صندوق(تومان)</label>
->>>>>>> 26b23e8 (final)
                                                       <input name="memberPrice" type="text" class="form-control"
                                                             value="{{ old('memberPrice', $vam->memberPrice) }}"
-                                                            {{ $isHR ? '' : 'readonly' }}>
+                                                            {{ $canEditHR ? '' : 'readonly' }}>
                                                       @error('memberPrice')
                                                       <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-4 mb-3">
-<<<<<<< HEAD
-                                                      <label class="form-label">آخرین حقوق دریافتی</label>
-=======
+                                                <div class="col-md-3 mb-3">
                                                       <label class="form-label">آخرین حقوق دریافتی(تومان)</label>
->>>>>>> 26b23e8 (final)
                                                       <input name="lastSalary" type="text" class="form-control"
                                                             value="{{ old('lastSalary', $vam->lastSalary) }}"
-                                                            {{ $isHR ? '' : 'readonly' }}>
+                                                            {{ $canEditHR ? '' : 'readonly' }}>
                                                       @error('lastSalary')
+                                                      <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
+                                                      @enderror
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                      <label class="form-label">تاریخ اعتبار سنجی</label>
+                                                      <div class="input-container">
+                                                            <input name="validationDate" type="text" class="form-control persian-date"
+                                                                  value="{{ old('validationDate', $vam->validationDate) }}"
+                                                                  placeholder="به طور مثال : 1402/02/30"
+                                                                  {{ $canEditHR ? '' : 'readonly' }}>
+                                                      </div>
+                                                      @error('validationDate')
                                                       <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                       <label class="form-label">میزان بدهی در زمان بهره برداری از امکانات رفاهی</label>
-<<<<<<< HEAD
-                                                      <input name="debt" type="text" class="form-control"
-                                                            value="{{ old('debt', $vam->debt) }}"
-                                                            {{ $isHR ? '' : 'readonly' }}>
-=======
-                                                      <textarea class="form-control" name="debt" rows="3">{{ old('debt', $vam->debt) }}</textarea>
->>>>>>> 26b23e8 (final)
+                                                      <table class="table table-bordered table-sm debt-table">
+                                                            <thead>
+                                                                  <tr>
+                                                                        <th>عنوان</th>
+                                                                        <th>مبلغ (تومان)</th>
+                                                                  </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                  <tr>
+                                                                        <td>وام شرکت</td>
+                                                                        <td>
+                                                                              <input type="text" class="form-control debt-input" name="debt_company"
+                                                                                    value="{{ old('debt_company', $vam->debt_company ?? '') }}"
+                                                                                    {{ $canEditHR ? '' : 'readonly' }}>
+                                                                        </td>
+                                                                  </tr>
+                                                                  <tr>
+                                                                        <td>مادیران</td>
+                                                                        <td>
+                                                                              <input type="text" class="form-control debt-input" name="debt_madiran"
+                                                                                    value="{{ old('debt_madiran', $vam->debt_madiran ?? '') }}"
+                                                                                    {{ $canEditHR ? '' : 'readonly' }}>
+                                                                        </td>
+                                                                  </tr>
+                                                                  <tr>
+                                                                        <td>وام صندوق</td>
+                                                                        <td>
+                                                                              <input type="text" class="form-control debt-input" name="debt_fund"
+                                                                                    value="{{ old('debt_fund', $vam->debt_fund ?? '') }}"
+                                                                                    {{ $canEditHR ? '' : 'readonly' }}>
+                                                                        </td>
+                                                                  </tr>
+                                                                  <tr>
+                                                                        <td>خرید از شرکت</td>
+                                                                        <td>
+                                                                              <input type="text" class="form-control debt-input" name="debt_purchase"
+                                                                                    value="{{ old('debt_purchase', $vam->debt_purchase ?? '') }}"
+                                                                                    {{ $canEditHR ? '' : 'readonly' }}>
+                                                                        </td>
+                                                                  </tr>
+                                                            </tbody>
+                                                      </table>
                                                       @error('debt')
                                                       <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-4 mb-3">
-                                                      <label class="form-label">تاریخ اعتبار سنجی</label>
-<<<<<<< HEAD
-                                                      <input name="validationDate" type="text" class="form-control"
-                                                            value="{{ old('validationDate', $vam->validationDate) }}"
-                                                            placeholder="به طور مثال : 1402/02/30"
-                                                            {{ $isHR ? '' : 'readonly' }}>
-=======
-                                                      <div class="input-container">
-                                                            <input name="validationDate" type="text" class="form-control persian-date"
-                                                                  value="{{ old('validationDate', $vam->validationDate) }}"
-                                                                  placeholder="به طور مثال : 1402/02/30"
-                                                                  {{ $isHR ? '' : 'readonly' }}>
-                                                            <i class="fas fa-calendar-minus icon"></i>
-                                                      </div>
->>>>>>> 26b23e8 (final)
-                                                      @error('validationDate')
-                                                      <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
-                                                      @enderror
-                                                </div>
-<<<<<<< HEAD
-                                                @if($isHR)
-                                                <div class="col-md-4 mt-4 d-flex gap-4">
-                                                      <div class="form-check">
-=======
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-md-8 mb-3">
                                                       <label class="form-label">توضیحات</label>
-                                                      <textarea class="form-control" name="descriptionHr" rows="3">{{ old('descriptionHr') }}</textarea>
+                                                      <textarea class="form-control" name="descriptionHr" rows="3" {{ $canEditHR ? '' : 'readonly' }}>{{ old('descriptionHr') }}</textarea>
                                                       @error('descriptionHr')
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror
                                                 </div>
-                                                @if($isHR)
+                                                @if($canEditHR)
                                                 <div class="col-md-4 mt-4 d-flex gap-4">
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationHr" value="Pending"
@@ -282,80 +281,70 @@
                                                             <label class="form-check-label">در حال بررسی</label>
                                                       </div>
                                                       <div class="form-check">
->>>>>>> 26b23e8 (final)
                                                             <input class="form-check-input" type="radio" name="validationHr" value="Yes"
                                                                   {{ old('validationHr', $vam->validationHr) == 'Yes' ? 'checked' : '' }}>
-                                                            <label class="form-check-label">تأیید</label>
+                                                            <label class="form-check-label">انجام شد</label>
                                                       </div>
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationHr" value="No"
                                                                   {{ old('validationHr', $vam->validationHr) == 'No' ? 'checked' : '' }}>
-                                                            <label class="form-check-label">عدم تأیید</label>
+                                                            <label class="form-check-label">بررسی نشده</label>
                                                       </div>
                                                 </div>
                                                 @else
-<<<<<<< HEAD
-                                                <div class="col-md-4 mt-4">
-                                                      <label class="form-label">نتیجه اعتبارسنجی منابع انسانی</label>
-                                                      <input type="text" class="form-control" value="{{ $vam->validationHr === 'Yes' ? 'تأیید شده' : ($vam->validationHr === 'No' ? 'عدم تأیید' : '---') }}" readonly>
-=======
-                                                <div class="col-md-12">
-                                                      <label class="form-label">نتیجه اعتبارسنجی منابع انسانی</label>
-                                                      <h6 class="badge bg-body-secondary text-black mb-3" readonly>{{ $vam->validationHr === 'Yes' ? 'تأیید شده' : ($vam->validationHr === 'No' ? 'عدم تأیید' : ($vam->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
-
->>>>>>> 26b23e8 (final)
+                                                <div class="row">
+                                                      <div class="col-md-6">
+                                                            <label class="form-label">اعتبارسنجی</label>
+                                                            <h6 class="badge bg-body-secondary text-black mb-3">{{ $vam->validationHr === 'Yes' ? 'انجام شد' : ($vam->validationHr === 'No' ? 'انجام نشود' : ($vam->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
+                                                      </div>
                                                 </div>
                                                 @endif
                                           </div>
                                           @endif
-<<<<<<< HEAD
 
-                                          @php
-                                          $isManager1 = auth()->check() && auth()->user()->role === 'manager1';
-                                          @endphp
-
-=======
-                                          @php
-                                          $isManager1 = auth()->check() && auth()->user()->role === 'manager1';
-                                          @endphp
->>>>>>> 26b23e8 (final)
+                                          {{-- تاییدیه منابع انسانی --}}
                                           @if($vam->validationHr === 'Yes')
                                           <hr />
-                                          <div class="text-center mt-4 mb-4">
-                                                <h4>تاییدیه توسط مدیر مالی</h4>
+                                          <h4 class="text-center mt-4 mb-4">تاییدیه منابع انسانی</h4>
+                                          @if($canEditManagerHr)
+                                          <div class="col-md-4 mt-4 d-flex gap-4">
+                                                <div class="form-check">
+                                                      <input class="form-check-input" type="radio" name="validation_managerHr" value="Pending"
+                                                            {{ old('validation_managerHr', $vam->validation_managerHr) == 'Pending' ? 'checked' : '' }}>
+                                                      <label class="form-check-label">در حال بررسی</label>
+                                                </div>
+                                                <div class="form-check">
+                                                      <input class="form-check-input" type="radio" name="validation_managerHr" value="Yes"
+                                                            {{ old('validation_managerHr', $vam->validation_managerHr) == 'Yes' ? 'checked' : '' }}>
+                                                      <label class="form-check-label">تأیید</label>
+                                                </div>
+                                                <div class="form-check">
+                                                      <input class="form-check-input" type="radio" name="validation_managerHr" value="No"
+                                                            {{ old('validation_managerHr', $vam->validation_managerHr) == 'No' ? 'checked' : '' }}>
+                                                      <label class="form-check-label">عدم تأیید</label>
+                                                </div>
                                           </div>
+                                          @else
                                           <div class="row">
-<<<<<<< HEAD
-                                                <div class="col-md-6 mb-3">
-                                                      <label class="form-label">مبلغ نهایی (تومان)</label>
-                                                      <input name="finalPrice" type="text" class="form-control"
-                                                            value="{{ old('finalPrice', $vam->finalPrice ?? $vam->price) }}"
-                                                            {{ $isManager1 ? '' : 'readonly' }}>
-                                                      @error('finalPrice')
-                                                      <small class="text-danger">{{ $message }}</small>
-                                                      @enderror
+                                                <div class="col-md-6">
+                                                      <label class="form-label">نتیجه بررسی منابع انسانی</label>
+                                                      <h6 class="form-control-plaintext bg-body-secondary">{{ $vam->validation_managerHr === 'Yes' ? 'تأیید شده' : ($vam->validation_managerHr === 'No' ? 'عدم تأیید' : ($vam->validation_managerHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
-                                                      <label class="form-label">توضیحات تکمیلی</label>
-                                                      <textarea class="form-control" name="description" rows="3" {{ $isManager1 ? '' : 'readonly' }}>{{ old('description', $vam->description) }}</textarea>
-                                                      @error('description')
-                                                      <small class="text-danger">{{ $message }}</small>
-                                                      @enderror
-                                                </div>
+                                          </div>
+                                          @endif
+                                          @endif
 
-                                                @if($isManager1)
-                                                <div class="col-md-4 mt-4 d-flex gap-4">
-                                                      <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="validationManager1" value="Yes" {{ old('validationManager1', $vam->validationManager1) == 'Yes' ? 'checked' : '' }}>
-                                                            <label class="form-check-label">تأیید</label>
-                                                      </div>
-                                                      <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="validationManager1" value="No" {{ old('validationManager1', $vam->validationManager1) == 'No' ? 'checked' : '' }}>
-=======
-                                                @if($isManager1)
+
+                                          {{-- تاییدیه مدیر مالی --}}
+                                          @if($vam->validation_managerHr === 'Yes')
+                                          <hr />
+                                          <h4 class="text-center mt-4 mb-4">تاییدیه مدیر مالی</h4>
+
+                                          @if($canEditManager1)
+                                          <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                       <label class="form-label">توضیحات مدیر مالی</label>
-                                                      <textarea class="form-control" name="descriptionManager1" rows="3" {{ $isManager1 ? '' : 'readonly' }}>{{ old('descriptionManager1', $vam->descriptionManager1) }}</textarea>
+                                                      <textarea class="form-control" name="descriptionManager1" rows="3" {{ $canEditManager1 ? '' : 'readonly' }}>{{ old('descriptionManager1', $vam->descriptionManager1) }}</textarea>
                                                       @error('descriptionManager1')
                                                       <small class="text-danger">{{ $message }}</small>
                                                       @enderror
@@ -374,63 +363,46 @@
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationManager1" value="No"
                                                                   {{ old('validationManager1', $vam->validationManager1) == 'No' ? 'checked' : '' }}>
->>>>>>> 26b23e8 (final)
                                                             <label class="form-check-label">عدم تأیید</label>
                                                       </div>
                                                 </div>
-                                                @else
-                                                <div class="col-md-4 mt-4">
-                                                      <label class="form-label">نتیجه بررسی مدیر مالی</label>
-<<<<<<< HEAD
-                                                      <input type="text" class="form-control" value="{{ $vam->validationManager1 === 'Yes' ? 'تأیید شده' : ($vam->validationManager1 === 'No' ? 'عدم تأیید' : '---') }}" readonly>
-=======
-                                                      <h6 class="badge bg-body-secondary text-black mb-3" readonly>{{ $vam->validationManager1 === 'Yes' ? 'تأیید شده' : ($vam->validationManager1 === 'No' ? 'عدم تأیید' : ($vam->validationManager1 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
->>>>>>> 26b23e8 (final)
+                                          </div>
+                                          @else
+                                          <div class="row">
+                                                <div class="col-md-6">
+                                                      <label class="form-label">توضیحات مدیر مالی</label>
+                                                      <p class="form-control-plaintext  bg-body-secondary">{{ $vam->descriptionManager1 }}</p>
                                                 </div>
-                                                @endif
+                                                <div class="col-md-6">
+                                                      <label class="form-label">نتیجه بررسی مدیر مالی</label>
+                                                      <h6 class="form-control-plaintext bg-body-secondary">{{ $vam->validationManager1 === 'Yes' ? 'تأیید شده' : ($vam->validationManager1 === 'No' ? 'عدم تأیید' : ($vam->validationManager1 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
+                                                </div>
                                           </div>
                                           @endif
-<<<<<<< HEAD
 
-                                          @php
-                                          $isManager2 = auth()->check() && auth()->user()->role === 'manager2';
-                                          @endphp
-
-=======
-                                          
-                                          @php
-                                          $isManager2 = auth()->check() && in_array(auth()->user()->role, ['manager2','admin']);
-                                          @endphp
->>>>>>> 26b23e8 (final)
+                                          @endif
+                                          {{-- تاییدیه رییس کمیته --}}
                                           @if($vam->validationManager1 === 'Yes')
                                           <hr />
-                                          <div class="text-center mt-4 mb-4">
-                                                <h4>تاییدیه توسط رییس کمیته رفاهی</h4>
-                                          </div>
+                                          <h4 class="text-center mt-4 mb-4">تاییدیه رییس کمیته رفاهی</h4>
+                                          @if($canEditManager2)
                                           <div class="row">
-                                                @if($isManager2)
-<<<<<<< HEAD
-                                                <div class="col-md-4 mt-4 d-flex gap-4">
-                                                      <div class="form-check">
-=======
                                                 <div class="col-md-6 mb-3">
                                                       <label class="form-label">مبلغ نهایی (تومان)</label>
                                                       <input name="finalPrice" type="text" class="form-control"
                                                             value="{{ old('finalPrice', $vam->finalPrice ?? $vam->price) }}"
-                                                            {{ $isManager2 ? '' : 'readonly' }}>
+                                                            {{ $canEditManager2 ? '' : 'readonly' }}>
                                                       @error('finalPrice')
                                                       <small class="text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-
                                                 <div class="col-md-6 mb-3">
                                                       <label class="form-label">توضیحات تکمیلی</label>
-                                                      <textarea class="form-control" name="descriptionManager2" rows="3" {{ $isManager2 ? '' : 'readonly' }}>{{ old('descriptionManager2', $vam->descriptionManager2) }}</textarea>
+                                                      <textarea class="form-control" name="descriptionManager2" rows="3" {{ $canEditManager2 ? '' : 'readonly' }}>{{ old('descriptionManager2', $vam->descriptionManager2) }}</textarea>
                                                       @error('descriptionManager2')
                                                       <small class="text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-
                                                 <div class="col-md-4 mt-4 d-flex gap-4">
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationManager2" value="Pending"
@@ -438,7 +410,6 @@
                                                             <label class="form-check-label">در حال بررسی</label>
                                                       </div>
                                                       <div class="form-check">
->>>>>>> 26b23e8 (final)
                                                             <input class="form-check-input" type="radio" name="validationManager2" value="Yes" {{ old('validationManager2', $vam->validationManager2) == 'Yes' ? 'checked' : '' }}>
                                                             <label class="form-check-label">تأیید</label>
                                                       </div>
@@ -447,17 +418,23 @@
                                                             <label class="form-check-label">عدم تأیید</label>
                                                       </div>
                                                 </div>
-                                                @else
-                                                <div class="col-md-4 mt-4">
-                                                      <label class="form-label">نتیجه بررسی رییس کمیته رفاهی</label>
-<<<<<<< HEAD
-                                                      <input type="text" class="form-control" value="{{ $vam->validationManager2 === 'Yes' ? 'تأیید شده' : ($vam->validationManager2 === 'No' ? 'عدم تأیید' : '---') }}" readonly>
-=======
-                                                      <h6 class="badge bg-body-secondary text-black mb-3" readonly>{{ $vam->validationManager2 === 'Yes' ? 'تأیید شده' : ($vam->validationManager2 === 'No' ? 'عدم تأیید' : ($vam->validationManager2 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
->>>>>>> 26b23e8 (final)
-                                                </div>
-                                                @endif
                                           </div>
+                                          @else
+                                          <div class="row">
+                                                <div class="col-md-4">
+                                                      <label class="form-label">مبلغ نهایی</label>
+                                                      <p class="form-control-plaintext bg-body-secondary">{{ $vam->finalPrice }}</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                      <label class="form-label">توضیحات رییس کمیته رفاهی</label>
+                                                      <p class="form-control-plaintext bg-body-secondary">{{ $vam->descriptionManager2 }}</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                      <label class="form-label">نتیجه بررسی رییس کمیته رفاهی</label>
+                                                      <h6 class="form-control-plaintext bg-body-secondary">{{ $vam->validationManager2 === 'Yes' ? 'تأیید شده' : ($vam->validationManager2 === 'No' ? 'عدم تأیید' : ($vam->validationManager2 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
+                                                </div>
+                                          </div>
+                                          @endif
                                           @endif
 
                                           <div class="col-md-12 d-flex gap-2 justify-content-end mt-5">

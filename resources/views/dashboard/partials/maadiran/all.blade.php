@@ -4,12 +4,8 @@
                   <div class="col-12">
                         <!-- Title -->
                         <div class="d-sm-flex justify-content-sm-between align-items-center">
-<<<<<<< HEAD
-                              <h1 class="mb-2 mb-sm-0 h3"> درخواست خرید
-=======
                               <h1 class="mb-2 mb-sm-0 h3">
                                     درخواست خرید از مادیران
->>>>>>> 26b23e8 (final)
                                     <span class="badge bg-primary bg-opacity-10 text-primary">{{$maadiranCount}}</span>
                               </h1>
                               <a href="{{route('maadiran.create')}}" class="btn btn-sm btn-primary mb-0"><i class="fas fa-plus me-2"></i>ثبت درخواست خرید جدید</a>
@@ -42,14 +38,7 @@
                               @endif
                         </div>
                         <div class="card border bg-transparent rounded-3">
-<<<<<<< HEAD
-                              <!-- Card body START -->
-                              <div class="card-body p-3">
-                                    <!-- Post list table START -->
-                                    <div class="table-responsive border-0">
-                                          <table class="table align-middle p-1 mb-0 table-hover table-shrink">
-                                                <!-- Table head -->
-=======
+
                               <div class="card-header bg-transparent border-bottom p-3">
                                     <div class="d-sm-flex justify-content-between align-items-center">
                                           <form action="{{ route('maadiran.index') }}" method="GET" class="mb-3">
@@ -63,7 +52,6 @@
                               <div class="card-body p-3">
                                     <div class="table-responsive border-0">
                                           <table class="table align-middle p-1 mb-0 table-hover table-shrink">
->>>>>>> 26b23e8 (final)
                                                 <thead class="table-dark">
                                                       <tr>
                                                             <th scope="col" class="border-0  rounded-start">شناسه</th>
@@ -73,10 +61,7 @@
                                                             <th scope="col" class="border-0">مدیرواحد</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
                                                             <th scope="col" class="border-0">دسته بندی</th>
-<<<<<<< HEAD
-=======
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
->>>>>>> 26b23e8 (final)
                                                             <th scope="col" class="border-0">اعتبارسنجی</th>
                                                             <th scope="col" class="border-0">عملیات</th>
                                                             <th scope="col" class="border-0">حذف</th>
@@ -87,8 +72,8 @@
 
                                                       @foreach($maadirans as $maadiran)
 
+                                                      @if($maadiran->status==='Yes')
                                                       <tr>
-                                                            @if($maadiran->status==='Yes')
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->id}}</h6>
                                                             </td>
@@ -110,32 +95,40 @@
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->category}}</h6>
                                                             </td>
-<<<<<<< HEAD
-=======
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">
                                                                         {{ jdate($maadiran->created_at)->format('Y/m/d') }}
                                                                   </h6>
                                                             </td>
->>>>>>> 26b23e8 (final)
-                                                            <!-- humanResources validation -->
-                                                            @if($maadiran->validationHr === 'No')
+
+
+                                                            @if($maadiran->validationHr === 'Pending')
                                                             <td>
-                                                                  <h6 class="badge text-bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبار سنجی نشده</h6>
+                                                                  <h6 class="badge bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>بررسی نشده</h6>
                                                             </td>
-                                                            @elseif($maadiran->validationHr==='Yes')
+                                                            @elseif($maadiran->validationHr === 'No')
                                                             <td>
-                                                                  <h6 class="badge text-bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
+                                                                  <h6 class="badge bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>عدم اعتبار سنجی</h6>
+                                                            </td>
+                                                            @elseif($maadiran->validationHr === 'Yes')
+                                                            <td>
+                                                                  <h6 class="badge bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
                                                             </td>
                                                             @endif
+
+
+                                                            {{-- عملیات --}}
+                                                            @if(auth()->check() && (
+                                                            auth()->user()->role === 'humanResources' ||
+                                                            (auth()->user()->role === 'managerHr' && $maadiran->validationHr === 'Yes')
+                                                            ))
                                                             <td>
-                                                                  <h6>
-                                                                        <a href="{{route('maadiran.edit',$maadiran->id)}}" class="text-success mb-0 me-2"><i class="fas fa-edit"></i></a>
-                                                                  </h6>
+                                                                  <a href="{{ route('maadiran.edit', $maadiran->id) }}" class="text-success mb-0 me-2">
+                                                                        <i class="fas fa-edit"></i>
+                                                                  </a>
                                                             </td>
-                                                            @if(in_array(auth()->user()->role, ['admin', 'humanResources']))
                                                             <td>
-                                                                  <div class="d-flex justify-align-content-between align-items-center">
+                                                                  <div class="d-flex align-items-center">
                                                                         <form action="{{ route('maadiran.destroy', $maadiran->id) }}" method="post">
                                                                               @csrf
                                                                               @method('DELETE')
@@ -145,10 +138,13 @@
                                                                         </form>
                                                                   </div>
                                                             </td>
-                                                            @endif
-
+                                                            @else
+                                                            <td></td>
+                                                            <td></td>
                                                             @endif
                                                       </tr>
+                                                      @endif
+
                                                       @endforeach
                                                       @else
                                                       <div class="alert alert-info">
@@ -158,12 +154,9 @@
                                                 </tbody>
                                           </table>
                                     </div>
-<<<<<<< HEAD
-=======
                                     <div class="d-flex justify-content-center mt-4">
                                           {{ $maadirans->appends(request()->query())->links() }}
                                     </div>
->>>>>>> 26b23e8 (final)
                               </div>
                         </div>
                   </div>
