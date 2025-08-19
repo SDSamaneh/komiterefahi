@@ -4,10 +4,9 @@
                   <div class="col-12">
                         <!-- Title -->
                         <div class="d-sm-flex justify-content-sm-between align-items-center">
-                              <h1 class="mb-2 mb-sm-0 h3">همه درخواست های وام
-                                    <span class="badge bg-primary bg-opacity-10 text-primary">{{$vamCount}}</span>
+                              <h1 class="mb-2 mb-sm-0 h3">لیست درخواست های مساعده
                               </h1>
-                              <a href="{{route('vam.create')}}" class="btn btn-sm btn-primary mb-0"><i class="fas fa-plus me-2"></i>ثبت درخواست وام جدید</a>
+                              <a href="{{route('vam.create')}}" class="btn btn-sm btn-primary mb-0"><i class="fas fa-plus me-2"></i>ثبت درخواست جدید</a>
                         </div>
                   </div>
             </div>
