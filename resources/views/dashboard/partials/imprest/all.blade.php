@@ -6,7 +6,7 @@
                         <div class="d-sm-flex justify-content-sm-between align-items-center">
                               <h1 class="mb-2 mb-sm-0 h3">لیست درخواست های مساعده
                               </h1>
-                              <a href="{{route('vam.create')}}" class="btn btn-sm btn-primary mb-0"><i class="fas fa-plus me-2"></i>ثبت درخواست جدید</a>
+                              <a href="{{route('imprest.create')}}" class="btn btn-sm btn-primary mb-0"><i class="fas fa-plus me-2"></i>ثبت درخواست جدید</a>
                         </div>
                   </div>
             </div>
@@ -38,7 +38,7 @@
                         <div class="card border bg-transparent rounded-3">
                               <div class="card-header bg-transparent border-bottom p-3">
                                     <div class="d-sm-flex justify-content-between align-items-center">
-                                          <form action="{{ route('vam.index') }}" method="GET" class="mb-3">
+                                          <form action="{{ route('imprest.index') }}" method="GET" class="mb-3">
                                                 <div class="input-group">
                                                       <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="براساس نام و کدملی و ...">
                                                       <button type="submit" class="btn btn-danger">جستجو</button>
@@ -54,10 +54,7 @@
                                                             <th scope="col" class="border-0 rounded-start">شناسه</th>
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
-                                                            <th scope="col" class="border-0">دپارتمان</th>
-                                                            <th scope="col" class="border-0">مدیرواحد</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
-                                                            <th scope="col" class="border-0">علت</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
                                                             <th scope="col" class="border-0">اعتبارسنجی</th>
                                                             <th scope="col" class="border-0">عملیات</th>
@@ -65,58 +62,48 @@
                                                       </tr>
                                                 </thead>
                                                 <tbody class="border-top-0">
-                                                      @if($vams)
+                                                      @if($imprests)
 
-                                                      @foreach($vams as $vam)
+                                                      @foreach($imprests as $imprest)
 
-                                                      @if($vam->status === 'Yes')
+                                                      @if($imprest->status === 'Yes')
 
                                                       @php
                                                       $isFullyApproved = (
-                                                      $vam->validationHr === 'Yes' &&
-                                                      $vam->validation_managerHr === 'Yes' &&
-                                                      $vam->validationManager1 === 'Yes' &&
-                                                      $vam->validationManager2 === 'Yes'
+                                                      $imprest->validationHr === 'Yes' &&
+                                                      $imprest->validation_managerHr === 'Yes' &&
+                                                      $imprest->validationManager1 === 'Yes' &&
+                                                      $imprest->validationManager2 === 'Yes'
                                                       );
                                                       @endphp
 
                                                       <tr>
 
                                                             <td @if($isFullyApproved) style="background-color: #d4edda;" @endif>
-                                                                  <h6 class="course-title mb-0">{{$vam->id}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$imprest->id}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->name}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$imprest->name}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->idCard}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$imprest->idCard}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->departmans->name}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$imprest->price}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->supervisor->name}}</h6>
-                                                            </td>
-                                                            <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->price}}</h6>
-                                                            </td>
-                                                            <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->resone}}</h6>
-                                                            </td>
-                                                            <td>
-                                                                  <h6 class="course-title mb-0">{{ jdate($vam->created_at)->format('Y/m/d') }}</h6>
+                                                                  <h6 class="course-title mb-0">{{ jdate($imprest->created_at)->format('Y/m/d') }}</h6>
                                                             </td>
 
-
-                                                            @if($vam->validationHr === 'Pending')
+                                                            @if($imprest->validationHr === 'Pending')
                                                             <td>
                                                                   <h6 class="badge bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>بررسی نشده</h6>
                                                             </td>
-                                                            @elseif($vam->validationHr === 'No')
+                                                            @elseif($imprest->validationHr === 'No')
                                                             <td>
                                                                   <h6 class="badge bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>عدم اعتبار سنجی</h6>
                                                             </td>
-                                                            @elseif($vam->validationHr === 'Yes')
+                                                            @elseif($imprest->validationHr === 'Yes')
                                                             <td>
                                                                   <h6 class="badge bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
                                                             </td>
@@ -125,16 +112,18 @@
                                                             {{-- عملیات --}}
                                                             @if(auth()->check() && (
                                                             auth()->user()->role === 'humanResources' ||
-                                                            (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes')
+                                                            (auth()->user()->role === 'managerHr' && $imprest->validationHr === 'Yes') ||
+                                                            (auth()->user()->role === 'manager1' && $imprest->validation_managerHr === 'Yes') ||
+                                                            (auth()->user()->role === 'manager2' && $imprest->validationManager1 === 'Yes')
                                                             ))
                                                             <td>
-                                                                  <a href="{{ route('vam.edit', $vam->id) }}" class="text-success mb-0 me-2">
+                                                                  <a href="{{ route('imprest.edit', $imprest->id) }}" class="text-success mb-0 me-2">
                                                                         <i class="fas fa-edit"></i>
                                                                   </a>
                                                             </td>
                                                             <td>
                                                                   <div class="d-flex align-items-center">
-                                                                        <form action="{{ route('vam.destroy', $vam->id) }}" method="post">
+                                                                        <form action="{{ route('imprest.destroy', $imprest->id) }}" method="post">
                                                                               @csrf
                                                                               @method('DELETE')
                                                                               <button type="submit" class="border-0 bg-transparent">
@@ -159,7 +148,7 @@
                                           </table>
                                     </div>
                                     <div class="d-flex justify-content-center mt-4">
-                                          {{ $vams->appends(request()->query())->links() }}
+                                          {{ $imprests->appends(request()->query())->links() }}
                                     </div>
                               </div>
                         </div>

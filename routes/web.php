@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\dashboard\DepartmanController;
+use App\Http\Controllers\dashboard\ImprestController;
 use App\Http\Controllers\dashboard\IndexController;
 use App\Http\Controllers\dashboard\MaadiranController;
 use App\Http\Controllers\dashboard\ServiceController;
@@ -40,6 +41,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         Route::resource('service', ServiceController::class);
         Route::resource('vam', VamController::class);
         Route::resource('maadiran', MaadiranController::class);
+        Route::resource('imprest', ImprestController::class);
 
         // Profile routes
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -62,5 +64,9 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         Route::get('maadirans', [SupervisorController::class, 'maadiranRequestsForSupervisor'])->name('supervisor.maadiran.index');
         Route::get('maadirans/{maadiran}/edit', [SupervisorController::class, 'editMaadiran'])->name('supervisor.maadiran.edit');
         Route::put('maadirans/{maadiran}', [SupervisorController::class, 'updateMaadiran'])->name('supervisor.maadiran.update');
+
+        Route::get('imprests', [SupervisorController::class, 'imprestRequestsForSupervisor'])->name('supervisor.imprest.index');
+        Route::get('imprests/{imprest}/edit', [SupervisorController::class, 'editImprest'])->name('supervisor.imprest.edit');
+        Route::put('imprests/{imprest}', [SupervisorController::class, 'updateImprest'])->name('supervisor.imprest.update');
     });
 });

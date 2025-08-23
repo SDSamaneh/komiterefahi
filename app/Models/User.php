@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\dashboard\Imprest;
 use App\Models\dashboard\Maadiran;
 use App\Models\dashboard\Service;
 use App\Models\dashboard\Supervisor;
@@ -74,6 +75,10 @@ class User extends Authenticatable
     }
     public function maadiran()
     {
-        return $this->belongsTo(Maadiran::class, 'maadiran_id');
+        return $this->belongsTo(Maadiran::class, 'author_id');
+    }
+    public function imprest()
+    {
+        return $this->belongsTo(Imprest::class, 'author_id');
     }
 }

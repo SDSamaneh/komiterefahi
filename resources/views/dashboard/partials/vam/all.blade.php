@@ -83,7 +83,7 @@
 
                                                       <tr>
 
-                                                            <td @if($isFullyApproved) style="background-color: #d4edda;" @endif>
+                                                            <td @if($isFullyApproved) style="background-color: green;" @endif>
                                                                   <h6 class="course-title mb-0">{{$vam->id}}</h6>
                                                             </td>
                                                             <td>
@@ -126,7 +126,9 @@
                                                             {{-- عملیات --}}
                                                             @if(auth()->check() && (
                                                             auth()->user()->role === 'humanResources' ||
-                                                            (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes')
+                                                            (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes') ||
+                                                            (auth()->user()->role === 'manager1' && $vam->validation_managerHr === 'Yes') ||
+                                                            (auth()->user()->role === 'manager2' && $vam->validationManager1 === 'Yes')
                                                             ))
                                                             <td>
                                                                   <a href="{{ route('vam.edit', $vam->id) }}" class="text-success mb-0 me-2">

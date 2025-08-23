@@ -71,8 +71,19 @@
                                                       @foreach($services as $service)
 
                                                       @if($service->status==='Yes')
+
+                                                      @php
+                                                      $isFullyApproved = (
+                                                      $vam->validationHr === 'Yes' &&
+                                                      $vam->validation_managerHr === 'Yes' &&
+                                                      $vam->validationManager1 === 'Yes' &&
+                                                      $vam->validationManager2 === 'Yes'
+                                                      );
+                                                      @endphp
+
                                                       <tr>
-                                                            <td>
+                                                            <td @if($isFullyApproved) style="background-color: green;" @endif>
+
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$service->id}}</h6>
                                                             </td>
                                                             <td>
@@ -114,9 +125,12 @@
                                                             </td>
                                                             @endif
 
+                                                            {{-- عملیات --}}
                                                             @if(auth()->check() && (
                                                             auth()->user()->role === 'humanResources' ||
-                                                            (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes')
+                                                            (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes') ||
+                                                            (auth()->user()->role === 'manager1' && $vam->validation_managerHr === 'Yes') ||
+                                                            (auth()->user()->role === 'manager2' && $vam->validationManager1 === 'Yes')
                                                             ))
 
                                                             <td>

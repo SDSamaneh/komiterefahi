@@ -41,8 +41,8 @@
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">درخواست مساعده</a>
                               <ul class="dropdown-menu" aria-labelledby="postMenu">
-                                    <li> <a class="dropdown-item" href="#">همه درخواست ها</a></li>
-                                    <li> <a class="dropdown-item" href="#">افزودن درخواست</a> </li>
+                                    <li> <a class="dropdown-item" href="{{route('imprest.index')}}">همه درخواست ها</a></li>
+                                    <li> <a class=" dropdown-item" href="{{route('imprest.create')}}">افزودن درخواست</a> </li>
 
                               </ul>
                         </li>

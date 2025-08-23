@@ -10,7 +10,7 @@
                                     </div>
                                     <!-- Content -->
                                     <div class="ms-3">
-                                          <h3>{{$vamCount}} درخواست</h3>
+                                          <h3>ثبت</h3>
                                           <h6 class="mb-0">درخواست وام</h6>
                                     </div>
                               </div>
@@ -27,13 +27,14 @@
                                     </div>
                                     <!-- Content -->
                                     <div class="ms-3">
-                                          <h3>{{$serviceCount}} درخواست</h3>
+                                          <h3>ثبت</h3>
                                           <h6 class="mb-0">درخواست از کویر</h6>
                                     </div>
                               </div>
                         </a>
                   </div>
             </div>
+
             <div class="col-sm-6 col-lg-3">
                   <div class="card card-body border p-3">
                         <a href="{{route('maadiran.create')}}">
@@ -46,8 +47,25 @@
                                     </div>
                                     <!-- Content -->
                                     <div class="ms-3">
-                                          <h3>{{$maadiranCount}}</h3>
-                                          <h6 class="mb-0">درخواست خرید از مادیران</h6>
+                                          <h3>ثبت درخواست</h3>
+                                          <h6 class="mb-0"> خرید از مادیران</h6>
+                                    </div>
+                              </div>
+                        </a>
+                  </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                  <div class="card card-body border p-3">
+                        <a href="{{route('imprest.create')}}">
+                              <div class="d-flex align-items-center">
+                                    <!-- Icon -->
+                                    <div class="icon-xl fs-1 bg-primary bg-opacity-10 rounded-3 text-primary">
+                                          <i class="fas fa-wallet"></i>
+                                    </div>
+                                    <!-- Content -->
+                                    <div class="ms-3">
+                                          <h3>ثبت</h3>
+                                          <h6 class="mb-0">درخواست مساعده</h6>
                                     </div>
                               </div>
                         </a>
@@ -64,7 +82,7 @@
                                     </div>
                                     <!-- Content -->
                                     <div class="ms-3">
-                                          <h6 class="mb-0">پروفایل کاربر</h6>
+                                          <h6 class="mb-0">پروفایل </h6>
                                     </div>
                               </div>
                         </a>
@@ -119,6 +137,22 @@
                                     <!-- Content -->
                                     <div class="ms-3">
                                           <h6 class="mb-0">درخواست خرید از مادیران</h6>
+                                    </div>
+                              </div>
+                        </a>
+                  </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                  <div class="card card-body border p-3">
+                        <a href="{{route('supervisor.imprest.index')}}">
+                              <div class="d-flex align-items-center">
+                                    <!-- Icon -->
+                                    <div class="icon-xl fs-1 bg-primary bg-opacity-10 rounded-3">
+                                          <img src="{{asset('storage/images/request-for-proposal.png')}}" alt="request" style="width: 50px;">
+                                    </div>
+                                    <!-- Content -->
+                                    <div class="ms-3">
+                                          <h6 class="mb-0">درخواست مساعده</h6>
                                     </div>
                               </div>
                         </a>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\dashboard\Imprest;
 use App\Models\dashboard\Maadiran;
 use App\Models\dashboard\Service;
 use App\Models\dashboard\Vam;
@@ -19,8 +19,9 @@ class IndexController extends Controller
             $vamCount = Vam::where('author_id', $user->id)->count();
             $serviceCount = Service::where('author_id', $user->id)->count();
             $maadiranCount = Maadiran::where('author_id', $user->id)->count();
+            $imprestCount = Imprest::where('author_id', $user->id)->count();
         } else {
-            $vamCount = $serviceCount = $maadiranCount = 0;
+            $vamCount = $serviceCount = $maadiranCount = $imprestCount = 0;
         }
 
         $vams = Vam::where('author_id', $user->id)->get()->map(function ($item) {
@@ -57,8 +58,19 @@ class IndexController extends Controller
             return $item;
         });
 
-        $allRequests = $vams->merge($services)->merge($maadirans)->sortByDesc('created_at');
+        $imprests = Imprest::where('author_id', $user->id)->get()->map(function ($item) {
+            $item->type = 'درخواست مساعده';
+            $item->accept = $item->accept ?? null;
+            $item->status = $item->status ?? null;
+            $item->validationHr = $item->validationHr ?? null;
+            $item->validationManager1 = $item->validationManager1 ?? null;
+            $item->validationManager2 = $item->validationManager2 ?? null;
+            $item->edit_route = route('imprest.edit', $item->id);
+            return $item;
+        });
 
-        return view('dashboard.index', compact('user', 'vamCount', 'allRequests', 'serviceCount', 'maadiranCount'));
+        $allRequests = $vams->merge($services)->merge($maadirans)->merge($imprests)->sortByDesc('created_at');
+
+        return view('dashboard.index', compact('user', 'vamCount', 'allRequests', 'serviceCount', 'maadiranCount', 'imprestCount'));
     }
 }

@@ -25,16 +25,12 @@
                                                              <td>{{ $item->type }}</td>
                                                              <td>{{ jdate($item->created_at)->format('Y/m/d') }}</td>
                                                              <td>
-                                                                   @if(isset($item->accept) && $item->accept === 'Yes')
-                                                                   <h6 class="badge text-black bg-body-secondary mb-2">ثبت اولیه</h6>
-                                                                   @endif
-
                                                                    @if(isset($item->status) && $item->status === 'Yes')
                                                                    <h6 class="badge text-black bg-body-secondary mb-2">مدیر واحد</h6>
                                                                    @endif
 
                                                                    @if(isset($item->validationHr) && $item->validationHr === 'Yes')
-                                                                   <h6 class="badge text-bg-success mb-2">اعتبارسنجی </h6>
+                                                                   <h6 class="badge text-bg-success mb-2">اعتبارسنجی</h6>
                                                                    @endif
 
                                                                    @if(isset($item->validationManager1) && $item->validationManager1 === 'Yes')

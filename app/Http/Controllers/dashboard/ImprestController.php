@@ -3,49 +3,42 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\dashboard\Maadiran;
+use App\Models\dashboard\Imprest;
 use Illuminate\Support\Facades\Auth;
-use App\Models\dashboard\Departmans;
-use App\Models\dashboard\Supervisor;
 
-class MaadiranController extends Controller
+use Illuminate\Http\Request;
+
+class ImprestController extends Controller
 {
 
     public function index(Request $request)
     {
         $search = $request->search;
-        $query = Maadiran::query()
-            ->leftJoin('supervisors', 'maadirans.supervisors_id', '=', 'supervisors.id')
-            ->leftJoin('departmans', 'maadirans.departmans_id', '=', 'departmans.id')
-            ->select('maadirans.*'); // مهم: فقط ستون‌های جدول وام‌ها رو بگیر
+        $query = Imprest::query()
+            ->select('imprests.*'); // مهم: فقط ستون‌های جدول وام‌ها رو بگیر
 
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
-                $q->where('maadirans.name', 'like', "%$search%")
-                    ->orWhere('maadirans.idCard', 'like', "%$search%")
-                    ->orWhere('maadirans.price', 'like', "%$search%")
-                    ->orWhere('supervisors.name', 'like', "%$search%")
-                    ->orWhere('departmans.name', 'like', "%$search%");
+                $q->where('imprests.name', 'like', "%$search%")
+                    ->orWhere('imprests.idCard', 'like', "%$search%")
+                    ->orWhere('imprests.price', 'like', "%$search%");
             });
         }
 
-        $maadirans = $query->latest('maadirans.created_at')->paginate(10);
+        $imprests = $query->latest('imprests.created_at')->paginate(10);
 
         $role = Auth::user()->role;
-        $supervisors = Supervisor::all();
-        $departmans = Departmans::all();
-        $maadiranCount = Maadiran::count();
-        return view('dashboard/allMaadiran', compact('maadirans', 'role', 'maadiranCount', 'supervisors', 'departmans'));
+
+        $imprestCount = Imprest::count();
+        return view('dashboard/allImprest', compact('imprests', 'role', 'imprestCount'));
     }
 
     public function create()
     {
         $role = Auth::user()->role;
-        $maadirans = Maadiran::all();
-        $supervisors = Supervisor::all();
-        $departmans = Departmans::all();
-        return view('dashboard/createMaadiran', compact('maadirans', 'role', 'supervisors', 'departmans'));
+        $imprests = Imprest::all();
+
+        return view('dashboard/createImprest', compact('imprests', 'role'));
     }
 
     public function store(Request $request)
@@ -53,85 +46,73 @@ class MaadiranController extends Controller
         $fields = $request->validate([
             'name' => ['required', 'persian_alpha'],
             'idCard' => ['required', 'ir_national_id'],
-            'departmans_id' => ['required', 'exists:departmans,id'],
-            'supervisors_id' => ['required', 'exists:supervisors,id'],
             'price' => ['required'],
-            'category' => ['required', 'in:موبایل,لپتاپ,لوازم خانگی,تلویزیون,سایر'],
-            'descriptionUser' => ['nullable', 'string'],
-            'accept' => ['required', 'in:No,Yes'],
+            'loc' => ['required', 'in:یکتاز,اوراسیا'],
 
         ], [
             'name.required' => 'نام و نام خانوادگی خود را وارد کنید',
             'idCard.required' => 'کد ملی را وارد کنید',
-            'departmans_id.required' => 'دپارتمان خود را وارد کنید',
-            'supervisors_id.required' => 'مدیر واحد خود را انتخاب کنید',
-            'price.required' => 'مبلغ درخواست را وارد کنید',
-            'accept.required' => 'قوانین را میپذیرم'
+            'price.required' => 'مبلغ را وارد کنید',
+            'loc.required' => 'محل تابع را مشخص کنید'
         ]);
 
 
         $role = Auth::user()->role;
 
-        if (!in_array($role, ['admin', 'author', 'managerHr' ,'manager1', 'manager2', 'humanResources', 'subscriber'])) {
+        if (!in_array($role, ['admin', 'author', 'managerHr', 'manager1', 'manager2', 'humanResources', 'subscriber'])) {
             abort(403, 'دسترسی غیرمجاز');
         }
 
         $fields['author_id'] = Auth::id();
-        $fields['accept'] = $request->has('accept') ? 'Yes' : 'No';
 
 
-        $maadirans = Maadiran::create($fields);
-        return $maadirans
-            ? redirect()->route('maadiran.create')->with('success', 'درخواست شما با موفقیت ثبت شد.')
-            : redirect()->route('maadiran.create')->with('error', 'مشکلی رخ داده است.');
+        $imprests = Imprest::create($fields);
+        return $imprests
+            ? redirect()->route('imprest.create')->with('success', 'درخواست شما با موفقیت ثبت شد.')
+            : redirect()->route('imprest.create')->with('error', 'مشکلی رخ داده است.');
     }
 
-    public function show(string $id) {}
-
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
     public function edit(string $id)
     {
-        $maadiran = Maadiran::find($id);
+        $imprest = Imprest::find($id);
         $role = Auth::user()->role;
-        $supervisors = Supervisor::all();
-        $departmans = Departmans::all();
-        return $maadiran ? view('dashboard.editMaadiran', compact('maadiran', 'role', 'supervisors', 'departmans')) : redirect()->route('maadiran.index')->with('error', 'درخواست مورد نظر پیدا نشد.');
+
+        return $imprest ? view('dashboard.editImprest', compact('imprest', 'role')) : redirect()->route('imprest.index')->with('error', 'درخواست مورد نظر پیدا نشد.');
     }
 
-
-    public function update(Request $request, Maadiran $maadiran)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Imprest $imprest)
     {
         $user = auth()->user();
-
-        $request->merge([
-            'accept' => $request->has('accept') ? 'Yes' : 'No',
-        ]);
 
         switch ($user->role) {
 
             case 'subscriber':
 
-                if ($maadiran->status !== 'Yes') {
+                if ($imprest->status !== 'Yes') {
 
                     $request->validate([
                         'name' => 'required|string|max:255|persian_alpha',
                         'idCard' => 'required|string|ir_national_id',
-                        'departmans_id' => 'required|exists:departmans,id',
-                        'supervisors_id' => 'required|exists:supervisors,id',
                         'price' => 'required|min:0',
-                        'category' => 'required|in:موبایل,لپتاپ,لوازم خانگی,تلویزیون,سایر',
-                        'descriptionUser' => 'nullable|string',
-                        'accept' => 'required|in:Yes,No',
+                        'loc' => 'required|in:یکتاز,اوراسیا',
                     ]);
 
-                    $maadiran->update([
+                    $imprest->update([
                         'name' => $request->name,
                         'idCard' => $request->idCard,
-                        'departmans_id' => $request->departmans_id,
-                        'supervisors_id' => $request->supervisors_id,
                         'price' => $request->price,
-                        'category' => $request->category,
-                        'descriptionUser' => $request->descriptionUser,
-                        'accept' => $request->accept,
+                        'loc' => $request->loc,
+
                     ]);
                 } else {
                     return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
@@ -140,38 +121,30 @@ class MaadiranController extends Controller
 
             case 'author':
 
-                if ($maadiran->status === 'Yes') {
+                if ($imprest->status === 'Yes') {
                     return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
                 }
 
                 $request->validate([
                     'name' => 'required|string|max:255|persian_alpha',
                     'idCard' => 'required|string|ir_national_id',
-                    'departmans_id' => 'required|exists:departmans,id',
-                    'supervisors_id' => 'required|exists:supervisors,id',
                     'price' => 'required|min:0',
-                    'category' => 'required|in:موبایل,لپتاپ,لوازم خانگی,تلویزیون,سایر',
-                    'descriptionUser' => 'nullable|string',
-                    'accept' => 'required|in:Yes,No',
+                    'loc' => 'required|in:یکتاز,اوراسیا',
                     'status' => 'required|in:Pending,Yes,No',
 
                 ]);
-                $maadiran->update([
+                $imprest->update([
                     'name' => $request->name,
                     'idCard' => $request->idCard,
-                    'departmans_id' => $request->departmans_id,
-                    'supervisors_id' => $request->supervisors_id,
                     'price' => $request->price,
-                    'category' => $request->category,
-                    'descriptionUser' => $request->descriptionUser,
-                    'accept' => $request->accept,
+                    'loc' => $request->loc,
                     'status' => $request->status,
                 ]);
                 break;
 
             case 'humanResources':
 
-                if ($maadiran->validationHr === 'Yes') {
+                if ($imprest->validationHr === 'Yes') {
                     return back()->with('error', 'امکان ویرایش وجود ندارد.');
                 }
 
@@ -188,7 +161,7 @@ class MaadiranController extends Controller
                     'validationHr' => 'required|in:Pending,Yes,No',
 
                 ]);
-                $maadiran->update([
+                $imprest->update([
                     'memberDate' => $request->memberDate,
                     'memberPrice' => $request->memberPrice,
                     'lastSalary' => $request->lastSalary,
@@ -204,20 +177,20 @@ class MaadiranController extends Controller
                 break;
             case 'managerHr':
 
-                if ($maadiran->validation_managerHr === 'Yes') {
+                if ($imprest->validation_managerHr === 'Yes') {
                     return back()->with('error', 'امکان ویرایش وجود ندارد.');
                 }
 
                 $request->validate([
                     'validation_managerHr' => 'required|in:Pending,Yes,No',
                 ]);
-                $maadiran->update([
+                $imprest->update([
                     'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
                 ]);
                 break;
             case 'manager1':
 
-                if ($maadiran->validationManager1 === 'Yes') {
+                if ($imprest->validationManager1 === 'Yes') {
                     return back()->with('error', 'امکان ویرایش وجود ندارد.');
                 }
 
@@ -226,7 +199,7 @@ class MaadiranController extends Controller
                     'descriptionManager1' => 'nullable|string',
                     'validationManager1' => 'required|in:Pending,Yes,No',
                 ]);
-                $maadiran->update([
+                $imprest->update([
                     'descriptionManager1' => $request->descriptionManager1,
                     'validationManager1' => $request->validationManager1 ?? 'Pending',
                 ]);
@@ -235,7 +208,7 @@ class MaadiranController extends Controller
 
             case 'manager2':
 
-                if ($maadiran->validationManager2 === 'Yes') {
+                if ($imprest->validationManager2 === 'Yes') {
                     return back()->with('error', 'امکان ویرایش وجود ندارد.');
                 }
 
@@ -246,7 +219,7 @@ class MaadiranController extends Controller
 
                     'validationManager2' => 'required|in:Pending,Yes,No',
                 ]);
-                $maadiran->update([
+                $imprest->update([
                     'finalPrice' => $request->finalPrice,
                     'descriptionManager2' => $request->descriptionManager2,
                     'validationManager2' => $request->validationManager2 ?? 'Pending',
@@ -260,10 +233,13 @@ class MaadiranController extends Controller
         return redirect()->back()->with('success', 'تغییرات با موفقیت ذخیره شد.');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(string $id)
     {
-        $maadiran = Maadiran::findOrfail($id);
-        $maadiranDestroy = $maadiran->delete();
-        return $maadiranDestroy ? redirect()->route('maadiran.index')->with('success', 'درخواست مورد نظر با موفقیت حذف گردید') : redirect()->route('maadiran.index')->with('error', 'خطایی در حذف درخواست  مورد نظر رخ داده است');
+        $imprest = Imprest::findOrfail($id);
+        $imprestDestroy = $imprest->delete();
+        return $imprestDestroy ? redirect()->route('imprest.index')->with('success', 'درخواست مورد نظر با موفقیت حذف گردید') : redirect()->route('imprest.index')->with('error', 'خطایی در حذف درخواست  مورد نظر رخ داده است');
     }
 }

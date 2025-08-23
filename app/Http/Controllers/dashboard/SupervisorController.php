@@ -4,6 +4,7 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\dashboard\Departmans;
+use App\Models\dashboard\Imprest;
 use App\Models\dashboard\Maadiran;
 use App\Models\dashboard\Service;
 use App\Models\dashboard\Supervisor;
@@ -160,6 +161,57 @@ class SupervisorController extends Controller
             ]);
 
             return redirect()->route('supervisor.maadiran.index')->with('success', 'درخواست با موفقیت به‌روزرسانی شد.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'خطایی در ذخیره‌سازی رخ داده است.');
+        }
+    }
+
+    // imprestRequest
+    public function imprestRequestsForSupervisor()
+    {
+        // شناسه مدیر واحد لاگین شده
+        $supervisorId = auth()->user()->supervisor_id;
+        // وام‌هایی که نویسنده‌شان کاربری است که supervisor_id آن برابر با این مقدار است
+        $imprest = Imprest::whereHas('user', function ($query) use ($supervisorId) {
+            $query->where('supervisor_id', $supervisorId);
+        })->with('user')->get();
+
+        return view('dashboard/supervisorImprests', compact('imprest'));
+    }
+
+    public function editImprest(Imprest $imprest)
+    {
+        // اطمینان از اینکه این وام متعلق به کاربر زیرمجموعه مدیر است:
+        $supervisorId = auth()->user()->supervisor_id;
+        $supervisors = Supervisor::all();
+        $departmans = Departmans::all();
+
+        if ($imprest->user->supervisor_id !== $supervisorId) {
+            abort(403, 'دسترسی غیرمجاز');
+        }
+
+        return view('dashboard/editSupervisorImprests', compact('imprest', 'supervisors', 'departmans'));
+    }
+
+    public function updateImprest(Request $request, Imprest $imprest)
+    {
+        $supervisorId = auth()->user()->supervisor_id;
+
+        if ($imprest->user->supervisor_id !== $supervisorId) {
+            abort(403, 'دسترسی غیرمجاز');
+        }
+
+        $request->validate([
+
+            'status' => 'required|in:Pending,Yes,No',
+        ]);
+
+        try {
+            $imprest->update([
+                'status' => $request->status,
+            ]);
+
+            return redirect()->route('supervisor.imprest.index')->with('success', 'درخواست با موفقیت به‌روزرسانی شد.');
         } catch (\Exception $e) {
             return back()->with('error', 'خطایی در ذخیره‌سازی رخ داده است.');
         }

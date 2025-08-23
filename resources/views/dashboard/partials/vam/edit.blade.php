@@ -18,7 +18,7 @@
                         ['key' => 'accept', 'label' => 'ثبت درخواست'],
                         ['key' => 'status', 'label' => 'تأیید مدیر واحد'],
                         ['key' => 'validationHr', 'label' => 'اعتبارسنجی'],
-                        ['key' => 'validation_managerHr', 'label' => 'تاییدیه منابع انسانی'],
+                        ['key' => 'validation_managerHr', 'label' => 'تاییدیه مدیر منابع انسانی'],
                         ['key' => 'validationManager1', 'label' => 'تأیید مدیر مالی'],
                         ['key' => 'validationManager2', 'label' => 'تأیید نهایی'],
                         ];

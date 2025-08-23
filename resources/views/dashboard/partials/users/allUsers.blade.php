@@ -36,6 +36,14 @@
                                                 <tbody class="border-top-0">
                                                       @if($users)
                                                       @foreach($users as $user)
+
+                                                      @php
+                                                      $isFullyApproved = (
+                                                      $user->supervisor_id === Null
+                                                      );
+                                                      @endphp
+
+
                                                       <tr>
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$user->name}}</a></h6>
@@ -46,7 +54,7 @@
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$user->phone_number}}</a></h6>
                                                             </td>
-                                                            <td>
+                                                            <td @if($isFullyApproved) style="background-color: #ccc;" @endif>
                                                                   <div class="d-flex gap-2">
                                                                         <a href="#" class="btn btn-light btn-round mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف"><i class="bi bi-trash"></i></a>
                                                                         <a href="{{route('users.edit',$user->id)}}" class="btn btn-light btn-round mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش"><i class="bi bi-pencil-square"></i></a>

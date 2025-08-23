@@ -73,8 +73,20 @@
                                                       @foreach($maadirans as $maadiran)
 
                                                       @if($maadiran->status==='Yes')
+                                                    
+                                                      
+                                                      @php
+                                                      $isFullyApproved = (
+                                                      $vam->validationHr === 'Yes' &&
+                                                      $vam->validation_managerHr === 'Yes' &&
+                                                      $vam->validationManager1 === 'Yes' &&
+                                                      $vam->validationManager2 === 'Yes'
+                                                      );
+                                                      @endphp
+
                                                       <tr>
-                                                            <td>
+                                                              <td @if($isFullyApproved) style="background-color: green;" @endif>
+
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->id}}</h6>
                                                             </td>
                                                             <td>
@@ -117,11 +129,14 @@
                                                             @endif
 
 
-                                                            {{-- عملیات --}}
+                                                           {{-- عملیات --}}
                                                             @if(auth()->check() && (
                                                             auth()->user()->role === 'humanResources' ||
-                                                            (auth()->user()->role === 'managerHr' && $maadiran->validationHr === 'Yes')
+                                                            (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes') ||
+                                                            (auth()->user()->role === 'manager1' && $vam->validation_managerHr === 'Yes') ||
+                                                            (auth()->user()->role === 'manager2' && $vam->validationManager1 === 'Yes')
                                                             ))
+                                                            
                                                             <td>
                                                                   <a href="{{ route('maadiran.edit', $maadiran->id) }}" class="text-success mb-0 me-2">
                                                                         <i class="fas fa-edit"></i>
