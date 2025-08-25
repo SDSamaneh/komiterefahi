@@ -54,9 +54,8 @@
                                                             <th scope="col" class="border-0 rounded-start">شناسه</th>
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
-                                                            <th scope="col" class="border-0">مبلغ (تومان)</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
-                                                            <th scope="col" class="border-0">اعتبارسنجی</th>
+                                                            <th scope="col" class="border-0">وضعیت</th>
                                                             <th scope="col" class="border-0">عملیات</th>
                                                             <th scope="col" class="border-0">حذف</th>
                                                       </tr>
@@ -70,10 +69,7 @@
 
                                                       @php
                                                       $isFullyApproved = (
-                                                      $imprest->validationHr === 'Yes' &&
-                                                      $imprest->validation_managerHr === 'Yes' &&
-                                                      $imprest->validationManager1 === 'Yes' &&
-                                                      $imprest->validationManager2 === 'Yes'
+                                                      $imprest->accept === 'Yes'
                                                       );
                                                       @endphp
 
@@ -88,33 +84,28 @@
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{$imprest->idCard}}</h6>
                                                             </td>
-                                                            <td>
-                                                                  <h6 class="course-title mb-0">{{$imprest->price}}</h6>
-                                                            </td>
+
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{ jdate($imprest->created_at)->format('Y/m/d') }}</h6>
                                                             </td>
 
-                                                            @if($imprest->validationHr === 'Pending')
+                                                            @if($imprest->accept === 'Pending')
                                                             <td>
                                                                   <h6 class="badge bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>بررسی نشده</h6>
                                                             </td>
-                                                            @elseif($imprest->validationHr === 'No')
+                                                            @elseif($imprest->accept === 'No')
                                                             <td>
                                                                   <h6 class="badge bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>عدم اعتبار سنجی</h6>
                                                             </td>
-                                                            @elseif($imprest->validationHr === 'Yes')
+                                                            @elseif($imprest->accept === 'Yes')
                                                             <td>
                                                                   <h6 class="badge bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
                                                             </td>
                                                             @endif
 
                                                             {{-- عملیات --}}
-                                                            @if(auth()->check() && (
-                                                            auth()->user()->role === 'humanResources' ||
-                                                            (auth()->user()->role === 'managerHr' && $imprest->validationHr === 'Yes') ||
-                                                            (auth()->user()->role === 'manager1' && $imprest->validation_managerHr === 'Yes') ||
-                                                            (auth()->user()->role === 'manager2' && $imprest->validationManager1 === 'Yes')
+                                                            @if(auth()->check() && (auth()->user()->role === 'admin' ||
+                                                            (auth()->user()->role === 'managerM' && $imprest->status === 'Yes')
                                                             ))
                                                             <td>
                                                                   <a href="{{ route('imprest.edit', $imprest->id) }}" class="text-success mb-0 me-2">

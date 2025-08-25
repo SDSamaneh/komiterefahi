@@ -32,9 +32,8 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         Route::resource('supervisor', SupervisorController::class);
     });
 
-    Route::middleware('role:author|manager1|admin|humanResources|managerHr|manager2|subscriber')->group(function () {
-
-        // Dashboard home
+    Route::middleware('role:author|manager1|admin|humanResources|managerHr|managerM|manager2|subscriber')->group(function () {
+     
         Route::get('/', [IndexController::class, 'index'])->name('index');
 
         Route::resource('users', UserController::class);

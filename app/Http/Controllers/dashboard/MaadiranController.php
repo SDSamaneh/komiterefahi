@@ -72,7 +72,7 @@ class MaadiranController extends Controller
 
         $role = Auth::user()->role;
 
-        if (!in_array($role, ['admin', 'author', 'managerHr' ,'manager1', 'manager2', 'humanResources', 'subscriber'])) {
+        if (!in_array($role, ['admin', 'author', 'managerHr', 'managerM' ,'manager1', 'manager2', 'humanResources', 'subscriber'])) {
             abort(403, 'دسترسی غیرمجاز');
         }
 

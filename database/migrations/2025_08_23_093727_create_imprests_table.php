@@ -18,23 +18,8 @@ return new class extends Migration
             $table->string('idCard');
             $table->string('price');
             $table->enum('loc', ['یکتاز', 'اوراسیا'])->default('یکتاز');
-            $table->enum('status', ['Pending', 'No', 'Yes'])->default('Pending');
-            $table->string('memberDate')->nullable();
-            $table->string('memberPrice')->nullable();
-            $table->string('lastSalary')->nullable();
-            $table->string('debt_company')->nullable();
-            $table->string('debt_madiran')->nullable();
-            $table->string('debt_fund')->nullable();
-            $table->string('debt_purchase')->nullable();
-            $table->string('validationDate')->nullable();
-            $table->text('descriptionHr')->nullable();
-            $table->enum('validationHr', ['Pending', 'No', 'Yes'])->default('Pending');
-            $table->enum('validation_managerHr', ['Pending', 'No', 'Yes'])->default('Pending');
-            $table->text('descriptionManager1')->nullable();
-            $table->enum('validationManager1', ['Pending', 'No', 'Yes'])->default('Pending');
-            $table->string('finalPrice')->nullable()->default(null);
-            $table->text('descriptionManager2')->nullable();
-            $table->enum('validationManager2', ['Pending', 'No', 'Yes'])->default('Pending');
+            $table->enum('status', ['No', 'Yes'])->default('Yes');
+            $table->enum('accept', ['Pending', 'No', 'Yes'])->default('Pending');
             $table->timestamps();
         });
     }

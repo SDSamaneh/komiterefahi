@@ -44,8 +44,6 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-
-
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
                                                             <label class="form-label">مبلغ درخواستی (تومان)</label>
@@ -69,7 +67,18 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                                <div class="col-md-12 mt-3 text-end">
+                                                <div class="col-md-6 mt-3">
+                                                      <div class="form-check mb-3">
+                                                            <input class="form-check-input" type="checkbox" name="status" value="Yes" id="status">
+                                                            <label class="form-check-label" for="status">
+                                                                  درخواست مساعده دارم
+                                                            </label>
+                                                            @error('status')
+                                                            <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
+                                                            @enderror
+                                                      </div>
+                                                </div>
+                                                <div class="col-md-6 mt-3 text-end">
                                                       <button class="btn btn-primary" type="submit">ثبت درخواست</button>
                                                       <a href="{{route('index')}}" class="btn btn-warning">انصراف</a>
                                                 </div>

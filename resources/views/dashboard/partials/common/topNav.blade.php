@@ -38,6 +38,8 @@
                               </ul>
                         </li>
 
+                        @if(auth()->check() && in_array(auth()->user()->role, ['managerM', 'admin']))
+
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">درخواست مساعده</a>
                               <ul class="dropdown-menu" aria-labelledby="postMenu">
@@ -46,7 +48,10 @@
 
                               </ul>
                         </li>
+                        @endif
 
+
+                        @if(auth()->user()->role === 'admin')
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-people me-1 fs-5"></i>مدیریت کاربران</a>
                               <ul class="dropdown-menu" aria-labelledby="postMenu">
@@ -55,6 +60,7 @@
                                     <li> <a class="dropdown-item" href="{{route('departman.index')}}">دپارتمان</a> </li>
                               </ul>
                         </li>
+                        @endif
                         <li class="nav-item">
                               <a class="nav-link" href="{{route('profile.edit')}}"><i class="far fa-user me-1"></i></a>
                         </li>

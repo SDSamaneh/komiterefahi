@@ -72,7 +72,7 @@ class ServiceController extends Controller
 
         $role = Auth::user()->role;
 
-        if (!in_array($role, ['admin', 'author', 'manager1', 'manager2', 'humanResources', 'subscriber'])) {
+        if (!in_array($role, ['admin', 'author', 'managerM','manager1', 'manager2', 'humanResources', 'subscriber'])) {
             abort(403, 'دسترسی غیرمجاز');
         }
 

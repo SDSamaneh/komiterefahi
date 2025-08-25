@@ -114,7 +114,7 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                                <div class="col-md-612 mt-5">
+                                                <div class="col-md-12 mt-5">
                                                       <div class="form-check mb-3">
                                                             <input class="form-check-input" type="checkbox" name="accept" value="Yes" id="accept">
                                                             <label class="form-check-label" for="accept">

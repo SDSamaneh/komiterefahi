@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class ImprestController extends Controller
 {
-
     public function index(Request $request)
     {
         $search = $request->search;
@@ -32,7 +31,6 @@ class ImprestController extends Controller
         $imprestCount = Imprest::count();
         return view('dashboard/allImprest', compact('imprests', 'role', 'imprestCount'));
     }
-
     public function create()
     {
         $role = Auth::user()->role;
@@ -40,7 +38,6 @@ class ImprestController extends Controller
 
         return view('dashboard/createImprest', compact('imprests', 'role'));
     }
-
     public function store(Request $request)
     {
         $fields = $request->validate([
@@ -48,18 +45,19 @@ class ImprestController extends Controller
             'idCard' => ['required', 'ir_national_id'],
             'price' => ['required'],
             'loc' => ['required', 'in:یکتاز,اوراسیا'],
-
+            'status' => ['required', 'in:No,Yes'],
         ], [
             'name.required' => 'نام و نام خانوادگی خود را وارد کنید',
             'idCard.required' => 'کد ملی را وارد کنید',
             'price.required' => 'مبلغ را وارد کنید',
-            'loc.required' => 'محل تابع را مشخص کنید'
+            'loc.required' => 'محل تابع را مشخص کنید',
+            'status.required' => 'درخواست را تایید فرمایید'
         ]);
 
 
         $role = Auth::user()->role;
 
-        if (!in_array($role, ['admin', 'author', 'managerHr', 'manager1', 'manager2', 'humanResources', 'subscriber'])) {
+        if (!in_array($role, ['admin', 'author', 'managerHr', 'managerM', 'manager1', 'manager2', 'humanResources', 'subscriber'])) {
             abort(403, 'دسترسی غیرمجاز');
         }
 
@@ -72,9 +70,6 @@ class ImprestController extends Controller
             : redirect()->route('imprest.create')->with('error', 'مشکلی رخ داده است.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
@@ -86,10 +81,6 @@ class ImprestController extends Controller
 
         return $imprest ? view('dashboard.editImprest', compact('imprest', 'role')) : redirect()->route('imprest.index')->with('error', 'درخواست مورد نظر پیدا نشد.');
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Imprest $imprest)
     {
         $user = auth()->user();
@@ -98,13 +89,14 @@ class ImprestController extends Controller
 
             case 'subscriber':
 
-                if ($imprest->status !== 'Yes') {
+                if ($imprest->accept !== 'Yes') {
 
                     $request->validate([
                         'name' => 'required|string|max:255|persian_alpha',
                         'idCard' => 'required|string|ir_national_id',
                         'price' => 'required|min:0',
                         'loc' => 'required|in:یکتاز,اوراسیا',
+                        'status' => 'required|in:No,Yes',
                     ]);
 
                     $imprest->update([
@@ -112,118 +104,23 @@ class ImprestController extends Controller
                         'idCard' => $request->idCard,
                         'price' => $request->price,
                         'loc' => $request->loc,
-
+                        'status' => $request->status,
                     ]);
                 } else {
+
                     return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
                 }
                 break;
 
-            case 'author':
-
-                if ($imprest->status === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
-                }
+            case 'managerM':
 
                 $request->validate([
-                    'name' => 'required|string|max:255|persian_alpha',
-                    'idCard' => 'required|string|ir_national_id',
-                    'price' => 'required|min:0',
-                    'loc' => 'required|in:یکتاز,اوراسیا',
-                    'status' => 'required|in:Pending,Yes,No',
-
+                    'accept' => 'required|in:Pending,Yes,No',
                 ]);
                 $imprest->update([
-                    'name' => $request->name,
-                    'idCard' => $request->idCard,
-                    'price' => $request->price,
-                    'loc' => $request->loc,
-                    'status' => $request->status,
-                ]);
-                break;
-
-            case 'humanResources':
-
-                if ($imprest->validationHr === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-                    'memberDate' => 'required',
-                    'memberPrice' => 'required|min:0',
-                    'lastSalary' => 'required|min:0',
-                    'debt_company' => 'required|min:0',
-                    'debt_madiran' => 'required|min:0',
-                    'debt_fund' => 'required|min:0',
-                    'debt_purchase' => 'required',
-                    'validationDate' => 'required',
-                    'descriptionHr' => 'nullable|string',
-                    'validationHr' => 'required|in:Pending,Yes,No',
-
-                ]);
-                $imprest->update([
-                    'memberDate' => $request->memberDate,
-                    'memberPrice' => $request->memberPrice,
-                    'lastSalary' => $request->lastSalary,
-                    'debt_company' => $request->debt_company,
-                    'debt_madiran' => $request->debt_madiran,
-                    'debt_fund' => $request->debt_fund,
-                    'debt_purchase' => $request->debt_purchase,
-                    'validationDate' => $request->validationDate,
-                    'descriptionHr' => $request->descriptionHr,
-                    'validationHr' => $request->validationHr ?? 'Pending',
-
-                ]);
-                break;
-            case 'managerHr':
-
-                if ($imprest->validation_managerHr === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-                    'validation_managerHr' => 'required|in:Pending,Yes,No',
-                ]);
-                $imprest->update([
-                    'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
-                ]);
-                break;
-            case 'manager1':
-
-                if ($imprest->validationManager1 === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-
-                    'descriptionManager1' => 'nullable|string',
-                    'validationManager1' => 'required|in:Pending,Yes,No',
-                ]);
-                $imprest->update([
-                    'descriptionManager1' => $request->descriptionManager1,
-                    'validationManager1' => $request->validationManager1 ?? 'Pending',
+                    'accept' => $request->accept ?? 'Pending',
                 ]);
 
-                break;
-
-            case 'manager2':
-
-                if ($imprest->validationManager2 === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-
-                    'finalPrice' => 'required|min:0',
-                    'descriptionManager2' => 'nullable|string',
-
-                    'validationManager2' => 'required|in:Pending,Yes,No',
-                ]);
-                $imprest->update([
-                    'finalPrice' => $request->finalPrice,
-                    'descriptionManager2' => $request->descriptionManager2,
-                    'validationManager2' => $request->validationManager2 ?? 'Pending',
-                ]);
                 break;
 
             default:
@@ -233,9 +130,7 @@ class ImprestController extends Controller
         return redirect()->back()->with('success', 'تغییرات با موفقیت ذخیره شد.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         $imprest = Imprest::findOrfail($id);

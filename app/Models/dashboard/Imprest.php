@@ -16,22 +16,7 @@ class Imprest extends Model
         'price',
         'loc',
         'status',
-        'memberDate',
-        'memberPrice',
-        'lastSalary',
-        'debt_company',
-        'debt_madiran',
-        'debt_fund',
-        'debt_purchase',
-        'validationDate',
-        'descriptionHr',
-        'validationHr',
-        'validation_managerHr',
-        'descriptionManager1',
-        'validationManager1',
-        'finalPrice',
-        'descriptionManager2',
-        'validationManager2'
+        'accept'
     ];
 
     public function user()
