@@ -55,25 +55,19 @@
                                                             <th scope="col" class="border-0 rounded-start">شناسه</th>
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
-                                                            <th scope="col" class="border-0">دپارتمان</th>
-                                                            <th scope="col" class="border-0">مدیرواحد</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
-                                                            <th scope="col" class="border-0">علت</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
-                                                            <th scope="col" class="border-0">اعتبارسنجی</th>
+                                                            <th scope="col" class="border-0">وضعیت</th>
                                                             <th scope="col" class="border-0">عملیات</th>
                                                             <th scope="col" class="border-0">حذف</th>
                                                       </tr>
                                                 </thead>
                                                 <tbody class="border-top-0">
                                                       @if($vams)
-
                                                       @foreach($vams as $vam)
-
-                                                      @if($vam->status === 'Yes')
-
                                                       @php
                                                       $isFullyApproved = (
+                                                      $vam->status === 'Yes' &&
                                                       $vam->validationHr === 'Yes' &&
                                                       $vam->validation_managerHr === 'Yes' &&
                                                       $vam->validationManager1 === 'Yes' &&
@@ -82,8 +76,7 @@
                                                       @endphp
 
                                                       <tr>
-
-                                                            <td @if($isFullyApproved) style="background-color: green;" @endif>
+                                                           <td @if($isFullyApproved) style="background-color: green;" @endif>
                                                                   <h6 class="course-title mb-0">{{$vam->id}}</h6>
                                                             </td>
                                                             <td>
@@ -93,38 +86,33 @@
                                                                   <h6 class="course-title mb-0">{{$vam->idCard}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->departmans->name}}</h6>
-                                                            </td>
-                                                            <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->supervisor->name}}</h6>
-                                                            </td>
-                                                            <td>
                                                                   <h6 class="course-title mb-0">{{$vam->price}}</h6>
-                                                            </td>
-                                                            <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->resone}}</h6>
                                                             </td>
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{ jdate($vam->created_at)->format('Y/m/d') }}</h6>
                                                             </td>
-
-
-                                                            @if($vam->validationHr === 'Pending')
                                                             <td>
-                                                                  <h6 class="badge bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>بررسی نشده</h6>
+                                                                  <ul class="navbar-nav">
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->status == 'Yes' ? 'green' : 'grey' }}"></i> مدیر واحد
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-clock" style="color: {{ $vam->validationHr == 'Yes' ? 'green' : 'orange' }}"></i> اعتبار سنجی
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->validation_managerHr == 'Yes' ? 'green' : 'grey' }}"></i> مدیر منابع انسانی
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->validationManager1 == 'Yes' ? 'green' : 'grey' }}"></i> مدیر مالی
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->validationManager2 == 'Yes' ? 'green' : 'grey' }}"></i> رییس کمیته
+                                                                        </li>
+                                                                  </ul>
                                                             </td>
-                                                            @elseif($vam->validationHr === 'No')
-                                                            <td>
-                                                                  <h6 class="badge bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>عدم اعتبار سنجی</h6>
-                                                            </td>
-                                                            @elseif($vam->validationHr === 'Yes')
-                                                            <td>
-                                                                  <h6 class="badge bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
-                                                            </td>
-                                                            @endif
 
-                                                            {{-- عملیات --}}
                                                             @if(auth()->check() && (
+                                                            auth()->user()->role === 'admin' ||
                                                             auth()->user()->role === 'humanResources' ||
                                                             (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes') ||
                                                             (auth()->user()->role === 'manager1' && $vam->validation_managerHr === 'Yes') ||
@@ -135,6 +123,11 @@
                                                                         <i class="fas fa-edit"></i>
                                                                   </a>
                                                             </td>
+                                                            @else
+                                                            <td></td>
+                                                            @endif
+
+                                                            @if(auth()->check() && auth()->user()->role === 'admin' )
                                                             <td>
                                                                   <div class="d-flex align-items-center">
                                                                         <form action="{{ route('vam.destroy', $vam->id) }}" method="post">
@@ -148,10 +141,8 @@
                                                             </td>
                                                             @else
                                                             <td></td>
-                                                            <td></td>
                                                             @endif
                                                       </tr>
-                                                      @endif
                                                       @endforeach
                                                       @else
                                                       <div class="alert alert-info">

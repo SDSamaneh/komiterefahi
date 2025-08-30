@@ -38,7 +38,7 @@
                               </ul>
                         </li>
 
-                        @if(auth()->check() && in_array(auth()->user()->role, ['managerM', 'admin']))
+                        @if(auth()->check() && in_array(auth()->user()->role, ['managerM', 'admin','humanResources']))
 
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">درخواست مساعده</a>
@@ -51,7 +51,7 @@
                         @endif
 
 
-                        @if(auth()->user()->role === 'admin')
+                        @if(auth()->check() && in_array(auth()->user()->role, ['humanResources', 'admin']))
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-people me-1 fs-5"></i>مدیریت کاربران</a>
                               <ul class="dropdown-menu" aria-labelledby="postMenu">

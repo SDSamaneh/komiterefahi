@@ -60,16 +60,19 @@ class IndexController extends Controller
 
         $imprests = Imprest::where('author_id', $user->id)->get()->map(function ($item) {
             $item->type = 'درخواست مساعده';
-            $item->accept = $item->accept ?? null;
             $item->status = $item->status ?? null;
-            $item->validationHr = $item->validationHr ?? null;
-            $item->validationManager1 = $item->validationManager1 ?? null;
-            $item->validationManager2 = $item->validationManager2 ?? null;
+            $item->accept = $item->accept ?? null;
             $item->edit_route = route('imprest.edit', $item->id);
             return $item;
         });
 
-        $allRequests = $vams->merge($services)->merge($maadirans)->merge($imprests)->sortByDesc('created_at');
+
+        $allRequests = collect()
+            ->concat($vams)
+            ->concat($services)
+            ->concat($maadirans)
+            ->concat($imprests)
+            ->sortByDesc('created_at');
 
         return view('dashboard.index', compact('user', 'vamCount', 'allRequests', 'serviceCount', 'maadiranCount', 'imprestCount'));
     }

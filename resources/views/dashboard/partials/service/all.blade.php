@@ -55,12 +55,10 @@
                                                             <th scope="col" class="border-0 rounded-start">شناسه</th>
                                                             <th scope="col" class="border-0 ">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
-                                                            <th scope="col" class="border-0">دپارتمان</th>
-                                                            <th scope="col" class="border-0">مدیرواحد</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
                                                             <th scope="col" class="border-0">دسته بندی</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
-                                                            <th scope="col" class="border-0">اعتبارسنجی</th>
+                                                            <th scope="col" class="border-0">وضعیت</th>
                                                             <th scope="col" class="border-0">عملیات</th>
                                                             <th scope="col" class="border-0">حذف</th>
                                                       </tr>
@@ -69,9 +67,7 @@
                                                       @if($services)
 
                                                       @foreach($services as $service)
-
-                                                      @if($service->status==='Yes')
-
+                                                                                                      
                                                       @php
                                                       $isFullyApproved = (
                                                       $service->validationHr === 'Yes' &&
@@ -92,12 +88,7 @@
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$service->idCard}}</a></h6>
                                                             </td>
-                                                            <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$service->departmans->name}}</a></h6>
-                                                            </td>
-                                                            <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$service->supervisors->name}}</a></h6>
-                                                            </td>
+
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$service->price}}</a></h6>
                                                             </td>
@@ -111,22 +102,28 @@
                                                                   </h6>
                                                             </td>
 
-                                                            @if($service->validationHr === 'Pending')
                                                             <td>
-                                                                  <h6 class="badge bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>بررسی نشده</h6>
+                                                                  <ul class="navbar-nav">
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $service->status == 'Yes' ? 'green' : 'grey' }}"></i> مدیر واحد
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-clock" style="color: {{ $service->validationHr == 'Yes' ? 'green' : 'orange' }}"></i> اعتبار سنجی
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $service->validation_managerHr == 'Yes' ? 'green' : 'grey' }}"></i> مدیر منابع انسانی
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $service->validationManager1 == 'Yes' ? 'green' : 'grey' }}"></i> مدیر مالی
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $service->validationManager2 == 'Yes' ? 'green' : 'grey' }}"></i> رییس کمیته
+                                                                        </li>
+                                                                  </ul>
                                                             </td>
-                                                            @elseif($service->validationHr === 'No')
-                                                            <td>
-                                                                  <h6 class="badge bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>عدم اعتبار سنجی</h6>
-                                                            </td>
-                                                            @elseif($service->validationHr === 'Yes')
-                                                            <td>
-                                                                  <h6 class="badge bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
-                                                            </td>
-                                                            @endif
 
-                                                            {{-- عملیات --}}
                                                             @if(auth()->check() && (
+                                                            auth()->user()->role === 'admin' ||
                                                             auth()->user()->role === 'humanResources' ||
                                                             (auth()->user()->role === 'managerHr' && $service->validationHr === 'Yes') ||
                                                             (auth()->user()->role === 'manager1' && $service->validation_managerHr === 'Yes') ||
@@ -134,11 +131,13 @@
                                                             ))
 
                                                             <td>
-
                                                                   <a href="{{route('service.edit',$service->id)}}" class="text-success mb-0 me-2"><i class="fas fa-edit"></i></a>
-
                                                             </td>
+                                                            @else
+                                                            <td></td>
+                                                            @endif
 
+                                                            @if(auth()->check() && auth()->user()->role === 'admin' )
                                                             <td>
                                                                   <div class="d-flex justify-align-content-between align-items-center">
                                                                         <form action="{{ route('service.destroy', $service->id) }}" method="post">
@@ -152,10 +151,9 @@
                                                             </td>
                                                             @else
                                                             <td></td>
-                                                            <td></td>
                                                             @endif
                                                       </tr>
-                                                      @endif
+                                                 
                                                       @endforeach
                                                       @else
                                                       <div class="alert alert-info">

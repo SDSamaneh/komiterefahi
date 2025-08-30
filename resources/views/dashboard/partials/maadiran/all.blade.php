@@ -57,12 +57,10 @@
                                                             <th scope="col" class="border-0  rounded-start">شناسه</th>
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
-                                                            <th scope="col" class="border-0">دپارتمان</th>
-                                                            <th scope="col" class="border-0">مدیرواحد</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
                                                             <th scope="col" class="border-0">دسته بندی</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
-                                                            <th scope="col" class="border-0">اعتبارسنجی</th>
+                                                            <th scope="col" class="border-0">وضعیت</th>
                                                             <th scope="col" class="border-0">عملیات</th>
                                                             <th scope="col" class="border-0">حذف</th>
                                                       </tr>
@@ -72,9 +70,6 @@
 
                                                       @foreach($maadirans as $maadiran)
 
-                                                      @if($maadiran->status==='Yes')
-                                                    
-                                                      
                                                       @php
                                                       $isFullyApproved = (
                                                       $maadiran->validationHr === 'Yes' &&
@@ -85,7 +80,7 @@
                                                       @endphp
 
                                                       <tr>
-                                                              <td @if($isFullyApproved) style="background-color: green;" @endif>
+                                                            <td @if($isFullyApproved) style="background-color: green;" @endif>
 
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->id}}</h6>
                                                             </td>
@@ -94,12 +89,6 @@
                                                             </td>
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->idCard}}</h6>
-                                                            </td>
-                                                            <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->departmans->name}}</h6>
-                                                            </td>
-                                                            <td>
-                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->supervisor->name}}</h6>
                                                             </td>
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->price}}</h6>
@@ -112,36 +101,45 @@
                                                                         {{ jdate($maadiran->created_at)->format('Y/m/d') }}
                                                                   </h6>
                                                             </td>
-
-
-                                                            @if($maadiran->validationHr === 'Pending')
                                                             <td>
-                                                                  <h6 class="badge bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>بررسی نشده</h6>
+                                                                  <ul class="navbar-nav">
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->status == 'Yes' ? 'green' : 'grey' }}"></i> مدیر واحد
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-clock" style="color: {{ $maadiran->validationHr == 'Yes' ? 'green' : 'orange' }}"></i> اعتبار سنجی
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->validation_managerHr == 'Yes' ? 'green' : 'grey' }}"></i> مدیر منابع انسانی
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->validationManager1 == 'Yes' ? 'green' : 'grey' }}"></i> مدیر مالی
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->validationManager2 == 'Yes' ? 'green' : 'grey' }}"></i> رییس کمیته
+                                                                        </li>
+                                                                  </ul>
                                                             </td>
-                                                            @elseif($maadiran->validationHr === 'No')
-                                                            <td>
-                                                                  <h6 class="badge bg-danger mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>عدم اعتبار سنجی</h6>
-                                                            </td>
-                                                            @elseif($maadiran->validationHr === 'Yes')
-                                                            <td>
-                                                                  <h6 class="badge bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>اعتبارسنجی شده</h6>
-                                                            </td>
-                                                            @endif
 
-
-                                                           {{-- عملیات --}}
                                                             @if(auth()->check() && (
+                                                            auth()->user()->role === 'admin' ||
                                                             auth()->user()->role === 'humanResources' ||
                                                             (auth()->user()->role === 'managerHr' && $maadiran->validationHr === 'Yes') ||
                                                             (auth()->user()->role === 'manager1' && $maadiran->validation_managerHr === 'Yes') ||
                                                             (auth()->user()->role === 'manager2' && $maadiran->validationManager1 === 'Yes')
                                                             ))
-                                                            
+
                                                             <td>
                                                                   <a href="{{ route('maadiran.edit', $maadiran->id) }}" class="text-success mb-0 me-2">
                                                                         <i class="fas fa-edit"></i>
                                                                   </a>
                                                             </td>
+
+                                                            @else
+                                                            <td></td>
+                                                            @endif
+
+                                                            @if(auth()->check() && auth()->user()->role === 'admin' )
                                                             <td>
                                                                   <div class="d-flex align-items-center">
                                                                         <form action="{{ route('maadiran.destroy', $maadiran->id) }}" method="post">
@@ -155,10 +153,10 @@
                                                             </td>
                                                             @else
                                                             <td></td>
-                                                            <td></td>
                                                             @endif
+
                                                       </tr>
-                                                      @endif
+                                                  
 
                                                       @endforeach
                                                       @else

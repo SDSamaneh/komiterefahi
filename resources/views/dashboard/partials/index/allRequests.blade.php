@@ -25,21 +25,23 @@
                                                              <td>{{ $item->type }}</td>
                                                              <td>{{ jdate($item->created_at)->format('Y/m/d') }}</td>
                                                              <td>
-                                                                   @if(isset($item->status) && $item->status === 'Yes')
-                                                                   <h6 class="badge text-black bg-body-secondary mb-2">مدیر واحد</h6>
-                                                                   @endif
-
-                                                                   @if(isset($item->validationHr) && $item->validationHr === 'Yes')
-                                                                   <h6 class="badge text-bg-success mb-2">اعتبارسنجی</h6>
-                                                                   @endif
-
-                                                                   @if(isset($item->validationManager1) && $item->validationManager1 === 'Yes')
-                                                                   <h6 class="badge text-bg-success mb-2">مدیر مالی</h6>
-                                                                   @endif
-
-                                                                   @if(isset($item->validationManager2) && $item->validationManager2 === 'Yes')
-                                                                   <h6 class="badge text-bg-success mb-2">تایید نهایی</h6>
-                                                                   @endif
+                                                                   <ul class="navbar-nav">
+                                                                         <li class="nav-item">
+                                                                               <i class="fas fa-check-circle" style="color: {{ $item->status == 'Yes' ? 'green' : 'grey' }}"></i> مدیر واحد
+                                                                         </li>
+                                                                         <li class="nav-item">
+                                                                               <i class="fas fa-clock" style="color: {{ $item->validationHr == 'Yes' ? 'green' : 'orange' }}"></i> اعتبار سنجی
+                                                                         </li>
+                                                                         <li class="nav-item">
+                                                                               <i class="fas fa-check-circle" style="color: {{ $item->validation_managerHr == 'Yes' ? 'green' : 'grey' }}"></i> مدیر منابع انسانی
+                                                                         </li>
+                                                                         <li class="nav-item">
+                                                                               <i class="fas fa-check-circle" style="color: {{ $item->validationManager1 == 'Yes' ? 'green' : 'grey' }}"></i> مدیر مالی
+                                                                         </li>
+                                                                         <li class="nav-item">
+                                                                               <i class="fas fa-check-circle" style="color: {{ $item->validationManager2 == 'Yes' ? 'green' : 'grey' }}"></i> رییس کمیته
+                                                                         </li>
+                                                                   </ul>
                                                              </td>
                                                              <td>
                                                                    @if(!($item->status === 'yes'))

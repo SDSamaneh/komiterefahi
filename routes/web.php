@@ -26,17 +26,13 @@ Route::prefix('/auth')->middleware('guest')->group(function () {
 
 Route::prefix('/dashboard')->middleware('auth')->group(function () {
 
-    Route::middleware('role:admin')->group(function () {
-
-        Route::resource('departman', DepartmanController::class);
-        Route::resource('supervisor', SupervisorController::class);
-    });
-
     Route::middleware('role:author|manager1|admin|humanResources|managerHr|managerM|manager2|subscriber')->group(function () {
-     
+
         Route::get('/', [IndexController::class, 'index'])->name('index');
 
         Route::resource('users', UserController::class);
+        Route::resource('departman', DepartmanController::class);
+        Route::resource('supervisor', SupervisorController::class);
         Route::resource('service', ServiceController::class);
         Route::resource('vam', VamController::class);
         Route::resource('maadiran', MaadiranController::class);
