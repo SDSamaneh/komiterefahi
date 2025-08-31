@@ -71,9 +71,8 @@ class IndexController extends Controller
             ->concat($vams)
             ->concat($services)
             ->concat($maadirans)
-            ->concat($imprests)
             ->sortByDesc('created_at');
 
-        return view('dashboard.index', compact('user', 'vamCount', 'allRequests', 'serviceCount', 'maadiranCount', 'imprestCount'));
+        return view('dashboard.index', compact('user', 'vamCount', 'allRequests', 'imprests', 'serviceCount', 'maadiranCount', 'imprestCount'));
     }
 }

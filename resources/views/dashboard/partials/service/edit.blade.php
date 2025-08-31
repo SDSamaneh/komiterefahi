@@ -94,7 +94,9 @@
 
                                                       @else
                                                       <select class="form-select" disabled>
-                                                            <option selected>{{$service->supervisors->name}}</option>
+
+                                                            <option selected>{{$service->departmans->name}}</option>
+
                                                       </select>
 
                                                       @endif
@@ -118,7 +120,8 @@
                                                       </select>
                                                       @else
                                                       <select class="form-select" disabled>
-                                                            <option selected>{{$service->departmans->name}}</option>
+                                                            <option selected>{{$service->supervisors->name}}</option>
+
                                                       </select>
 
                                                       @endif

@@ -3,20 +3,36 @@
             <div class="row">
                   <div class="col-12">
                         @php
-                       
-                        $user = auth()->user();
 
+                        $user = auth()->user();
                         // مجوزهای دسترسی
                         $canEditUserFields = $user && in_array($user->role, ['subscriber', 'admin']) && $imprest->accept !== 'Yes';
-                        $canEditManagerM = $user && $user->role === 'managerM';
+                        $canEditManagerM = $user && in_array($user->role, ['managerM', 'admin']);
 
                         @endphp
+
+                        <div class="d-sm-flex justify-content-end align-items-end">
+                              <a href="{{route('index')}}" class="btn btn-sm text-danger mb-3">انصراف  <i class="fas fa-chevron-left"></i></a>
+                        </div>
 
                         <div class="card border">
                               <div class="card-header text-center mb-3 mt-3">
                                     <h1 class="mb-3">ویرایش درخواست مساعده</h1>
                               </div>
                               <div class="card-body">
+                                    <div class="col-md-6">
+                                          @if (session('success'))
+                                          <div class="alert alert-success">
+                                                {{ session('success') }}
+                                          </div>
+                                          @endif
+
+                                          @if (session('error'))
+                                          <div class="alert alert-danger">
+                                                {{ session('error') }}
+                                          </div>
+                                          @endif
+                                    </div>
                                     <form action="{{ route('imprest.update', $imprest->id) }}" method="post">
                                           @csrf
                                           @method('PUT')
@@ -57,43 +73,63 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                          </div>
 
-                                          @if($imprest->status === 'Yes')
-                                          <hr />
-                                          <h4 class="text-center mt-4 mb-4">تاییدیه مدیر منابع انسانی</h4>
-                                          @if($canEditManagerM)
-                                          <div class="col-md-4 mt-4 d-flex gap-4">
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio" name="accept" value="Pending"
-                                                            {{ old('accept', $imprest->accept) == 'Pending' ? 'checked' : '' }}>
-                                                      <label class="form-check-label">در حال بررسی</label>
+                                                @if($imprest->status === 'Yes')
+                                                <hr />
+                                                <h4 class="text-center mt-4 mb-4">تاییدیه مدیر منابع انسانی</h4>
+                                                @if($canEditManagerM)
+                                                <div class="col-md-4 mb-3">
+                                                      <label class="form-label">توضیحات تکمیلی</label>
+                                                      <textarea class="form-control" name="description" rows="3" {{ $canEditManagerM ? '' : 'readonly' }}>{{ old('description', $imprest->description) }}</textarea>
                                                 </div>
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio" name="accept" value="Yes"
-                                                            {{ old('accept', $imprest->accept) == 'Yes' ? 'checked' : '' }}>
-                                                      <label class="form-check-label">تأیید</label>
+                                                <div class="col-md-3 mb-3">
+                                                      <label class="form-label">مبلغ نهایی (تومان)</label>
+                                                      <input name="finalPrice" type="text" class="form-control"
+                                                            value="{{ old('finalPrice', $imprest->finalPrice ?? $imprest->price) }}"
+                                                            {{ $canEditManagerM ? '' : 'readonly' }}>
+                                                      @error('finalPrice')
+                                                      <small class="text-danger">{{ $message }}</small>
+                                                      @enderror
                                                 </div>
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio" name="accept" value="No"
-                                                            {{ old('accept', $imprest->accept) == 'No' ? 'checked' : '' }}>
-                                                      <label class="form-check-label">عدم تأیید</label>
+                                                <div class="col-md-4 mt-4 d-flex gap-4">
+                                                      <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="accept" value="Pending"
+                                                                  {{ old('accept', $imprest->accept) == 'Pending' ? 'checked' : '' }}>
+                                                            <label class="form-check-label">در حال بررسی</label>
+                                                      </div>
+                                                      <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="accept" value="Yes"
+                                                                  {{ old('accept', $imprest->accept) == 'Yes' ? 'checked' : '' }}>
+                                                            <label class="form-check-label">تأیید</label>
+                                                      </div>
+                                                      <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="accept" value="No"
+                                                                  {{ old('accept', $imprest->accept) == 'No' ? 'checked' : '' }}>
+                                                            <label class="form-check-label">عدم تأیید</label>
+                                                      </div>
                                                 </div>
-                                          </div>
-                                          @else
-                                          <div class="row">
-                                                <div class="col-md-6">
-                                                      <label class="form-label">نتیجه بررسی مدیر منابع انسانی</label>
+                                                <div class="d-flex justify-content mt-3">
+                                                      <a class="btn btn-danger" href="{{route('imprest.index')}}"> بازگشت</a>
+                                                </div>
+                                                @else
+                                                <div class="col-md-3 mb-3">
+                                                      <label class="form-label">مبلغ نهایی</label>
+                                                      <p class="form-control-plaintext bg-body-secondary">{{ $imprest->finalPrice }}</p>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                      <label class="form-label">توضیحات تکمیلی</label>
+                                                      <p class="form-control-plaintext bg-body-secondary">{{ $imprest->description }}</p>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                      <label class="form-label">نتیجه نهایی </label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $imprest->accept === 'Yes' ? 'تأیید شده' : ($imprest->accept === 'No' ? 'عدم تأیید' : ($imprest->accept === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
+                                                @endif
+
                                           </div>
                                           @endif
-
-                                          @endif
-
-                                          <div class="col-md-12 d-flex gap-2 justify-content-end mt-5">
+                                          <div class="d-flex justify-content-end">
                                                 <button class="btn btn-primary" type="submit">ذخیره تغییرات</button>
-                                                <a class="btn btn-danger" href="{{route('index')}}"> بازگشت</a>
                                           </div>
                                     </form>
                               </div>

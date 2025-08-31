@@ -56,7 +56,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
-                                                            <label class="form-label">سرپرست واحد</label>
+                                                            <label class="form-label">مدیر واحد</label>
                                                             <select class="form-select" name="supervisors_id" aria-label="Default select example">
                                                                   <option value="" disabled selected>لطفاً انتخاب کنید</option>
                                                                   @forelse($supervisors as $supervisor)

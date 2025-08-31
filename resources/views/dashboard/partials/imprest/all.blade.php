@@ -54,6 +54,7 @@
                                                             <th scope="col" class="border-0 rounded-start">شناسه</th>
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
+                                                            <th scope="col" class="border-0">مبلغ</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
                                                             <th scope="col" class="border-0">وضعیت</th>
                                                             <th scope="col" class="border-0">عملیات</th>
@@ -84,7 +85,9 @@
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{$imprest->idCard}}</h6>
                                                             </td>
-
+                                                            <td>
+                                                                  <h6 class="course-title mb-0">{{$imprest->price}}</h6>
+                                                            </td>
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{ jdate($imprest->created_at)->format('Y/m/d') }}</h6>
                                                             </td>

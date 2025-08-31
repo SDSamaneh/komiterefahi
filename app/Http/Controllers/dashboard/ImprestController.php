@@ -115,9 +115,13 @@ class ImprestController extends Controller
             case 'managerM':
 
                 $request->validate([
+                    'finalPrice' => 'required|min:0',
+                    'description' => 'nullable|string',
                     'accept' => 'required|in:Pending,Yes,No',
                 ]);
                 $imprest->update([
+                    'finalPrice' => $request->finalPrice,
+                    'description' => $request->description,
                     'accept' => $request->accept ?? 'Pending',
                 ]);
 

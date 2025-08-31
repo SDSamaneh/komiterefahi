@@ -16,7 +16,9 @@ class Imprest extends Model
         'price',
         'loc',
         'status',
-        'accept'
+        'accept',
+        'finalPrice',
+        'description',
     ];
 
     public function user()
