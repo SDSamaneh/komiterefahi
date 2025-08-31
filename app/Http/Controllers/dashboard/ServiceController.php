@@ -72,7 +72,7 @@ class ServiceController extends Controller
 
         $role = Auth::user()->role;
 
-        if (!in_array($role, ['admin', 'author', 'managerM','manager1', 'manager2', 'humanResources', 'subscriber'])) {
+        if (!in_array($role, ['admin', 'author', 'managerM', 'manager1', 'manager2', 'humanResources', 'subscriber'])) {
             abort(403, 'دسترسی غیرمجاز');
         }
 
@@ -175,24 +175,41 @@ class ServiceController extends Controller
                     'memberDate' => 'required',
                     'memberPrice' => 'required',
                     'lastSalary' => 'required',
-                    'debt' => 'required|numeric',
+                    'debt_company' => 'required|min:0',
+                    'debt_madiran' => 'required|min:0',
+                    'debt_fund' => 'required|min:0',
+                    'debt_purchase' => 'required',
                     'validationDate' => 'required',
-                    'descriptionHr' => 'nullable|string',
                     'validationHr' => 'required|in:Pending,Yes,No',
                 ]);
                 $service->update([
                     'memberDate' => $request->memberDate,
                     'memberPrice' => $request->memberPrice,
                     'lastSalary' => $request->lastSalary,
-                    'debt' => $request->debt,
+                    'debt_company' => $request->debt_company,
+                    'debt_madiran' => $request->debt_madiran,
+                    'debt_fund' => $request->debt_fund,
+                    'debt_purchase' => $request->debt_purchase,
                     'validationDate' => $request->validationDate,
-
-                    'descriptionHr' => $request->descriptionHr,
                     'validationHr' => $request->validationHr ?? 'Pending',
 
                 ]);
                 break;
+            case 'managerHr':
 
+                if ($service->validation_managerHr === 'Yes') {
+                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
+                }
+
+                $request->validate([
+                    'descriptionHr' => 'nullable|string',
+                    'validation_managerHr' => 'required|in:Pending,Yes,No',
+                ]);
+                $service->update([
+                    'descriptionHr' => $request->descriptionHr,
+                    'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
+                ]);
+                break;
             case 'manager1':
 
                 if ($service->validationManager1 === 'Yes') {

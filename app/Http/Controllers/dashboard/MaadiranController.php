@@ -183,8 +183,7 @@ class MaadiranController extends Controller
                     'debt_madiran' => 'required|min:0',
                     'debt_fund' => 'required|min:0',
                     'debt_purchase' => 'required',
-                    'validationDate' => 'required',
-                    'descriptionHr' => 'nullable|string',
+                    'validationDate' => 'required',                    
                     'validationHr' => 'required|in:Pending,Yes,No',
 
                 ]);
@@ -196,8 +195,7 @@ class MaadiranController extends Controller
                     'debt_madiran' => $request->debt_madiran,
                     'debt_fund' => $request->debt_fund,
                     'debt_purchase' => $request->debt_purchase,
-                    'validationDate' => $request->validationDate,
-                    'descriptionHr' => $request->descriptionHr,
+                    'validationDate' => $request->validationDate,                    
                     'validationHr' => $request->validationHr ?? 'Pending',
 
                 ]);
@@ -209,9 +207,11 @@ class MaadiranController extends Controller
                 }
 
                 $request->validate([
+                    'descriptionHr' => 'nullable|string',
                     'validation_managerHr' => 'required|in:Pending,Yes,No',
                 ]);
                 $maadiran->update([
+                    'descriptionHr' => $request->descriptionHr,
                     'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
                 ]);
                 break;
@@ -222,7 +222,6 @@ class MaadiranController extends Controller
                 }
 
                 $request->validate([
-
                     'descriptionManager1' => 'nullable|string',
                     'validationManager1' => 'required|in:Pending,Yes,No',
                 ]);

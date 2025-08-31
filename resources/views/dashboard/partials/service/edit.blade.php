@@ -18,7 +18,7 @@
                         ['key' => 'accept', 'label' => 'ثبت درخواست'],
                         ['key' => 'status', 'label' => 'تأیید مدیر واحد'],
                         ['key' => 'validationHr', 'label' => 'اعتبارسنجی'],
-                        ['key' => 'validation_managerHr', 'label' => 'تاییدیه منابع انسانی'],
+                        ['key' => 'validation_managerHr', 'label' => 'تاییدیه مدیر منابع انسانی'],
                         ['key' => 'validationManager1', 'label' => 'تأیید مدیر مالی'],
                         ['key' => 'validationManager2', 'label' => 'تأیید نهایی'],
                         ];
@@ -177,13 +177,11 @@
                                                 </div>
                                           </div>
 
-
-                                          <!-- اعتبارسنجی -->
-                                          @if($service->status === 'Yes')
-                                          <hr />
-                                          <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
-
                                           <div class="row">
+                                                {{-- اعتبارسنجی --}}
+                                                @if($service->status === 'Yes')
+                                                <hr />
+                                                <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                                 <div class="col-md-4 mb-3">
                                                       <label class="form-label">تاریخ ورود به سازمان</label>
                                                       <div class="input-container">
@@ -274,16 +272,7 @@
                                                       <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-8 mb-3">
-                                                      <label class="form-label">توضیحات</label>
-                                                      <textarea class="form-control" name="descriptionHr" rows="3" {{ $canEditHR ? '' : 'readonly' }}>{{ old('descriptionHr') }}</textarea>
-                                                      @error('descriptionHr')
-                                                      <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
-                                                      @enderror
-                                                </div>
-
                                                 @if($canEditHR)
-
                                                 <div class="col-md-4 mt-4 d-flex gap-4">
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationHr" value="Pending"
@@ -302,59 +291,61 @@
                                                       </div>
                                                 </div>
                                                 @else
-                                                <div class="row">
-                                                      <div class="col-md-6">
-                                                            <label class="form-label">اعتبارسنجی</label>
-                                                            <h6 class="badge bg-body-secondary text-black mb-3">{{ $service->validationHr === 'Yes' ? 'انجام شد' : ($service->validationHr === 'No' ? 'انجام نشود' : ($service->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
-                                                      </div>
+                                                <div class="col-md-6">
+                                                      <label class="form-label">اعتبارسنجی</label>
+                                                      <h6 class="badge bg-body-secondary text-black mb-3">{{ $service->validationHr === 'Yes' ? 'انجام شد' : ($service->validationHr === 'No' ? 'انجام نشود' : ($service->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
                                                 @endif
-                                          </div>
-                                          @endif
+                                                @endif
 
-                                          {{-- تاییدیه منابع انسانی --}}
-                                          @if($service->validationHr === 'Yes')
-                                          <hr />
-                                          <h4 class="text-center mt-4 mb-4">تاییدیه منابع انسانی</h4>
-                                          @if($canEditManagerHr)
-
-                                          <div class="col-md-4 mt-4 d-flex gap-4">
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio" name="validation_managerHr" value="Pending"
-                                                            {{ old('validation_managerHr', $service->validation_managerHr) == 'Pending' ? 'checked' : '' }}>
-                                                      <label class="form-check-label">در حال بررسی</label>
+                                                {{-- تاییدیه مدیر منابع انسانی --}}
+                                                @if($service->validationHr === 'Yes')
+                                                <hr />
+                                                <h4 class="text-center mt-4 mb-4">تاییدیه مدیر منابع انسانی</h4>
+                                                @if($canEditManagerHr)
+                                                <div class="col-md-8 mb-3">
+                                                      <label class="form-label">توضیحات</label>
+                                                      <textarea class="form-control" name="descriptionHr" rows="1" {{ $canEditManagerHr ? '' : 'readonly' }}>
+                                                      {{ old('descriptionHr', $service->descriptionHr) }}
+                                                      </textarea>
+                                                      @error('descriptionHr')
+                                                      <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
+                                                      @enderror
                                                 </div>
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio" name="validation_managerHr" value="Yes"
-                                                            {{ old('validation_managerHr', $service->validation_managerHr) == 'Yes' ? 'checked' : '' }}>
-                                                      <label class="form-check-label">تأیید</label>
+                                                <div class="col-md-4 mt-4 d-flex gap-4">
+                                                      <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="validation_managerHr" value="Pending"
+                                                                  {{ old('validation_managerHr', $service->validation_managerHr) == 'Pending' ? 'checked' : '' }}>
+                                                            <label class="form-check-label">در حال بررسی</label>
+                                                      </div>
+                                                      <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="validation_managerHr" value="Yes"
+                                                                  {{ old('validation_managerHr', $service->validation_managerHr) == 'Yes' ? 'checked' : '' }}>
+                                                            <label class="form-check-label">تأیید</label>
+                                                      </div>
+                                                      <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="validation_managerHr" value="No"
+                                                                  {{ old('validation_managerHr', $service->validation_managerHr) == 'No' ? 'checked' : '' }}>
+                                                            <label class="form-check-label">عدم تأیید</label>
+                                                      </div>
                                                 </div>
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio" name="validation_managerHr" value="No"
-                                                            {{ old('validation_managerHr', $service->validation_managerHr) == 'No' ? 'checked' : '' }}>
-                                                      <label class="form-check-label">عدم تأیید</label>
-                                                </div>
-                                          </div>
-
-                                          @else
-                                          <div class="row">
+                                                @else
                                                 <div class="col-md-6">
-                                                      <label class="form-label">نتیجه بررسی منابع انسانی</label>
+                                                      <label class="form-label">توضیحات</label>
+                                                      <p class="form-control-plaintext  bg-body-secondary">{{ $service->descriptionHr }}</p>
+                                                </div>
+                                                <div class="col-md-6 mb-4">
+                                                      <label class="form-label">نتیجه نهایی</label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $service->validation_managerHr === 'Yes' ? 'تأیید شده' : ($service->validation_managerHr === 'No' ? 'عدم تأیید' : ($service->validation_managerHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
-                                          </div>
-                                          @endif
-                                          @endif
+                                                @endif
+                                                @endif
 
-
-                                          {{-- تاییدیه مدیر مالی --}}
-                                          @if($service->validation_managerHr === 'Yes')
-                                          <hr />
-                                          <h4 class="text-center mt-4 mb-4">تاییدیه مدیر مالی</h4>
-
-                                          @if($canEditManager1)
-
-                                          <div class="row">
+                                                {{-- تاییدیه مدیر مالی --}}
+                                                @if($service->validation_managerHr === 'Yes')
+                                                <hr />
+                                                <h4 class="text-center mt-4 mb-4">تاییدیه مدیر مالی</h4>
+                                                @if($canEditManager1)
                                                 <div class="col-md-6 mb-3">
                                                       <label class="form-label">توضیحات مدیر مالی</label>
                                                       <textarea class="form-control" name="descriptionManager1" rows="3" {{ $canEditManager1 ? '' : 'readonly' }}>{{ old('descriptionManager1', $service->descriptionManager1) }}</textarea>
@@ -379,9 +370,7 @@
                                                             <label class="form-check-label">عدم تأیید</label>
                                                       </div>
                                                 </div>
-                                          </div>
-                                          @else
-                                          <div class="row">
+                                                @else
                                                 <div class="col-md-6">
                                                       <label class="form-label">توضیحات مدیر مالی</label>
                                                       <p class="form-control-plaintext  bg-body-secondary">{{ $service->descriptionManager1 }}</p>
@@ -390,16 +379,14 @@
                                                       <label class="form-label">نتیجه بررسی مدیر مالی</label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $service->validationManager1 === 'Yes' ? 'تأیید شده' : ($service->validationManager1 === 'No' ? 'عدم تأیید' : ($service->validationManager1 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
-                                          </div>
-                                          @endif
+                                                @endif
+                                                @endif
 
-                                          @endif
-                                          {{-- تاییدیه رییس کمیته --}}
-                                          @if($service->validationManager1 === 'Yes')
-                                          <hr />
-                                          <h4 class="text-center mt-4 mb-4">تاییدیه رییس کمیته رفاهی</h4>
-                                          @if($canEditManager2)
-                                          <div class="row">
+                                                {{-- تاییدیه رییس کمیته --}}
+                                                @if($service->validationManager1 === 'Yes')
+                                                <hr />
+                                                <h4 class="text-center mt-4 mb-4">تاییدیه رییس کمیته رفاهی</h4>
+                                                @if($canEditManager2)
                                                 <div class="col-md-6 mb-3">
                                                       <label class="form-label">مبلغ نهایی (تومان)</label>
                                                       <input name="finalPrice" type="text" class="form-control"
@@ -431,9 +418,7 @@
                                                             <label class="form-check-label">عدم تأیید</label>
                                                       </div>
                                                 </div>
-                                          </div>
-                                          @else
-                                          <div class="row">
+                                                @else
                                                 <div class="col-md-4">
                                                       <label class="form-label">مبلغ نهایی</label>
                                                       <p class="form-control-plaintext bg-body-secondary">{{ $service->finalPrice }}</p>
@@ -446,9 +431,9 @@
                                                       <label class="form-label">نتیجه بررسی رییس کمیته رفاهی</label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $service->validationManager2 === 'Yes' ? 'تأیید شده' : ($service->validationManager2 === 'No' ? 'عدم تأیید' : ($service->validationManager2 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
+                                                @endif
+                                                @endif
                                           </div>
-                                          @endif
-                                          @endif
                                           <div class="col-md-12 d-flex gap-2 justify-content-end mt-5">
                                                 <button class="btn btn-primary" type="submit">ذخیره تغییرات</button>
                                                 <a class="btn btn-danger" href="{{route('index')}}"> بازگشت</a>

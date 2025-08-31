@@ -170,12 +170,11 @@
                                                 </div>
                                           </div>
 
-                                          <!-- اعتبارسنجی -->
-                                          @if($vam->status === 'Yes')
-
-                                          <hr />
-                                          <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                           <div class="row">
+                                                <!-- اعتبارسنجی -->
+                                                @if($vam->status === 'Yes')
+                                                <hr />
+                                                <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">تاریخ ورود به سازمان</label>
                                                       <div class="input-container">
@@ -266,13 +265,6 @@
                                                       <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-8 mb-3">
-                                                      <label class="form-label">توضیحات</label>
-                                                      <textarea class="form-control" name="descriptionHr" rows="3" {{ $canEditHR ? '' : 'readonly' }}>{{ old('descriptionHr') }}</textarea>
-                                                      @error('descriptionHr')
-                                                      <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
-                                                      @enderror
-                                                </div>
                                                 @if($canEditHR)
                                                 <div class="col-md-4 mt-4 d-flex gap-4">
                                                       <div class="form-check">
@@ -292,56 +284,61 @@
                                                       </div>
                                                 </div>
                                                 @else
-                                                <div class="row">
-                                                      <div class="col-md-6">
-                                                            <label class="form-label">اعتبارسنجی</label>
-                                                            <h6 class="badge bg-body-secondary text-black mb-3">{{ $vam->validationHr === 'Yes' ? 'انجام شد' : ($vam->validationHr === 'No' ? 'انجام نشود' : ($vam->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
-                                                      </div>
+                                                <div class="col-md-6 mt-4">
+                                                      <label class="form-label">اعتبارسنجی</label>
+                                                      <h6 class="badge bg-body-secondary text-black mb-3">{{ $vam->validationHr === 'Yes' ? 'انجام شد' : ($vam->validationHr === 'No' ? 'انجام نشود' : ($vam->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
                                                 @endif
-                                          </div>
-                                          @endif
+                                                @endif
 
-                                          {{-- تاییدیه منابع انسانی --}}
-                                          @if($vam->validationHr === 'Yes')
-                                          <hr />
-                                          <h4 class="text-center mt-4 mb-4">تاییدیه منابع انسانی</h4>
-                                          @if($canEditManagerHr)
-                                          <div class="col-md-4 mt-4 d-flex gap-4">
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio" name="validation_managerHr" value="Pending"
-                                                            {{ old('validation_managerHr', $vam->validation_managerHr) == 'Pending' ? 'checked' : '' }}>
-                                                      <label class="form-check-label">در حال بررسی</label>
+                                                {{-- تاییدیه مدیر منابع انسانی --}}
+                                                @if($vam->validationHr === 'Yes')
+                                                <hr />
+                                                <h4 class="text-center mt-4 mb-4">تاییدیه مدیر منابع انسانی</h4>
+                                                @if($canEditManagerHr)
+                                                <div class="col-md-8 mb-3">
+                                                      <label class="form-label">توضیحات</label>
+                                                      <textarea class="form-control" name="descriptionHr" rows="1" {{ $canEditManagerHr ? '' : 'readonly' }}>
+                                                      {{ old('descriptionHr', $vam->descriptionHr) }}
+                                                      </textarea>
+                                                      @error('descriptionHr')
+                                                      <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
+                                                      @enderror
                                                 </div>
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio" name="validation_managerHr" value="Yes"
-                                                            {{ old('validation_managerHr', $vam->validation_managerHr) == 'Yes' ? 'checked' : '' }}>
-                                                      <label class="form-check-label">تأیید</label>
+                                                <div class="col-md-4 mt-4 d-flex gap-4">
+                                                      <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="validation_managerHr" value="Pending"
+                                                                  {{ old('validation_managerHr', $vam->validation_managerHr) == 'Pending' ? 'checked' : '' }}>
+                                                            <label class="form-check-label">در حال بررسی</label>
+                                                      </div>
+                                                      <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="validation_managerHr" value="Yes"
+                                                                  {{ old('validation_managerHr', $vam->validation_managerHr) == 'Yes' ? 'checked' : '' }}>
+                                                            <label class="form-check-label">تأیید</label>
+                                                      </div>
+                                                      <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="validation_managerHr" value="No"
+                                                                  {{ old('validation_managerHr', $vam->validation_managerHr) == 'No' ? 'checked' : '' }}>
+                                                            <label class="form-check-label">عدم تأیید</label>
+                                                      </div>
                                                 </div>
-                                                <div class="form-check">
-                                                      <input class="form-check-input" type="radio" name="validation_managerHr" value="No"
-                                                            {{ old('validation_managerHr', $vam->validation_managerHr) == 'No' ? 'checked' : '' }}>
-                                                      <label class="form-check-label">عدم تأیید</label>
-                                                </div>
-                                          </div>
-                                          @else
-                                          <div class="row">
+                                                @else
                                                 <div class="col-md-6">
+                                                      <label class="form-label">توضیحات</label>
+                                                      <p class="form-control-plaintext  bg-body-secondary">{{ $vam->descriptionHr }}</p>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
                                                       <label class="form-label">نتیجه بررسی منابع انسانی</label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $vam->validation_managerHr === 'Yes' ? 'تأیید شده' : ($vam->validation_managerHr === 'No' ? 'عدم تأیید' : ($vam->validation_managerHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
-                                          </div>
-                                          @endif
-                                          @endif
+                                                @endif
+                                                @endif
 
-
-                                          {{-- تاییدیه مدیر مالی --}}
-                                          @if($vam->validation_managerHr === 'Yes')
-                                          <hr />
-                                          <h4 class="text-center mt-4 mb-4">تاییدیه مدیر مالی</h4>
-
-                                          @if($canEditManager1)
-                                          <div class="row">
+                                                <hr />
+                                                {{-- تاییدیه مدیر مالی --}}
+                                                @if($vam->validation_managerHr === 'Yes')
+                                                <h4 class="text-center mt-3 mb-4">تاییدیه مدیر مالی</h4>
+                                                @if($canEditManager1)
                                                 <div class="col-md-6 mb-3">
                                                       <label class="form-label">توضیحات مدیر مالی</label>
                                                       <textarea class="form-control" name="descriptionManager1" rows="3" {{ $canEditManager1 ? '' : 'readonly' }}>{{ old('descriptionManager1', $vam->descriptionManager1) }}</textarea>
@@ -366,9 +363,7 @@
                                                             <label class="form-check-label">عدم تأیید</label>
                                                       </div>
                                                 </div>
-                                          </div>
-                                          @else
-                                          <div class="row">
+                                                @else
                                                 <div class="col-md-6">
                                                       <label class="form-label">توضیحات مدیر مالی</label>
                                                       <p class="form-control-plaintext  bg-body-secondary">{{ $vam->descriptionManager1 }}</p>
@@ -377,16 +372,14 @@
                                                       <label class="form-label">نتیجه بررسی مدیر مالی</label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $vam->validationManager1 === 'Yes' ? 'تأیید شده' : ($vam->validationManager1 === 'No' ? 'عدم تأیید' : ($vam->validationManager1 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
-                                          </div>
-                                          @endif
+                                                @endif
+                                                @endif
 
-                                          @endif
-                                          {{-- تاییدیه رییس کمیته --}}
-                                          @if($vam->validationManager1 === 'Yes')
-                                          <hr />
-                                          <h4 class="text-center mt-4 mb-4">تاییدیه رییس کمیته رفاهی</h4>
-                                          @if($canEditManager2)
-                                          <div class="row">
+                                                {{-- تاییدیه رییس کمیته --}}
+                                                @if($vam->validationManager1 === 'Yes')
+                                                <hr />
+                                                <h4 class="text-center mt-4 mb-4">تاییدیه رییس کمیته رفاهی</h4>
+                                                @if($canEditManager2)
                                                 <div class="col-md-6 mb-3">
                                                       <label class="form-label">مبلغ نهایی (تومان)</label>
                                                       <input name="finalPrice" type="text" class="form-control"
@@ -418,9 +411,7 @@
                                                             <label class="form-check-label">عدم تأیید</label>
                                                       </div>
                                                 </div>
-                                          </div>
-                                          @else
-                                          <div class="row">
+                                                @else
                                                 <div class="col-md-4">
                                                       <label class="form-label">مبلغ نهایی</label>
                                                       <p class="form-control-plaintext bg-body-secondary">{{ $vam->finalPrice }}</p>
@@ -433,9 +424,9 @@
                                                       <label class="form-label">نتیجه بررسی رییس کمیته رفاهی</label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $vam->validationManager2 === 'Yes' ? 'تأیید شده' : ($vam->validationManager2 === 'No' ? 'عدم تأیید' : ($vam->validationManager2 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
+                                                @endif
+                                                @endif
                                           </div>
-                                          @endif
-                                          @endif
 
                                           <div class="col-md-12 d-flex gap-2 justify-content-end mt-5">
                                                 <button class="btn btn-primary" type="submit">ذخیره تغییرات</button>

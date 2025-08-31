@@ -173,7 +173,6 @@ class VamController extends Controller
                     'debt_fund' => 'required|min:0',
                     'debt_purchase' => 'required',
                     'validationDate' => 'required',
-                    'descriptionHr' => 'nullable|string',
                     'validationHr' => 'required|in:Pending,Yes,No',
                 ]);
                 $vam->update([
@@ -185,7 +184,6 @@ class VamController extends Controller
                     'debt_fund' => $request->debt_fund,
                     'debt_purchase' => $request->debt_purchase,
                     'validationDate' => $request->validationDate,
-                    'descriptionHr' => $request->descriptionHr,
                     'validationHr' => $request->validationHr ?? 'Pending',
                 ]);
                 break;
@@ -197,9 +195,11 @@ class VamController extends Controller
                 }
 
                 $request->validate([
+                    'descriptionHr' => 'nullable|string',
                     'validation_managerHr' => 'required|in:Pending,Yes,No',
                 ]);
                 $vam->update([
+                    'descriptionHr' => $request->descriptionHr,
                     'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
                 ]);
                 break;
