@@ -7,11 +7,11 @@
                         $user = auth()->user();
 
                         // مجوزهای دسترسی
-                        $canEditUserFields = $user && in_array($user->role, ['subscriber', 'author']) && $service->status !== 'Yes';
-                        $canEditHR = $user && $user->role === 'humanResources';
-                        $canEditManagerHr = $user && $user->role === 'managerHr';
-                        $canEditManager1 = $user && $user->role === 'manager1';
-                        $canEditManager2 = $user && in_array($user->role, ['manager2', 'admin']);
+                        $canEditUserFields = $user && $user->hasAnyRole(['subscriber', 'author']) && $maadiran->status !== 'Yes';
+                        $canEditHR = $user && $user->hasAnyRole(['humanResources','admin']);
+                        $canEditManagerHr = $user && $user->hasAnyRole(['managerHr','admin']);
+                        $canEditManager1 = $user && $user->hasAnyRole(['admin','manager1']);
+                        $canEditManager2 = $user && $user->hasAnyRole(['manager2', 'admin']);
 
 
                         $steps = [

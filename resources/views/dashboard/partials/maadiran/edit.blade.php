@@ -7,11 +7,10 @@
 
                         $user = auth()->user();
                         // مجوزهای دسترسی
-                        $canEditUserFields = $user && in_array($user->role, ['subscriber', 'author']) && $maadiran->status !== 'Yes';
-                        $canEditHR = $user && $user->role === 'humanResources';
-                        $canEditManagerHr = $user && $user->role === 'managerHr';
-                        $canEditManager1 = $user && $user->role === 'manager1';
-                        $canEditManager2 = $user && in_array($user->role, ['manager2', 'admin']);
+                        $canEditUserFields = $user && $user->hasAnyRole(['subscriber', 'author']) && $maadiran->status !== 'Yes';
+                        $canEditHR = $user && $user->hasAnyRole(['humanResources','admin']);
+                        $canEditManagerHr = $user && $user->hasAnyRole(['managerHr','admin']);
+                        $canEditManager1 = $user && $user->hasAnyRole(['admin','manager1']);
 
 
                         $steps = [
@@ -20,7 +19,6 @@
                         ['key' => 'validationHr', 'label' => 'اعتبارسنجی'],
                         ['key' => 'validation_managerHr', 'label' => 'تاییدیه مدیر منابع انسانی'],
                         ['key' => 'validationManager1', 'label' => 'تأیید مدیر مالی'],
-                        ['key' => 'validationManager2', 'label' => 'تأیید نهایی'],
                         ];
 
                         // پیدا کردن مرحله فعلی
@@ -375,58 +373,6 @@
                                                 <div class="col-md-6">
                                                       <label class="form-label">نتیجه بررسی مدیر مالی</label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $maadiran->validationManager1 === 'Yes' ? 'تأیید شده' : ($maadiran->validationManager1 === 'No' ? 'عدم تأیید' : ($maadiran->validationManager1 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
-                                                </div>
-                                                @endif
-                                                @endif
-
-                                                {{-- تاییدیه رییس کمیته --}}
-                                                @if($maadiran->validationManager1 === 'Yes')
-                                                <hr />
-                                                <h4 class="text-center mt-4 mb-4">تاییدیه رییس کمیته رفاهی</h4>
-                                                @if($canEditManager2)
-                                                <div class="col-md-6 mb-3">
-                                                      <label class="form-label">مبلغ نهایی (تومان)</label>
-                                                      <input name="finalPrice" type="text" class="form-control"
-                                                            value="{{ old('finalPrice', $maadiran->finalPrice ?? $maadiran->price) }}"
-                                                            {{ $canEditManager2 ? '' : 'readonly' }}>
-                                                      @error('finalPrice')
-                                                      <small class="text-danger">{{ $message }}</small>
-                                                      @enderror
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                      <label class="form-label">توضیحات تکمیلی</label>
-                                                      <textarea class="form-control" name="descriptionManager2" rows="3" {{ $canEditManager2 ? '' : 'readonly' }}>{{ old('descriptionManager2', $maadiran->descriptionManager2) }}</textarea>
-                                                      @error('descriptionManager2')
-                                                      <small class="text-danger">{{ $message }}</small>
-                                                      @enderror
-                                                </div>
-                                                <div class="col-md-4 mt-4 d-flex gap-4">
-                                                      <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="validationManager2" value="Pending"
-                                                                  {{ old('validationManager2', $maadiran->validationManager2) == 'Pending' ? 'checked' : '' }}>
-                                                            <label class="form-check-label">در حال بررسی</label>
-                                                      </div>
-                                                      <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="validationManager2" value="Yes" {{ old('validationManager2', $maadiran->validationManager2) == 'Yes' ? 'checked' : '' }}>
-                                                            <label class="form-check-label">تأیید</label>
-                                                      </div>
-                                                      <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="validationManager2" value="No" {{ old('validationManager2', $maadiran->validationManager2) == 'No' ? 'checked' : '' }}>
-                                                            <label class="form-check-label">عدم تأیید</label>
-                                                      </div>
-                                                </div>
-                                                @else
-                                                <div class="col-md-4">
-                                                      <label class="form-label">مبلغ نهایی</label>
-                                                      <p class="form-control-plaintext bg-body-secondary">{{ $maadiran->finalPrice }}</p>
-                                                </div>
-                                                <div class="col-md-4">
-                                                      <label class="form-label">توضیحات رییس کمیته رفاهی</label>
-                                                      <p class="form-control-plaintext bg-body-secondary">{{ $maadiran->descriptionManager2 }}</p>
-                                                </div>
-                                                <div class="col-md-4">
-                                                      <label class="form-label">نتیجه بررسی رییس کمیته رفاهی</label>
-                                                      <h6 class="form-control-plaintext bg-body-secondary">{{ $maadiran->validationManager2 === 'Yes' ? 'تأیید شده' : ($maadiran->validationManager2 === 'No' ? 'عدم تأیید' : ($maadiran->validationManager2 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
                                                 @endif
                                                 @endif

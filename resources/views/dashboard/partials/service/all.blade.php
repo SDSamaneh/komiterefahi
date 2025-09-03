@@ -67,7 +67,7 @@
                                                       @if($services)
 
                                                       @foreach($services as $service)
-                                                                                                      
+
                                                       @php
                                                       $isFullyApproved = (
                                                       $service->validationHr === 'Yes' &&
@@ -122,13 +122,8 @@
                                                                   </ul>
                                                             </td>
 
-                                                            @if(auth()->check() && (
-                                                            auth()->user()->role === 'admin' ||
-                                                            auth()->user()->role === 'humanResources' ||
-                                                            (auth()->user()->role === 'managerHr' && $service->validationHr === 'Yes') ||
-                                                            (auth()->user()->role === 'manager1' && $service->validation_managerHr === 'Yes') ||
-                                                            (auth()->user()->role === 'manager2' && $service->validationManager1 === 'Yes')
-                                                            ))
+
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','humanResources','managerHr','manager1','manager2']))
 
                                                             <td>
                                                                   <a href="{{route('service.edit',$service->id)}}" class="text-success mb-0 me-2"><i class="fas fa-edit"></i></a>
@@ -137,7 +132,8 @@
                                                             <td></td>
                                                             @endif
 
-                                                            @if(auth()->check() && auth()->user()->role === 'admin' )
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr']) )
+
                                                             <td>
                                                                   <div class="d-flex justify-align-content-between align-items-center">
                                                                         <form action="{{ route('service.destroy', $service->id) }}" method="post">
@@ -153,7 +149,7 @@
                                                             <td></td>
                                                             @endif
                                                       </tr>
-                                                 
+
                                                       @endforeach
                                                       @else
                                                       <div class="alert alert-info">

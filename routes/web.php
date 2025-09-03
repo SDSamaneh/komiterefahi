@@ -11,6 +11,9 @@ use App\Http\Controllers\dashboard\UserController;
 use App\Http\Controllers\dashboard\VamController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserRoleController;
+
+use App\Http\Middleware\RoleMiddleware;
 
 Route::redirect('/', '/auth/login');
 
@@ -23,13 +26,11 @@ Route::prefix('/auth')->middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
-
 Route::prefix('/dashboard')->middleware('auth')->group(function () {
 
-    Route::middleware('role:author|manager1|admin|humanResources|managerHr|managerM|manager2|subscriber')->group(function () {
+    Route::middleware([RoleMiddleware::class . ':any,author,manager1,admin,humanResources,managerHr,managerM,manager2,subscriber'])->group(function () {
 
         Route::get('/', [IndexController::class, 'index'])->name('index');
-
         Route::resource('users', UserController::class);
         Route::resource('departman', DepartmanController::class);
         Route::resource('supervisor', SupervisorController::class);
@@ -37,16 +38,21 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         Route::resource('vam', VamController::class);
         Route::resource('maadiran', MaadiranController::class);
         Route::resource('imprest', ImprestController::class);
-
-        // Profile routes
+        // پروفایل
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-        // Logout
+        // خروج
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 
-    Route::middleware('role:author')->group(function () {
+    Route::middleware([RoleMiddleware::class . ':any,admin'])->group(function () {
+        Route::get('user-roles', [UserRoleController::class, 'index'])->name('admin.user_roles.index');
+        Route::get('user-roles/{user}/edit', [UserRoleController::class, 'edit'])->name('admin.user_roles.edit');
+        Route::put('user-roles/{user}', [UserRoleController::class, 'update'])->name('admin.user_roles.update');
+    });
+
+    Route::middleware([RoleMiddleware::class . ':any,author,manager1,managerHr,manager2'])->group(function () {
 
         Route::get('vams', [SupervisorController::class, 'vamRequestsForSupervisor'])->name('supervisor.vam.index');
         Route::get('vams/{vam}/edit', [SupervisorController::class, 'editVam'])->name('supervisor.vam.edit');
@@ -64,4 +70,5 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         Route::get('imprests/{imprest}/edit', [SupervisorController::class, 'editImprest'])->name('supervisor.imprest.edit');
         Route::put('imprests/{imprest}', [SupervisorController::class, 'updateImprest'])->name('supervisor.imprest.update');
     });
+
 });

@@ -76,7 +76,7 @@
                                                       @endphp
 
                                                       <tr>
-                                                           <td @if($isFullyApproved) style="background-color: green;" @endif>
+                                                            <td @if($isFullyApproved) style="background-color: green;" @endif>
                                                                   <h6 class="course-title mb-0">{{$vam->id}}</h6>
                                                             </td>
                                                             <td>
@@ -111,13 +111,7 @@
                                                                   </ul>
                                                             </td>
 
-                                                            @if(auth()->check() && (
-                                                            auth()->user()->role === 'admin' ||
-                                                            auth()->user()->role === 'humanResources' ||
-                                                            (auth()->user()->role === 'managerHr' && $vam->validationHr === 'Yes') ||
-                                                            (auth()->user()->role === 'manager1' && $vam->validation_managerHr === 'Yes') ||
-                                                            (auth()->user()->role === 'manager2' && $vam->validationManager1 === 'Yes')
-                                                            ))
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','humanResources','managerHr','manager1','manager2']))
                                                             <td>
                                                                   <a href="{{ route('vam.edit', $vam->id) }}" class="text-success mb-0 me-2">
                                                                         <i class="fas fa-edit"></i>
@@ -127,7 +121,7 @@
                                                             <td></td>
                                                             @endif
 
-                                                            @if(auth()->check() && auth()->user()->role === 'admin' )
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr']) )
                                                             <td>
                                                                   <div class="d-flex align-items-center">
                                                                         <form action="{{ route('vam.destroy', $vam->id) }}" method="post">

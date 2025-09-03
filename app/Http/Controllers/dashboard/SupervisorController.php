@@ -16,12 +16,21 @@ use Illuminate\Support\Facades\Auth;
 
 class SupervisorController extends Controller
 {
-    // vamRequest
+    /**
+     * گرفتن شناسه مدیر لاگین شده
+     */
+    private function supervisorId()
+    {
+        return Auth::user()->supervisor_id;
+    }
+
+    /**
+     * Vam Requests
+     */
     public function vamRequestsForSupervisor()
     {
-        // شناسه مدیر واحد لاگین شده
-        $supervisorId = auth()->user()->supervisor_id;
-        // وام‌هایی که نویسنده‌شان کاربری است که supervisor_id آن برابر با این مقدار است
+        $supervisorId = $this->supervisorId();
+
         $vams = Vam::whereHas('user', function ($query) use ($supervisorId) {
             $query->where('supervisor_id', $supervisorId);
         })->with('user')->get();
@@ -32,7 +41,7 @@ class SupervisorController extends Controller
     public function editVam(Vam $vam)
     {
         // اطمینان از اینکه این وام متعلق به کاربر زیرمجموعه مدیر است:
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
         $supervisors = Supervisor::all();
         $departmans = Departmans::all();
 
@@ -45,7 +54,7 @@ class SupervisorController extends Controller
 
     public function updateVam(Request $request, Vam $vam)
     {
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
 
         if ($vam->user->supervisor_id !== $supervisorId) {
             abort(403, 'دسترسی غیرمجاز');
@@ -67,10 +76,14 @@ class SupervisorController extends Controller
         }
     }
 
-    // serviceRequest
+    /**
+     * service Requests
+     */
+
     public function serviceRequestsForSupervisor()
     {
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
+
         $services = Service::whereHas('user', function ($query) use ($supervisorId) {
             $query->where('supervisor_id', $supervisorId);
         })->with('user')->get();
@@ -80,9 +93,8 @@ class SupervisorController extends Controller
 
     public function editService(Service $service)
     {
-
         // اطمینان از اینکه این وام متعلق به کاربر زیرمجموعه مدیر است:
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
         $supervisors = Supervisor::all();
         $departmans = Departmans::all();
 
@@ -95,7 +107,7 @@ class SupervisorController extends Controller
 
     public function updateService(Request $request, Service $service)
     {
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
 
         if ($service->user->supervisor_id !== $supervisorId) {
             abort(403, 'دسترسی غیرمجاز');
@@ -120,7 +132,7 @@ class SupervisorController extends Controller
     public function maadiranRequestsForSupervisor()
     {
         // شناسه مدیر واحد لاگین شده
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
         // وام‌هایی که نویسنده‌شان کاربری است که supervisor_id آن برابر با این مقدار است
         $maadirans = Maadiran::whereHas('user', function ($query) use ($supervisorId) {
             $query->where('supervisor_id', $supervisorId);
@@ -131,7 +143,7 @@ class SupervisorController extends Controller
     public function editMaadiran(Maadiran $maadiran)
     {
 
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
         $supervisors = Supervisor::all();
         $departmans = Departmans::all();
 
@@ -145,7 +157,7 @@ class SupervisorController extends Controller
     public function updateMaadiran(Request $request, Maadiran $maadiran)
     {
 
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
 
         if ($maadiran->user->supervisor_id !== $supervisorId) {
             abort(403, 'دسترسی غیرمجاز');
@@ -169,8 +181,7 @@ class SupervisorController extends Controller
     // imprestRequest
     public function imprestRequestsForSupervisor()
     {
-        // شناسه مدیر واحد لاگین شده
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
         // وام‌هایی که نویسنده‌شان کاربری است که supervisor_id آن برابر با این مقدار است
         $imprest = Imprest::whereHas('user', function ($query) use ($supervisorId) {
             $query->where('supervisor_id', $supervisorId);
@@ -181,8 +192,7 @@ class SupervisorController extends Controller
 
     public function editImprest(Imprest $imprest)
     {
-        // اطمینان از اینکه این وام متعلق به کاربر زیرمجموعه مدیر است:
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
         $supervisors = Supervisor::all();
         $departmans = Departmans::all();
 
@@ -195,7 +205,7 @@ class SupervisorController extends Controller
 
     public function updateImprest(Request $request, Imprest $imprest)
     {
-        $supervisorId = auth()->user()->supervisor_id;
+        $supervisorId = $this->supervisorId();
 
         if ($imprest->user->supervisor_id !== $supervisorId) {
             abort(403, 'دسترسی غیرمجاز');

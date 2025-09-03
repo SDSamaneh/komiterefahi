@@ -33,10 +33,7 @@ class Maadiran extends Model
         'validationHr',
         'validation_managerHr',
         'descriptionManager1',
-        'validationManager1',
-        'finalPrice',
-        'descriptionManager2',
-        'validationManager2'
+        'validationManager1'
     ];
 
 

@@ -4,6 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+
 use App\Models\dashboard\Imprest;
 use App\Models\dashboard\Maadiran;
 use App\Models\dashboard\Service;
@@ -60,6 +63,31 @@ class User extends Authenticatable
         ];
     }
 
+    public function roles(): BelongsToMany
+    {
+        // اگر اسم جدول pivot چیز دیگری است، دومین پارامتر را تغییر بده
+        return $this->belongsToMany(Role::class, 'role_user');
+    }
+ 
+    // آیا کاربر نقش مشخص را دارد؟ (به‌صورت کوئری، بدون بارگذاری کل کالکشن)
+    public function hasRole(string $role): bool
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    // آیا کاربر حداقل یکی از نقش‌های آرایه را دارد؟
+    public function hasAnyRole(array $roles): bool
+    {
+        return $this->roles()->whereIn('name', $roles)->exists();
+    }
+
+    // آیا کاربر همه‌ی نقش‌های آرایه را دارد؟
+    public function hasAllRoles(array $roles): bool
+    {
+        $unique = array_unique($roles);
+        $count = $this->roles()->whereIn('name', $unique)->count();
+        return $count === count($unique);
+    }
 
     public function vams()
     {

@@ -89,7 +89,9 @@
                   </div>
             </div>
 
-            @if(auth()->check() && auth()->user()->role==='author')
+
+            @if(auth()->check() && auth()->user()->hasAnyRole(['managerHr', 'author','manager1','manager2']))
+
             <hr />
             <div class="text-center mt-4 mb-4">
                   <h4>کارتابل درخواست مدیران</h4>

@@ -72,7 +72,7 @@ class MaadiranController extends Controller
 
         $role = Auth::user()->role;
 
-        if (!in_array($role, ['admin', 'author', 'managerHr', 'managerM' ,'manager1', 'manager2', 'humanResources', 'subscriber'])) {
+        if (!in_array($role, ['admin', 'author', 'managerHr', 'managerM' ,'manager1', 'humanResources', 'subscriber'])) {
             abort(403, 'دسترسی غیرمجاز');
         }
 
@@ -230,27 +230,7 @@ class MaadiranController extends Controller
                     'validationManager1' => $request->validationManager1 ?? 'Pending',
                 ]);
 
-                break;
-
-            case 'manager2':
-
-                if ($maadiran->validationManager2 === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-
-                    'finalPrice' => 'required|min:0',
-                    'descriptionManager2' => 'nullable|string',
-
-                    'validationManager2' => 'required|in:Pending,Yes,No',
-                ]);
-                $maadiran->update([
-                    'finalPrice' => $request->finalPrice,
-                    'descriptionManager2' => $request->descriptionManager2,
-                    'validationManager2' => $request->validationManager2 ?? 'Pending',
-                ]);
-                break;
+                break;    
 
             default:
                 return redirect()->back()->with('error', 'شما اجازه دسترسی به این عملیات را ندارید.');

@@ -74,8 +74,8 @@
                                                       $isFullyApproved = (
                                                       $maadiran->validationHr === 'Yes' &&
                                                       $maadiran->validation_managerHr === 'Yes' &&
-                                                      $maadiran->validationManager1 === 'Yes' &&
-                                                      $maadiran->validationManager2 === 'Yes'
+                                                      $maadiran->validationManager1 === 'Yes'
+
                                                       );
                                                       @endphp
 
@@ -115,19 +115,13 @@
                                                                         <li class="nav-item">
                                                                               <i class="fas fa-check-circle" style="color: {{ $maadiran->validationManager1 == 'Yes' ? 'green' : 'grey' }}"></i> مدیر مالی
                                                                         </li>
-                                                                        <li class="nav-item">
-                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->validationManager2 == 'Yes' ? 'green' : 'grey' }}"></i> رییس کمیته
-                                                                        </li>
+
                                                                   </ul>
                                                             </td>
 
-                                                            @if(auth()->check() && (
-                                                            auth()->user()->role === 'admin' ||
-                                                            auth()->user()->role === 'humanResources' ||
-                                                            (auth()->user()->role === 'managerHr' && $maadiran->validationHr === 'Yes') ||
-                                                            (auth()->user()->role === 'manager1' && $maadiran->validation_managerHr === 'Yes') ||
-                                                            (auth()->user()->role === 'manager2' && $maadiran->validationManager1 === 'Yes')
-                                                            ))
+
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr','manager1']))
+
 
                                                             <td>
                                                                   <a href="{{ route('maadiran.edit', $maadiran->id) }}" class="text-success mb-0 me-2">
@@ -139,7 +133,7 @@
                                                             <td></td>
                                                             @endif
 
-                                                            @if(auth()->check() && auth()->user()->role === 'admin' )
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr']) )
                                                             <td>
                                                                   <div class="d-flex align-items-center">
                                                                         <form action="{{ route('maadiran.destroy', $maadiran->id) }}" method="post">
@@ -156,7 +150,7 @@
                                                             @endif
 
                                                       </tr>
-                                                  
+
 
                                                       @endforeach
                                                       @else
