@@ -66,7 +66,7 @@ class User extends Authenticatable
     public function roles(): BelongsToMany
     {
         // اگر اسم جدول pivot چیز دیگری است، دومین پارامتر را تغییر بده
-        return $this->belongsToMany(Role::class, 'role_user');
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
     }
  
     // آیا کاربر نقش مشخص را دارد؟ (به‌صورت کوئری، بدون بارگذاری کل کالکشن)

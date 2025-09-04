@@ -69,16 +69,14 @@ class ServiceController extends Controller
             'accept.required' => 'قوانین را میپذیرم'
         ]);
 
-
-        $role = Auth::user()->role;
-
-        if (!in_array($role, ['admin', 'author', 'managerM', 'manager1', 'manager2', 'humanResources', 'subscriber'])) {
+        // بررسی دسترسی کاربر
+        $validRoles = ['admin', 'author', 'managerM', 'managerHr', 'manager1', 'manager2', 'humanResources', 'subscriber'];
+        if (!auth()->user()->hasAnyRole($validRoles)) {
             abort(403, 'دسترسی غیرمجاز');
         }
 
         $fields['author_id'] = Auth::id();
         $fields['accept'] = $request->has('accept') ? 'Yes' : 'No';
-
 
         $services = Service::create($fields);
         return $services

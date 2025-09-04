@@ -6,6 +6,7 @@ use App\Events\UserSubscribed;
 use App\Http\Requests\Auth\StoreRegister;
 use App\Mail\WelcomeMail;
 use App\Models\dashboard\Departmans;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,9 +49,21 @@ class AuthController extends Controller
 
         ]);
 
-        //create user
-        $user = User::create($fields);
-        //login user
+        // ایجاد کاربر
+        $user = User::create([
+            'name' => $fields['name'],
+            'email' => $fields['email'],
+            'idCard' => $fields['idCard'],
+            'phone_number' => $fields['phone_number'],
+            'password' => bcrypt($fields['password']), // هش کردن رمز
+        ]);
+
+        // اختصاص نقش پیش‌فرض subscriber
+        $defaultRole = Role::where('name', 'subscriber')->first();
+        if ($defaultRole) {
+            $user->roles()->attach($defaultRole->id);
+        }
+        // لاگین کاربر
         Auth::login($user);
 
         return redirect()->route('index')->withErrors([

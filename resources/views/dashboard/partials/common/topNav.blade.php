@@ -10,26 +10,25 @@
             @endauth
             <!-- Main navbar START -->
             <div class="collapse navbar-collapse" id="navbarCollapse">
-                  @if(auth()->check() && !in_array(auth()->user()->role, ['subscriber', 'author']))
-
+                  @if(auth()->check() && auth()->user()->hasAnyRole(['manager2','admin', 'manager1','humanResources','managerM','managerHr']))
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-wallet"></i>
-                                    مدیریت وام ها</a>
+                                    درخواست وام ها</a>
                               <ul class="dropdown-menu" aria-labelledby="postMenu">
                                     <li> <a class="dropdown-item" href="{{route('vam.index')}}">همه درخواست ها</a> </li>
                                     <li> <a class="dropdown-item" href="{{route('vam.create')}}">افزودن درخواست وام</a> </li>
                               </ul>
                         </li>
                         <li class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-motorcycle"></i> درخواست خرید از کویر</a>
+                              <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-motorcycle"></i> درخواست از کویر</a>
                               <ul class="dropdown-menu" aria-labelledby="postMenu">
                                     <li> <a class="dropdown-item" href="{{route('service.index')}}">همه درخواست ها</a> </li>
                                     <li> <a class="dropdown-item" href="{{route('service.create')}}">افزودن درخواست</a> </li>
                               </ul>
                         </li>
                         <li class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-store"></i> مدیریت درخواست خرید مادیران</a>
+                              <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-store"></i> درخواست از مادیران</a>
 
                               <ul class="dropdown-menu" aria-labelledby="postMenu">
                                     <li> <a class="dropdown-item" href="{{route('maadiran.index')}}">همه درخواست ها</a></li>
@@ -38,7 +37,7 @@
                               </ul>
                         </li>
 
-                        @if(auth()->check() && in_array(auth()->user()->role, ['managerM', 'admin','humanResources']))
+                        @if(auth()->check() && auth()->user()->hasAnyRole(['managerM', 'admin','humanResources']))
 
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">درخواست مساعده</a>
@@ -50,8 +49,8 @@
                         </li>
                         @endif
 
+                        @if(auth()->check() && auth()->user()->hasAnyRole(['admin','humanResources']))
 
-                        @if(auth()->check() && in_array(auth()->user()->role, ['humanResources', 'admin']))
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-people me-1 fs-5"></i>مدیریت کاربران</a>
                               <ul class="dropdown-menu" aria-labelledby="postMenu">
@@ -59,6 +58,14 @@
                                     <li> <a class="dropdown-item" href="{{route('supervisor.index')}}">مدیران واحد</a> </li>
                                     <li> <a class="dropdown-item" href="{{route('departman.index')}}">دپارتمان</a> </li>
                               </ul>
+                        </li>
+                        @endif
+
+                        @if(auth()->check() && auth()->user()->hasAnyRole(['admin']))
+
+                        <li class="nav-item dropdown">
+                              <a class="nav-link" href="{{route('admin.user_roles.index')}}">مدیریت نقش</a>
+
                         </li>
                         @endif
                         <li class="nav-item">

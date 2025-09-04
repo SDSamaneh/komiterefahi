@@ -54,10 +54,9 @@ class ImprestController extends Controller
             'status.required' => 'درخواست را تایید فرمایید'
         ]);
 
-
-        $role = Auth::user()->role;
-
-        if (!in_array($role, ['admin', 'author', 'managerHr', 'managerM', 'manager1', 'manager2', 'humanResources', 'subscriber'])) {
+        // بررسی دسترسی کاربر
+        $validRoles = ['admin', 'author', 'managerM', 'managerHr','manager1', 'manager2', 'humanResources', 'subscriber'];
+        if (!auth()->user()->hasAnyRole($validRoles)) {
             abort(403, 'دسترسی غیرمجاز');
         }
 

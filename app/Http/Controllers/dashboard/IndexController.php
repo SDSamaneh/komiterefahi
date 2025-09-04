@@ -53,7 +53,6 @@ class IndexController extends Controller
             $item->status = $item->status ?? null;
             $item->validationHr = $item->validationHr ?? null;
             $item->validationManager1 = $item->validationManager1 ?? null;
-            $item->validationManager2 = $item->validationManager2 ?? null;
             $item->edit_route = route('maadiran.edit', $item->id);
             return $item;
         });
