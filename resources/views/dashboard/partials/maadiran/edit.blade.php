@@ -7,7 +7,7 @@
 
                         $user = auth()->user();
                         // مجوزهای دسترسی
-                        $canEditUserFields = $user && $user->hasAnyRole(['subscriber', 'author']) && $maadiran->status !== 'Yes';
+                        $canEditUserFields = $user && $user->hasAnyRole(['subscriber', 'author','humanResources','admin']);
                         $canEditHR = $user && $user->hasAnyRole(['humanResources','admin']);
                         $canEditManagerHr = $user && $user->hasAnyRole(['managerHr','admin']);
                         $canEditManager1 = $user && $user->hasAnyRole(['admin','manager1']);

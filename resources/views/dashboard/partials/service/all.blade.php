@@ -132,7 +132,7 @@
                                                             <td></td>
                                                             @endif
 
-                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr']) )
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr','humanResources']) )
 
                                                             <td>
                                                                   <div class="d-flex justify-align-content-between align-items-center">

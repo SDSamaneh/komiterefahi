@@ -54,6 +54,11 @@
                                                             <td>
                                                                   <h6 class="badge text-bg-success mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>تایید</h6>
                                                             </td>
+                                                            @else
+                                                            <td>
+                                                                  <h6 class="badge text-bg-warning mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>بررسی نشده</h6>
+                                                            </td>
+
                                                             @endif
                                                             <td>
                                                                   <a href="{{ route('supervisor.vam.edit', $vam->id) }}" class="btn btn-sm btn-warning">

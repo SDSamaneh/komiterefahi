@@ -6,24 +6,21 @@
 
                         $user = auth()->user();
 
-                        // مجوزهای دسترسی
-                        $canEditUserFields = $user && $user->hasAnyRole(['subscriber', 'author']) && $maadiran->status !== 'Yes';
+                        $canEditUserFields = $user && $user->hasAnyRole(['subscriber', 'author','humanResources','admin']);
                         $canEditHR = $user && $user->hasAnyRole(['humanResources','admin']);
-                        $canEditManagerHr = $user && $user->hasAnyRole(['managerHr','admin']);
-                        $canEditManager1 = $user && $user->hasAnyRole(['admin','manager1']);
-                        $canEditManager2 = $user && $user->hasAnyRole(['manager2', 'admin']);
-
+                        $canEditManagerHr = $user && $user->hasAnyRole(['managerHr','admin','author']);
+                        $canEditManager1 = $user && $user->hasAnyRole(['admin','manager1','author']);
+                        $canEditManager2 = $user && $user->hasAnyRole(['manager2', 'admin','author']);
 
                         $steps = [
                         ['key' => 'accept', 'label' => 'ثبت درخواست'],
                         ['key' => 'status', 'label' => 'تأیید مدیر واحد'],
                         ['key' => 'validationHr', 'label' => 'اعتبارسنجی'],
-                        ['key' => 'validation_managerHr', 'label' => 'تاییدیه مدیر منابع انسانی'],
+                        ['key' => 'validation_managerHr', 'label' => 'تایید مدیر منابع انسانی'],
                         ['key' => 'validationManager1', 'label' => 'تأیید مدیر مالی'],
                         ['key' => 'validationManager2', 'label' => 'تأیید نهایی'],
                         ];
 
-                        // پیدا کردن مرحله فعلی
                         $currentStep = 1;
                         foreach ($steps as $index => $step) {
                         if (!empty($service->{$step['key']}) && $service->{$step['key']} === 'Yes') {
@@ -56,6 +53,7 @@
                                           @endforeach
                               </ul>
                         </div>
+
                         <div class="card border">
                               <div class="card-header text-center mb-3 mt-3">
                                     <h1 class="mb-3">ویرایش درخواست از کویر</h1>
@@ -116,12 +114,10 @@
                                                                   {{$supervisor->name}}
                                                             </option>
                                                             @endforeach
-
                                                       </select>
                                                       @else
                                                       <select class="form-select" disabled>
                                                             <option selected>{{$service->supervisors->name}}</option>
-
                                                       </select>
 
                                                       @endif
@@ -175,11 +171,12 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                          </div>
-
-                                          <div class="row">
-                                                {{-- اعتبارسنجی --}}
                                                 @if($service->status === 'Yes')
+                                                <div class="col-md-12 mt-4">
+                                                      <label class="form-label">مدیر واحد</label>
+                                                      <h6 class="badge bg-body-secondary text-black mb-3">تایید می باشد</h6>
+
+                                                </div>
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                                 <div class="col-md-4 mb-3">
@@ -191,9 +188,8 @@
                                                                   {{ $canEditHR ? '' : 'readonly' }}
                                                                   autocomplete="off">
                                                       </div>
-
                                                       @error('memberDate')
-                                                      <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
+                                                      <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror
                                                 </div>
                                                 <div class="col-md-4 mb-3">
@@ -268,9 +264,11 @@
                                                                   </tr>
                                                             </tbody>
                                                       </table>
-                                                      @error('debt')
-                                                      <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
-                                                      @enderror
+                                                      @error('debt_company') <small class="text-danger">{{ $message }}</small> @enderror
+                                                      @error('debt_madiran') <small class="text-danger">{{ $message }}</small> @enderror
+                                                      @error('debt_fund') <small class="text-danger">{{ $message }}</small> @enderror
+                                                      @error('debt_purchase') <small class="text-danger">{{ $message }}</small> @enderror
+
                                                 </div>
                                                 @if($canEditHR)
                                                 <div class="col-md-4 mt-4 d-flex gap-4">
@@ -298,7 +296,6 @@
                                                 @endif
                                                 @endif
 
-                                                {{-- تاییدیه مدیر منابع انسانی --}}
                                                 @if($service->validationHr === 'Yes')
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">تاییدیه مدیر منابع انسانی</h4>
@@ -341,7 +338,6 @@
                                                 @endif
                                                 @endif
 
-                                                {{-- تاییدیه مدیر مالی --}}
                                                 @if($service->validation_managerHr === 'Yes')
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">تاییدیه مدیر مالی</h4>
@@ -382,7 +378,6 @@
                                                 @endif
                                                 @endif
 
-                                                {{-- تاییدیه رییس کمیته --}}
                                                 @if($service->validationManager1 === 'Yes')
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">تاییدیه رییس کمیته رفاهی</h4>

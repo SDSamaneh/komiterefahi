@@ -60,6 +60,10 @@ class VamController extends Controller
         // اجازه ثبت فقط اگر مجاز باشه
         $this->authorize('create', Vam::class);
 
+        $validRoles = ['admin', 'author', 'managerM', 'managerHr', 'manager1', 'manager2', 'humanResources', 'subscriber'];
+        if (!auth()->user()->hasAnyRole($validRoles)) {
+            abort(403, 'دسترسی غیرمجاز');
+        }
         // اعتبارسنجی داده‌ها
         $fields = $request->validated();
         $fields['author_id'] = Auth::id();
@@ -93,46 +97,11 @@ class VamController extends Controller
 
         $request->merge([
             'accept' => $request->has('accept') ? 'Yes' : 'No',
+            'status' => $request->status ?? 'Pending',
         ]);
 
-        switch ($user->role) {
-
-            case 'subscriber':
-
-                if ($vam->status !== 'Yes') {
-
-                    $request->validate([
-                        'name' => 'required|string|max:255|persian_alpha',
-                        'idCard' => 'required|string|ir_national_id',
-                        'price' => 'required|min:0',
-                        'departmans_id' => 'required|exists:departmans,id',
-                        'supervisors_id' => 'required|exists:supervisors,id',
-                        'resone' => 'required|in:تحصیل,ازدواج,جهیزیه,درمان,تصادف,بیمه,فوت اقوام,سایر',
-                        'descriptionUser' => 'nullable|string',
-                        'accept' => 'required|in:Yes,No',
-                    ]);
-
-                    $vam->update([
-                        'name' => $request->name,
-                        'idCard' => $request->idCard,
-                        'price' => $request->price,
-                        'departmans_id' => $request->departmans_id,
-                        'supervisors_id' => $request->supervisors_id,
-                        'resone' => $request->resone,
-                        'descriptionUser' => $request->descriptionUser,
-                        'accept' => $request->accept,
-                    ]);
-                } else {
-                    return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است');
-                }
-                break;
-
-            case 'author':
-
-                if ($vam->status === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
-                }
-
+        if ($user->hasRole('subscriber')) {
+            if ($vam->status !== 'Yes') {
                 $request->validate([
                     'name' => 'required|string|max:255|persian_alpha',
                     'idCard' => 'required|string|ir_national_id',
@@ -142,7 +111,6 @@ class VamController extends Controller
                     'resone' => 'required|in:تحصیل,ازدواج,جهیزیه,درمان,تصادف,بیمه,فوت اقوام,سایر',
                     'descriptionUser' => 'nullable|string',
                     'accept' => 'required|in:Yes,No',
-                    'status' => 'required|in:Pending,Yes,No',
                 ]);
 
                 $vam->update([
@@ -154,92 +122,110 @@ class VamController extends Controller
                     'resone' => $request->resone,
                     'descriptionUser' => $request->descriptionUser,
                     'accept' => $request->accept,
-                    'status' => $request->status,
                 ]);
-                break;
+            } else {
+                return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است');
+            }
+        }
 
-            case 'humanResources':
+        if ($user->hasAnyRole(['author', 'admin'])) {
 
-                if ($vam->validationHr === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
+            $request->validate([
+                'name' => 'required|string|max:255|persian_alpha',
+                'idCard' => 'required|string|ir_national_id',
+                'price' => 'required|min:0',
+                'departmans_id' => 'required|exists:departmans,id',
+                'supervisors_id' => 'required|exists:supervisors,id',
+                'resone' => 'required|in:تحصیل,ازدواج,جهیزیه,درمان,تصادف,بیمه,فوت اقوام,سایر',
+                'descriptionUser' => 'nullable|string',
+                'accept' => 'required|in:Yes,No',
+                'status' => 'required|in:Pending,Yes,No',
+            ]);
 
-                $request->validate([
-                    'memberDate' => 'required',
-                    'memberPrice' => 'required|min:0',
-                    'lastSalary' => 'required|min:0',
-                    'debt_company' => 'required|min:0',
-                    'debt_madiran' => 'required|min:0',
-                    'debt_fund' => 'required|min:0',
-                    'debt_purchase' => 'required',
-                    'validationDate' => 'required',
-                    'validationHr' => 'required|in:Pending,Yes,No',
-                ]);
-                $vam->update([
-                    'memberDate' => $request->memberDate,
-                    'memberPrice' => $request->memberPrice,
-                    'lastSalary' => $request->lastSalary,
-                    'debt_company' => $request->debt_company,
-                    'debt_madiran' => $request->debt_madiran,
-                    'debt_fund' => $request->debt_fund,
-                    'debt_purchase' => $request->debt_purchase,
-                    'validationDate' => $request->validationDate,
-                    'validationHr' => $request->validationHr ?? 'Pending',
-                ]);
-                break;
+            $vam->update([
+                'name' => $request->name,
+                'idCard' => $request->idCard,
+                'price' => $request->price,
+                'departmans_id' => $request->departmans_id,
+                'supervisors_id' => $request->supervisors_id,
+                'resone' => $request->resone,
+                'descriptionUser' => $request->descriptionUser,
+                'accept' => $request->accept,
+            ]);
+        }
 
-            case 'managerHr':
+        if ($user->hasAnyRole(['humanResources', 'admin'])) {
+            $request->validate([
+                'memberDate' => 'required',
+                'memberPrice' => 'required|min:0',
+                'lastSalary' => 'required|min:0',
+                'debt_company' => 'required|min:0',
+                'debt_madiran' => 'required|min:0',
+                'debt_fund' => 'required|min:0',
+                'debt_purchase' => 'required',
+                'validationDate' => 'required',
+                'number' => 'nullable|numeric',
+                'validationHr' => 'required|in:Pending,Yes,No',
+            ], [
+                'memberDate.required' => 'تاریخ ورود به سازمان را وارد نمایید',
+                'memberPrice.required' => 'مبلغ را وارد نمایید',
+                'lastSalary.required' => 'آخرین حقوق را وارد نمایید',
+                'debt_company.required' => 'میزان وام شرکت',
+                'debt_madiran.required' => 'میزان مادیران',
+                'debt_fund.required' => 'میزان وام صندوق',
+                'debt_purchase.required' => 'میزان شرکت ',
+                'validationDate.required' => 'تاریخ اعتبارسنجی را وارد نمایید',
+            ]);
+            $vam->update([
+                'memberDate' => $request->memberDate,
+                'memberPrice' => $request->memberPrice,
+                'lastSalary' => $request->lastSalary,
+                'debt_company' => $request->debt_company,
+                'debt_madiran' => $request->debt_madiran,
+                'debt_fund' => $request->debt_fund,
+                'debt_purchase' => $request->debt_purchase,
+                'validationDate' => $request->validationDate,
+                'number' => $request->number,
+                'validationHr' => $request->validationHr ?? 'Pending',
+            ]);
+        }
 
-                if ($vam->validation_managerHr === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
+        if ($user->hasAnyRole(['managerHr', 'admin'])) {
 
-                $request->validate([
-                    'descriptionHr' => 'nullable|string',
-                    'validation_managerHr' => 'required|in:Pending,Yes,No',
-                ]);
-                $vam->update([
-                    'descriptionHr' => $request->descriptionHr,
-                    'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
-                ]);
-                break;
+            $request->validate([
+                'descriptionHr' => 'nullable|string',
+                'validation_managerHr' => 'required|in:Pending,Yes,No',
+            ]);
+            $vam->update([
+                'descriptionHr' => $request->descriptionHr,
+                'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
+            ]);
+        }
 
-            case 'manager1':
+        if ($user->hasAnyRole(['manager1', 'admin'])) {
 
-                if ($vam->validationManager1 === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
+            $request->validate([
+                'descriptionManager1' => 'nullable|string',
+                'validationManager1' => 'required|in:Pending,Yes,No',
+            ]);
+            $vam->update([
+                'descriptionManager1' => $request->descriptionManager1,
+                'validationManager1' => $request->validationManager1 ?? 'Pending',
+            ]);
+        }
 
-                $request->validate([
-                    'descriptionManager1' => 'nullable|string',
-                    'validationManager1' => 'required|in:Pending,Yes,No',
-                ]);
-                $vam->update([
-                    'descriptionManager1' => $request->descriptionManager1,
-                    'validationManager1' => $request->validationManager1 ?? 'Pending',
-                ]);
-                break;
+        if ($user->hasAnyRole(['manager2', 'admin'])) {
 
-            case 'manager2':
-
-                if ($vam->validationManager2 === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-                    'finalPrice' => 'required|min:0',
-                    'descriptionManager2' => 'nullable|string',
-                    'validationManager2' => 'required|in:Pending,Yes,No',
-                ]);
-                $vam->update([
-                    'finalPrice' => $request->finalPrice,
-                    'descriptionManager2' => $request->descriptionManager2,
-                    'validationManager2' => $request->validationManager2 ?? 'Pending',
-                ]);
-                break;
-
-            default:
-                return redirect()->back()->with('error', 'شما اجازه دسترسی به این عملیات را ندارید.');
+            $request->validate([
+                'finalPrice' => 'required|min:0',
+                'descriptionManager2' => 'nullable|string',
+                'validationManager2' => 'required|in:Pending,Yes,No',
+            ]);
+            $vam->update([
+                'finalPrice' => $request->finalPrice,
+                'descriptionManager2' => $request->descriptionManager2,
+                'validationManager2' => $request->validationManager2 ?? 'Pending',
+            ]);
         }
 
         return redirect()->back()->with('success', 'تغییرات با موفقیت ذخیره شد.');

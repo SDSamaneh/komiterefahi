@@ -52,7 +52,7 @@
                                           <table class="table align-middle p-1 mb-0 table-hover table-shrink">
                                                 <thead class="table-dark">
                                                       <tr>
-                                                            <th scope="col" class="border-0 rounded-start">شناسه</th>
+                                                            <th scope="col" class="border-0 rounded-start">شماره</th>
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
@@ -64,20 +64,24 @@
                                                 </thead>
                                                 <tbody class="border-top-0">
                                                       @if($vams)
+
                                                       @foreach($vams as $vam)
+
                                                       @php
                                                       $isFullyApproved = (
-                                                      $vam->status === 'Yes' &&
+
                                                       $vam->validationHr === 'Yes' &&
                                                       $vam->validation_managerHr === 'Yes' &&
                                                       $vam->validationManager1 === 'Yes' &&
                                                       $vam->validationManager2 === 'Yes'
+
                                                       );
+
                                                       @endphp
 
                                                       <tr>
                                                             <td @if($isFullyApproved) style="background-color: green;" @endif>
-                                                                  <h6 class="course-title mb-0">{{$vam->id}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$vam->number}}</h6>
                                                             </td>
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{$vam->name}}</h6>
@@ -112,6 +116,7 @@
                                                             </td>
 
                                                             @if(auth()->check() && auth()->user()->hasAnyRole(['admin','humanResources','managerHr','manager1','manager2']))
+
                                                             <td>
                                                                   <a href="{{ route('vam.edit', $vam->id) }}" class="text-success mb-0 me-2">
                                                                         <i class="fas fa-edit"></i>
@@ -121,7 +126,7 @@
                                                             <td></td>
                                                             @endif
 
-                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr']) )
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr','humanResources']) )
                                                             <td>
                                                                   <div class="d-flex align-items-center">
                                                                         <form action="{{ route('vam.destroy', $vam->id) }}" method="post">

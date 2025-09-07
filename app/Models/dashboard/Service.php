@@ -14,6 +14,7 @@ class Service extends Model
         'idCard',
         'departmans_id',
         'supervisors_id',
+        'category',
         'price',
         'descriptionUser',
         'accept',

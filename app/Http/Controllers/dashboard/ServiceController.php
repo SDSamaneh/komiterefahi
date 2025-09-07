@@ -98,46 +98,14 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         $user = auth()->user();
-
         $request->merge([
             'accept' => $request->has('accept') ? 'Yes' : 'No',
+            'status' => $request->status ?? 'Pending',
         ]);
 
-        switch ($user->role) {
-            case 'subscriber':
-                if ($service->status !== 'Yes') {
+        if ($user->hasRole('subscriber')) {
 
-                    $request->validate([
-                        'name' => 'required|string|max:255|persian_alpha',
-                        'idCard' => 'required|string|ir_national_id',
-                        'departmans_id' => 'required|exists:departmans,id',
-                        'supervisors_id' => 'required|exists:supervisors,id',
-                        'category' => 'required|in:خدمات تعمیرگاهی,موتورسیکلت بنزینی,موتورسیکلت برقی,محصولات کودک,دوچرخه,اکسسوری و لوازم جانبی,تفریحات آبی,چهار چرخ,سایر',
-                        'price' => 'required|min:0',
-                        'descriptionUser' => 'nullable|string',
-                        'accept' => 'required|in:Yes,No',
-                    ]);
-
-                    $service->update([
-                        'name' => $request->name,
-                        'idCard' => $request->idCard,
-                        'category' => $request->category,
-                        'price' => $request->price,
-                        'departmans_id' => $request->departmans_id,
-                        'supervisors_id' => $request->supervisors_id,
-                        'descriptionUser' => $request->descriptionUser,
-                        'accept' => $request->accept,
-                    ]);
-                } else {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
-                }
-                break;
-
-            case 'author':
-
-                if ($service->status === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
-                }
+            if ($service->status !== 'Yes') {
 
                 $request->validate([
                     'name' => 'required|string|max:255|persian_alpha',
@@ -145,12 +113,11 @@ class ServiceController extends Controller
                     'departmans_id' => 'required|exists:departmans,id',
                     'supervisors_id' => 'required|exists:supervisors,id',
                     'category' => 'required|in:خدمات تعمیرگاهی,موتورسیکلت بنزینی,موتورسیکلت برقی,محصولات کودک,دوچرخه,اکسسوری و لوازم جانبی,تفریحات آبی,چهار چرخ,سایر',
-                    'price' => 'required',
+                    'price' => 'required|min:0',
                     'descriptionUser' => 'nullable|string',
                     'accept' => 'required|in:Yes,No',
-                    'status' => 'required|in:Pending,Yes,No',
-
                 ]);
+
                 $service->update([
                     'name' => $request->name,
                     'idCard' => $request->idCard,
@@ -161,97 +128,113 @@ class ServiceController extends Controller
                     'descriptionUser' => $request->descriptionUser,
                     'accept' => $request->accept,
                 ]);
-                break;
-
-            case 'humanResources':
-
-                if ($service->validationHr === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-                    'memberDate' => 'required',
-                    'memberPrice' => 'required',
-                    'lastSalary' => 'required',
-                    'debt_company' => 'required|min:0',
-                    'debt_madiran' => 'required|min:0',
-                    'debt_fund' => 'required|min:0',
-                    'debt_purchase' => 'required',
-                    'validationDate' => 'required',
-                    'validationHr' => 'required|in:Pending,Yes,No',
-                ]);
-                $service->update([
-                    'memberDate' => $request->memberDate,
-                    'memberPrice' => $request->memberPrice,
-                    'lastSalary' => $request->lastSalary,
-                    'debt_company' => $request->debt_company,
-                    'debt_madiran' => $request->debt_madiran,
-                    'debt_fund' => $request->debt_fund,
-                    'debt_purchase' => $request->debt_purchase,
-                    'validationDate' => $request->validationDate,
-                    'validationHr' => $request->validationHr ?? 'Pending',
-
-                ]);
-                break;
-            case 'managerHr':
-
-                if ($service->validation_managerHr === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-                    'descriptionHr' => 'nullable|string',
-                    'validation_managerHr' => 'required|in:Pending,Yes,No',
-                ]);
-                $service->update([
-                    'descriptionHr' => $request->descriptionHr,
-                    'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
-                ]);
-                break;
-            case 'manager1':
-
-                if ($service->validationManager1 === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-                    'descriptionManager1' => 'nullable|string',
-                    'validationManager1' => 'required|in:Pending,Yes,No',
-                ]);
-                $service->update([
-                    'descriptionManager1' => $request->descriptionManager1,
-                    'validationManager1' => $request->validationManager1 ?? 'Pending',
-
-                ]);
-                break;
-
-            case 'manager2':
-
-
-                if ($service->validationManager2 === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-
-                $request->validate([
-                    'finalPrice' => 'required',
-                    'descriptionManager2' => 'nullable|string',
-
-                    'validationManager2' => 'required|in:Pending,Yes,No',
-                ]);
-                $service->update([
-                    'finalPrice' => $request->finalPrice,
-                    'descriptionManager2' => $request->descriptionManager2,
-
-                    'validationManager2' => $request->validationManager2 ?? 'Pending',
-                ]);
-                break;
-
-            default:
-                return redirect()->back()->with('error', 'شما اجازه دسترسی به این عملیات را ندارید.');
+            } else {
+                return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
+            }
         }
-        return redirect()->back()->with('success', 'تغییرات با موفقیت ذخیره شد.');
+
+        if ($user->hasAnyRole(['author', 'admin'])) {
+
+            $request->validate([
+                'name' => 'required|string|max:255|persian_alpha',
+                'idCard' => 'required|string|ir_national_id',
+                'departmans_id' => 'required|exists:departmans,id',
+                'supervisors_id' => 'required|exists:supervisors,id',
+                'category' => 'required|in:خدمات تعمیرگاهی,موتورسیکلت بنزینی,موتورسیکلت برقی,محصولات کودک,دوچرخه,اکسسوری و لوازم جانبی,تفریحات آبی,چهار چرخ,سایر',
+                'price' => 'required',
+                'descriptionUser' => 'nullable|string',
+                'accept' => 'required|in:Yes,No',
+                'status' => 'required|in:Pending,Yes,No',
+
+            ]);
+            $service->update([
+                'name' => $request->name,
+                'idCard' => $request->idCard,
+                'category' => $request->category,
+                'price' => $request->price,
+                'departmans_id' => $request->departmans_id,
+                'supervisors_id' => $request->supervisors_id,
+                'descriptionUser' => $request->descriptionUser,
+                'accept' => $request->accept,
+            ]);
+        }
+        if ($user->hasAnyRole(['humanResources', 'admin'])) {
+            $request->validate([
+                'memberDate' => 'required',
+                'memberPrice' => 'required',
+                'lastSalary' => 'required',
+                'debt_company' => 'required|min:0',
+                'debt_madiran' => 'required|min:0',
+                'debt_fund' => 'required|min:0',
+                'debt_purchase' => 'required',
+                'validationDate' => 'required',
+                'validationHr' => 'required|in:Pending,Yes,No',
+            ], [
+                'memberDate.required' => 'تاریخ ورود به سازمان را وارد نمایید',
+                'memberPrice.required' => 'مبلغ را وارد نمایید',
+                'lastSalary.required' => 'آخرین حقوق را وارد نمایید',
+                'debt_company.required' => 'بدهی وام شرکت',
+                'debt_madiran.required' => 'بدهی مادیران',
+                'debt_fund.required' => 'بدهی وام صندوق',
+                'debt_purchase.required' => 'بدهی شرکت ',
+                'validationDate.required' => 'تاریخ اعتبارسنجی را وارد نمایید',
+            ]);
+            $service->update([
+                'memberDate' => $request->memberDate,
+                'memberPrice' => $request->memberPrice,
+                'lastSalary' => $request->lastSalary,
+                'debt_company' => $request->debt_company,
+                'debt_madiran' => $request->debt_madiran,
+                'debt_fund' => $request->debt_fund,
+                'debt_purchase' => $request->debt_purchase,
+                'validationDate' => $request->validationDate,
+                'validationHr' => $request->validationHr ?? 'Pending',
+
+            ]);
+        }
+        if ($user->hasAnyRole(['managerHr', 'admin'])) {
+
+            $request->validate([
+                'descriptionHr' => 'nullable|string',
+                'validation_managerHr' => 'required|in:Pending,Yes,No',
+            ]);
+            $service->update([
+                'descriptionHr' => $request->descriptionHr,
+                'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
+            ]);
+        }
+
+        if ($user->hasAnyRole(['manager1', 'admin'])) {
+
+            $request->validate([
+                'descriptionManager1' => 'nullable|string',
+                'validationManager1' => 'required|in:Pending,Yes,No',
+            ]);
+            $service->update([
+                'descriptionManager1' => $request->descriptionManager1,
+                'validationManager1' => $request->validationManager1 ?? 'Pending',
+
+            ]);
+        }
+
+        if ($user->hasAnyRole(['manager2', 'admin'])) {
+
+            $request->validate([
+                'finalPrice' => 'required',
+                'descriptionManager2' => 'nullable|string',
+                'validationManager2' => 'required|in:Pending,Yes,No',
+            ]);
+
+            $service->update([
+                'finalPrice' => $request->finalPrice,
+                'descriptionManager2' => $request->descriptionManager2,
+                'validationManager2' => $request->validationManager2 ?? 'Pending',
+            ]);
+        }
+
+        return back()->with('success', 'تغییرات با موفقیت ذخیره شد.');
     }
+
     public function destroy(string $id)
     {
         $services = Service::findOrfail($id);

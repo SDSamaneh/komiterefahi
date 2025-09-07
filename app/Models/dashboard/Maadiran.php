@@ -31,9 +31,7 @@ class Maadiran extends Model
         'validationDate',
         'descriptionHr',
         'validationHr',
-        'validation_managerHr',
-        'descriptionManager1',
-        'validationManager1'
+        'validation_managerHr',       
     ];
 
 

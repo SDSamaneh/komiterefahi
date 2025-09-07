@@ -6,25 +6,22 @@
 
                         $user = auth()->user();
 
-                        // مجوزهای دسترسی
-
-                        $canEditUserFields = $user && $user->hasAnyRole(['subscriber', 'author']) && $maadiran->status !== 'Yes';
+                        $canEditUserFields = $user && $user->hasAnyRole(['subscriber', 'author','humanResources','admin']);
                         $canEditHR = $user && $user->hasAnyRole(['humanResources','admin']);
                         $canEditManagerHr = $user && $user->hasAnyRole(['managerHr','admin']);
-                        $canEditManager1 = $user && $user->hasAnyRole(['admin','manager1']);
-                        $canEditManager2 = $user && $user->hasAnyRole(['manager2', 'admin']);
+                        $canEditManager1 = $user && $user->hasAnyRole(['manager1','admin']);
+                        $canEditManager2 = $user && $user->hasAnyRole(['manager2','admin']);
 
 
                         $steps = [
                         ['key' => 'accept', 'label' => 'ثبت درخواست'],
                         ['key' => 'status', 'label' => 'تأیید مدیر واحد'],
                         ['key' => 'validationHr', 'label' => 'اعتبارسنجی'],
-                        ['key' => 'validation_managerHr', 'label' => 'تاییدیه مدیر منابع انسانی'],
+                        ['key' => 'validation_managerHr', 'label' => 'تایید مدیر منابع انسانی'],
                         ['key' => 'validationManager1', 'label' => 'تأیید مدیر مالی'],
                         ['key' => 'validationManager2', 'label' => 'تأیید نهایی'],
                         ];
 
-                        // پیدا کردن مرحله فعلی
                         $currentStep = 1;
                         foreach ($steps as $index => $step) {
                         if (!empty($vam->{$step['key']}) && $vam->{$step['key']} === 'Yes') {
@@ -36,7 +33,6 @@
 
                         @endphp
 
-                        <!-- راهنمای مراحل -->
                         <div class="col-md-12 border p-3 rounded-3 mb-3">
                               @php
                               $fillWidth = ($currentStep - 1) / (count($steps) - 1) * 100;
@@ -128,35 +124,31 @@
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-3">
-                                                      <div class="mb-3">
-                                                            <label class="form-label">دلیل درخواست</label>
-                                                            @if($canEditUserFields)
-                                                            <select class="form-select" name="resone" aria-label="Default select example" required>
-                                                                  <option value="" disabled>دلیل درخواست وام را انتخاب کنید</option>
-                                                                  @foreach(['تحصیل','ازدواج','جهیزیه','درمان','تصادف','بیمه','فوت اقوام','مسکن','سایر'] as $resone)
-                                                                  <option value="{{ $resone }}" {{ old('resone', $vam->resone) == $resone ? 'selected' : '' }}>{{ $resone }}</option>
-                                                                  @endforeach
-                                                            </select>
-                                                            @else
-                                                            <select class="form-select" disabled>
-                                                                  <option selected>{{ $vam->resone }}</option>
-                                                            </select>
-                                                            @endif
+                                                <div class="col-md-3 mb-3">
+                                                      <label class="form-label">دلیل درخواست</label>
+                                                      @if($canEditUserFields)
+                                                      <select class="form-select" name="resone" aria-label="Default select example" required>
+                                                            <option value="" disabled>دلیل درخواست وام را انتخاب کنید</option>
+                                                            @foreach(['تحصیل','ازدواج','جهیزیه','درمان','تصادف','بیمه','فوت اقوام','مسکن','سایر'] as $resone)
+                                                            <option value="{{ $resone }}" {{ old('resone', $vam->resone) == $resone ? 'selected' : '' }}>{{ $resone }}</option>
+                                                            @endforeach
+                                                      </select>
+                                                      @else
+                                                      <select class="form-select" disabled>
+                                                            <option selected>{{ $vam->resone }}</option>
+                                                      </select>
+                                                      @endif
 
-                                                            @error('resone')
-                                                            <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
-                                                            @enderror
-                                                      </div>
+                                                      @error('resone')
+                                                      <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
+                                                      @enderror
                                                 </div>
-                                                <div class="col-md-6">
-                                                      <div class="mb-3">
-                                                            <label class="form-label">توضیحات</label>
-                                                            <textarea class="form-control" name="descriptionUser" rows="3" {{ $canEditUserFields ? '' : 'readonly' }}>{{ old('descriptionUser', $vam->descriptionUser) }}</textarea>
-                                                            @error('descriptionUser')
-                                                            <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
-                                                            @enderror
-                                                      </div>
+                                                <div class="col-md-6 mb-3">
+                                                      <label class="form-label">توضیحات</label>
+                                                      <textarea class="form-control" name="descriptionUser" rows="3" {{ $canEditUserFields ? '' : 'readonly' }}>{{ old('descriptionUser', $vam->descriptionUser) }}</textarea>
+                                                      @error('descriptionUser')
+                                                      <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
+                                                      @enderror
                                                 </div>
                                                 <div class="col-md-12 mt-5">
                                                       <div class="form-check mb-3">
@@ -169,11 +161,13 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                          </div>
 
-                                          <div class="row">
-                                                <!-- اعتبارسنجی -->
                                                 @if($vam->status === 'Yes')
+                                                <hr />
+                                                <div class="col-md-12 mt-4">
+                                                      <label class="form-label">مدیر واحد</label>
+                                                      <h6 class="badge bg-body-secondary text-black mb-3">تایید می باشد</h6>
+                                                </div>
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                                 <div class="col-md-3 mb-3">
@@ -262,9 +256,21 @@
                                                                   </tr>
                                                             </tbody>
                                                       </table>
-                                                      @error('debt')
-                                                      <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
-                                                      @enderror
+                                                      <div class="col-md-4">
+                                                            @error('debt_company') <small class="text-danger">{{ $message }}</small> @enderror
+                                                      </div>
+                                                      <div class="col-md-4">
+
+                                                            @error('debt_madiran') <small class="text-danger">{{ $message }}</small> @enderror
+                                                      </div>
+                                                      <div class="col-md-4">
+
+                                                            @error('debt_fund') <small class="text-danger">{{ $message }}</small> @enderror
+                                                      </div>
+                                                      <div class="col-md-4">
+
+                                                            @error('debt_purchase') <small class="text-danger">{{ $message }}</small> @enderror
+                                                      </div>
                                                 </div>
                                                 @if($canEditHR)
                                                 <div class="col-md-4 mt-4 d-flex gap-4">
@@ -292,7 +298,6 @@
                                                 @endif
                                                 @endif
 
-                                                {{-- تاییدیه مدیر منابع انسانی --}}
                                                 @if($vam->validationHr === 'Yes')
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">تاییدیه مدیر منابع انسانی</h4>
@@ -336,7 +341,6 @@
                                                 @endif
 
                                                 <hr />
-                                                {{-- تاییدیه مدیر مالی --}}
                                                 @if($vam->validation_managerHr === 'Yes')
                                                 <h4 class="text-center mt-3 mb-4">تاییدیه مدیر مالی</h4>
                                                 @if($canEditManager1)
@@ -376,7 +380,6 @@
                                                 @endif
                                                 @endif
 
-                                                {{-- تاییدیه رییس کمیته --}}
                                                 @if($vam->validationManager1 === 'Yes')
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">تاییدیه رییس کمیته رفاهی</h4>
@@ -397,7 +400,7 @@
                                                       <small class="text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-4 mt-4 d-flex gap-4">
+                                                <div class="col-md-4 mt-4 mb-5 d-flex gap-4">
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationManager2" value="Pending"
                                                                   {{ old('validationManager2', $vam->validationManager2) == 'Pending' ? 'checked' : '' }}>
@@ -413,17 +416,34 @@
                                                       </div>
                                                 </div>
                                                 @else
-                                                <div class="col-md-4">
+                                                <div class="col-md-4 mb-5">
                                                       <label class="form-label">مبلغ نهایی</label>
                                                       <p class="form-control-plaintext bg-body-secondary">{{ $vam->finalPrice }}</p>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-4 mb-5">
                                                       <label class="form-label">توضیحات رییس کمیته رفاهی</label>
                                                       <p class="form-control-plaintext bg-body-secondary">{{ $vam->descriptionManager2 }}</p>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-4 mb-5">
                                                       <label class="form-label">نتیجه بررسی رییس کمیته رفاهی</label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $vam->validationManager2 === 'Yes' ? 'تأیید شده' : ($vam->validationManager2 === 'No' ? 'عدم تأیید' : ($vam->validationManager2 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
+                                                </div>
+                                                @endif
+                                                @endif
+
+                                                @if($vam->validationManager2 === 'Yes')
+                                                <hr />
+                                                @if($canEditManager2)
+                                                <div class="col-md-3 mt-3">
+                                                      <label class="form-label">شماره درخواست</label>
+                                                      <input name="number" type="text" class="form-control"
+                                                            value="{{ old('number', $vam->number) }}"
+                                                            {{ $canEditHR ? '' : 'readonly' }}>
+                                                </div>
+                                                @else
+                                                <div class="col-md-4 mb-5">
+                                                      <label class="form-label">شماره درخواست</label>
+                                                      <p class="form-control-plaintext bg-body-secondary">{{ $vam->number }}</p>
                                                 </div>
                                                 @endif
                                                 @endif
