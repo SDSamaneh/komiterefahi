@@ -179,7 +179,7 @@
                                                 </div>
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-md-3 mb-3">
                                                       <label class="form-label">تاریخ ورود به سازمان</label>
                                                       <div class="input-container">
                                                             <input name="memberDate" type="text" class="form-control persian-date"
@@ -192,7 +192,7 @@
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-md-3 mb-3">
                                                       <label class="form-label">مبلغ سرمایه گذاری در صندوق( تومان )</label>
                                                       <input name="memberPrice" type="text" class="form-control"
                                                             value="{{ old('memberPrice', $service->memberPrice) }}"
@@ -201,7 +201,7 @@
                                                       <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-md-3 mb-3">
                                                       <label class="form-label">آخرین حقوق دریافتی</label>
                                                       <input name="lastSalary" type="text" class="form-control"
                                                             value="{{ old('lastSalary', $service->lastSalary) }}"
@@ -210,7 +210,7 @@
                                                       <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
                                                       @enderror
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-md-3 mb-3">
                                                       <label class="form-label">تاریخ اعتبار سنجی</label>
                                                       <input name="validationDate" type="text" class="form-control persian-date"
                                                             value="{{ old('validationDate', $service->validationDate) }}"
@@ -270,8 +270,17 @@
                                                       @error('debt_purchase') <small class="text-danger">{{ $message }}</small> @enderror
 
                                                 </div>
+                                                <div class="col-md-2 mt-3">
+                                                      <label class="form-label">شماره درخواست</label>
+                                                      <input name="number" type="text" class="form-control"
+                                                            value="{{ old('number', $service->number) }}"
+                                                            {{ $canEditHR ? '' : 'readonly' }}>
+                                                      @error('number')
+                                                      <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
+                                                      @enderror
+                                                </div>
                                                 @if($canEditHR)
-                                                <div class="col-md-4 mt-4 d-flex gap-4">
+                                                <div class="col-md-4 mt-5 d-flex gap-4">
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationHr" value="Pending"
                                                                   {{ old('validationHr', $service->validationHr) == 'Pending' ? 'checked' : '' }}>
@@ -289,7 +298,7 @@
                                                       </div>
                                                 </div>
                                                 @else
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 mt-4">
                                                       <label class="form-label">اعتبارسنجی</label>
                                                       <h6 class="badge bg-body-secondary text-black mb-3">{{ $service->validationHr === 'Yes' ? 'انجام شد' : ($service->validationHr === 'No' ? 'انجام نشود' : ($service->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>

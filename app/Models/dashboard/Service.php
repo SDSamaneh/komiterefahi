@@ -27,6 +27,7 @@ class Service extends Model
         'debt_fund',
         'debt_purchase',
         'validationDate',
+        'number',
         'descriptionHr',
         'validationHr',
         'validation_managerHr',

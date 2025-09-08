@@ -53,6 +53,7 @@
                                                 <thead class="table-dark">
                                                       <tr>
                                                             <th scope="col" class="border-0 rounded-start">شناسه</th>
+                                                            <th scope="col" class="border-0">شماره درخواست</th>
                                                             <th scope="col" class="border-0 ">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
@@ -81,6 +82,9 @@
                                                             <td @if($isFullyApproved) style="background-color: green;" @endif>
 
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$service->id}}</h6>
+                                                            </td>
+                                                            <td>
+                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$service->number}}</a></h6>
                                                             </td>
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$service->name}}</a></h6>

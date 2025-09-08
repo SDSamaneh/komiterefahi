@@ -168,6 +168,7 @@ class ServiceController extends Controller
                 'debt_fund' => 'required|min:0',
                 'debt_purchase' => 'required',
                 'validationDate' => 'required',
+                'number' => 'nullable|regex:/^[0-9-]+$/',
                 'validationHr' => 'required|in:Pending,Yes,No',
             ], [
                 'memberDate.required' => 'تاریخ ورود به سازمان را وارد نمایید',
@@ -177,6 +178,7 @@ class ServiceController extends Controller
                 'debt_madiran.required' => 'بدهی مادیران',
                 'debt_fund.required' => 'بدهی وام صندوق',
                 'debt_purchase.required' => 'بدهی شرکت ',
+                'number.regex' => ' به طور مثال : 01-04',
                 'validationDate.required' => 'تاریخ اعتبارسنجی را وارد نمایید',
             ]);
             $service->update([
@@ -188,6 +190,7 @@ class ServiceController extends Controller
                 'debt_fund' => $request->debt_fund,
                 'debt_purchase' => $request->debt_purchase,
                 'validationDate' => $request->validationDate,
+                'number' => $request->number,
                 'validationHr' => $request->validationHr ?? 'Pending',
 
             ]);

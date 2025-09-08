@@ -52,7 +52,8 @@
                                           <table class="table align-middle p-1 mb-0 table-hover table-shrink">
                                                 <thead class="table-dark">
                                                       <tr>
-                                                            <th scope="col" class="border-0 rounded-start">شماره</th>
+                                                            <th scope="col" class="border-0 rounded-start">شناسه</th>
+                                                            <th scope="col" class="border-0">شماره درخواست</th>
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
@@ -80,8 +81,13 @@
                                                       @endphp
 
                                                       <tr>
+
                                                             <td @if($isFullyApproved) style="background-color: green;" @endif>
-                                                                  <h6 class="course-title mb-0">{{$vam->number}}</h6>
+
+                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0">{{$vam->id}}</h6>
+                                                            </td>
+                                                            <td>
+                                                                  <h6 class="course-title mt-2 mt-md-0 mb-0"><a href="#">{{$vam->number}}</a></h6>
                                                             </td>
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{$vam->name}}</h6>
