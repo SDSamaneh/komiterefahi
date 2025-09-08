@@ -164,7 +164,7 @@ class VamController extends Controller
                 'debt_fund' => 'required|min:0',
                 'debt_purchase' => 'required',
                 'validationDate' => 'required',
-                'number' => 'nullable|numeric',
+                'number' => 'nullable|regex:/^[0-9-]+$/',
                 'validationHr' => 'required|in:Pending,Yes,No',
             ], [
                 'memberDate.required' => 'تاریخ ورود به سازمان را وارد نمایید',
@@ -174,6 +174,7 @@ class VamController extends Controller
                 'debt_madiran.required' => 'میزان مادیران',
                 'debt_fund.required' => 'میزان وام صندوق',
                 'debt_purchase.required' => 'میزان شرکت ',
+                'number.regex' => ' به طور مثال : 01-04',
                 'validationDate.required' => 'تاریخ اعتبارسنجی را وارد نمایید',
             ]);
             $vam->update([

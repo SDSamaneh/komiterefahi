@@ -18,7 +18,7 @@ class MaadiranController extends Controller
         $query = Maadiran::query()
             ->leftJoin('supervisors', 'maadirans.supervisors_id', '=', 'supervisors.id')
             ->leftJoin('departmans', 'maadirans.departmans_id', '=', 'departmans.id')
-            ->select('maadirans.*'); // مهم: فقط ستون‌های جدول وام‌ها رو بگیر
+            ->select('maadirans.*'); // فقط ستون‌های جدول مادیران رو بگیر
 
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
@@ -69,8 +69,6 @@ class MaadiranController extends Controller
             'accept.required' => 'قوانین را میپذیرم'
         ]);
 
-
-        // بررسی دسترسی کاربر
         $validRoles = ['admin', 'author', 'managerM', 'managerHr', 'manager1', 'manager2', 'humanResources', 'subscriber'];
         if (!auth()->user()->hasAnyRole($validRoles)) {
             abort(403, 'دسترسی غیرمجاز');
@@ -104,46 +102,12 @@ class MaadiranController extends Controller
 
         $request->merge([
             'accept' => $request->has('accept') ? 'Yes' : 'No',
+            'status' => $request->status ?? 'Pending',
         ]);
 
-        switch ($user->role) {
+        if ($user->hasRole('subscriber')) {
 
-            case 'subscriber':
-
-                if ($maadiran->status !== 'Yes') {
-
-                    $request->validate([
-                        'name' => 'required|string|max:255|persian_alpha',
-                        'idCard' => 'required|string|ir_national_id',
-                        'departmans_id' => 'required|exists:departmans,id',
-                        'supervisors_id' => 'required|exists:supervisors,id',
-                        'price' => 'required|min:0',
-                        'category' => 'required|in:موبایل,لپتاپ,لوازم خانگی,تلویزیون,سایر',
-                        'descriptionUser' => 'nullable|string',
-                        'accept' => 'required|in:Yes,No',
-                    ]);
-
-                    $maadiran->update([
-                        'name' => $request->name,
-                        'idCard' => $request->idCard,
-                        'departmans_id' => $request->departmans_id,
-                        'supervisors_id' => $request->supervisors_id,
-                        'price' => $request->price,
-                        'category' => $request->category,
-                        'descriptionUser' => $request->descriptionUser,
-                        'accept' => $request->accept,
-                    ]);
-                } else {
-                    return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
-                }
-                break;
-
-            case 'author':
-
-                if ($maadiran->status === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
-                }
-
+            if ($maadiran->status !== 'Yes') {
                 $request->validate([
                     'name' => 'required|string|max:255|persian_alpha',
                     'idCard' => 'required|string|ir_national_id',
@@ -153,9 +117,8 @@ class MaadiranController extends Controller
                     'category' => 'required|in:موبایل,لپتاپ,لوازم خانگی,تلویزیون,سایر',
                     'descriptionUser' => 'nullable|string',
                     'accept' => 'required|in:Yes,No',
-                    'status' => 'required|in:Pending,Yes,No',
-
                 ]);
+
                 $maadiran->update([
                     'name' => $request->name,
                     'idCard' => $request->idCard,
@@ -165,75 +128,83 @@ class MaadiranController extends Controller
                     'category' => $request->category,
                     'descriptionUser' => $request->descriptionUser,
                     'accept' => $request->accept,
-                    'status' => $request->status,
                 ]);
-                break;
+            } else {
+                return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
+            }
+        }
+        if ($user->hasAnyRole(['author', 'admin'])) {
 
-            case 'humanResources':
+            $request->validate([
+                'name' => 'required|string|max:255|persian_alpha',
+                'idCard' => 'required|string|ir_national_id',
+                'departmans_id' => 'required|exists:departmans,id',
+                'supervisors_id' => 'required|exists:supervisors,id',
+                'price' => 'required|min:0',
+                'category' => 'required|in:موبایل,لپتاپ,لوازم خانگی,تلویزیون,سایر',
+                'descriptionUser' => 'nullable|string',
+                'accept' => 'required|in:Yes,No',
+                'status' => 'required|in:Pending,Yes,No',
 
-                if ($maadiran->validationHr === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
+            ]);
+            $maadiran->update([
+                'name' => $request->name,
+                'idCard' => $request->idCard,
+                'departmans_id' => $request->departmans_id,
+                'supervisors_id' => $request->supervisors_id,
+                'price' => $request->price,
+                'category' => $request->category,
+                'descriptionUser' => $request->descriptionUser,
+                'accept' => $request->accept,
+            ]);
+        }
+        if ($user->hasAnyRole(['humanResources', 'admin'])) {
 
-                $request->validate([
-                    'memberDate' => 'required',
-                    'memberPrice' => 'required|min:0',
-                    'lastSalary' => 'required|min:0',
-                    'debt_company' => 'required|min:0',
-                    'debt_madiran' => 'required|min:0',
-                    'debt_fund' => 'required|min:0',
-                    'debt_purchase' => 'required',
-                    'validationDate' => 'required',                    
-                    'validationHr' => 'required|in:Pending,Yes,No',
+            $request->validate([
+                'memberDate' => 'required',
+                'memberPrice' => 'required|min:0',
+                'lastSalary' => 'required|min:0',
+                'debt_company' => 'required|min:0',
+                'debt_madiran' => 'required|min:0',
+                'debt_fund' => 'required|min:0',
+                'debt_purchase' => 'required',
+                'validationDate' => 'required',
+                'validationHr' => 'required|in:Pending,Yes,No',
 
-                ]);
-                $maadiran->update([
-                    'memberDate' => $request->memberDate,
-                    'memberPrice' => $request->memberPrice,
-                    'lastSalary' => $request->lastSalary,
-                    'debt_company' => $request->debt_company,
-                    'debt_madiran' => $request->debt_madiran,
-                    'debt_fund' => $request->debt_fund,
-                    'debt_purchase' => $request->debt_purchase,
-                    'validationDate' => $request->validationDate,                    
-                    'validationHr' => $request->validationHr ?? 'Pending',
+            ], [
+                'memberDate.required' => 'تاریخ ورود به سازمان را وارد نمایید',
+                'memberPrice.required' => 'مبلغ را وارد نمایید',
+                'lastSalary.required' => 'آخرین حقوق را وارد نمایید',
+                'debt_company.required' => 'بدهی وام شرکت',
+                'debt_madiran.required' => 'بدهی مادیران',
+                'debt_fund.required' => 'بدهی وام صندوق',
+                'debt_purchase.required' => 'بدهی شرکت ',
+                'validationDate.required' => 'تاریخ اعتبارسنجی را وارد نمایید',
+            ]);
+            $maadiran->update([
+                'memberDate' => $request->memberDate,
+                'memberPrice' => $request->memberPrice,
+                'lastSalary' => $request->lastSalary,
+                'debt_company' => $request->debt_company,
+                'debt_madiran' => $request->debt_madiran,
+                'debt_fund' => $request->debt_fund,
+                'debt_purchase' => $request->debt_purchase,
+                'validationDate' => $request->validationDate,
+                'validationHr' => $request->validationHr ?? 'Pending',
 
-                ]);
-                break;
-            case 'managerHr':
+            ]);
+        }
 
-                if ($maadiran->validation_managerHr === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
+        if ($user->hasAnyRole(['managerHr', 'admin'])) {
 
-                $request->validate([
-                    'descriptionHr' => 'nullable|string',
-                    'validation_managerHr' => 'required|in:Pending,Yes,No',
-                ]);
-                $maadiran->update([
-                    'descriptionHr' => $request->descriptionHr,
-                    'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
-                ]);
-                break;
-            case 'manager1':
-
-                if ($maadiran->validationManager1 === 'Yes') {
-                    return back()->with('error', 'امکان ویرایش وجود ندارد.');
-                }
-
-                $request->validate([
-                    'descriptionManager1' => 'nullable|string',
-                    'validationManager1' => 'required|in:Pending,Yes,No',
-                ]);
-                $maadiran->update([
-                    'descriptionManager1' => $request->descriptionManager1,
-                    'validationManager1' => $request->validationManager1 ?? 'Pending',
-                ]);
-
-                break;    
-
-            default:
-                return redirect()->back()->with('error', 'شما اجازه دسترسی به این عملیات را ندارید.');
+            $request->validate([
+                'descriptionHr' => 'nullable|string',
+                'validation_managerHr' => 'required|in:Pending,Yes,No',
+            ]);
+            $maadiran->update([
+                'descriptionHr' => $request->descriptionHr,
+                'validation_managerHr' => $request->validation_managerHr ?? 'Pending',
+            ]);
         }
 
         return redirect()->back()->with('success', 'تغییرات با موفقیت ذخیره شد.');

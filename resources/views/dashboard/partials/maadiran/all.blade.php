@@ -73,10 +73,9 @@
                                                       @php
                                                       $isFullyApproved = (
                                                       $maadiran->validationHr === 'Yes' &&
-                                                      $maadiran->validation_managerHr === 'Yes' &&
-                                                      $maadiran->validationManager1 === 'Yes'
-
+                                                      $maadiran->validation_managerHr === 'Yes'
                                                       );
+
                                                       @endphp
 
                                                       <tr>
@@ -112,17 +111,12 @@
                                                                         <li class="nav-item">
                                                                               <i class="fas fa-check-circle" style="color: {{ $maadiran->validation_managerHr == 'Yes' ? 'green' : 'grey' }}"></i> مدیر منابع انسانی
                                                                         </li>
-                                                                        <li class="nav-item">
-                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->validationManager1 == 'Yes' ? 'green' : 'grey' }}"></i> مدیر مالی
-                                                                        </li>
 
                                                                   </ul>
                                                             </td>
 
 
-                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr','manager1']))
-
-
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr']))
                                                             <td>
                                                                   <a href="{{ route('maadiran.edit', $maadiran->id) }}" class="text-success mb-0 me-2">
                                                                         <i class="fas fa-edit"></i>

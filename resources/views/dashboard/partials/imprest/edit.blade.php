@@ -5,14 +5,15 @@
                         @php
 
                         $user = auth()->user();
-                        // مجوزهای دسترسی
-                        $canEditUserFields = $user && in_array($user->role, ['subscriber', 'admin']) && $imprest->accept !== 'Yes';
-                        $canEditManagerM = $user && in_array($user->role, ['managerM', 'admin']);
+
+                        $canEditUserFields = $user && $user->hasAnyRole(['subscriber','humanResources','admin']);
+
+                        $canEditManagerM = $user && $user->hasAnyRole(['managerM', 'admin']);
 
                         @endphp
 
                         <div class="d-sm-flex justify-content-end align-items-end">
-                              <a href="{{route('index')}}" class="btn btn-sm text-danger mb-3">انصراف  <i class="fas fa-chevron-left"></i></a>
+                              <a href="{{route('index')}}" class="btn btn-sm text-danger mb-3">انصراف <i class="fas fa-chevron-left"></i></a>
                         </div>
 
                         <div class="card border">

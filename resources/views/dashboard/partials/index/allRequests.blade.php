@@ -58,6 +58,39 @@
                                                        </tr>
                                                        @endforelse
 
+                                                       @forelse($maadirans as $maadiran)
+                                                       <tr>
+                                                             <td>{{ $maadiran->type }}</td>
+                                                             <td>{{ jdate($maadiran->created_at)->format('Y/m/d') }}</td>
+                                                             <td>
+                                                                   <ul class="navbar-nav">
+                                                                         <li class="nav-item">
+                                                                               <i class="fas fa-check-circle" style="color: {{ $maadiran->status == 'Yes' ? 'green' : 'grey' }}"></i> مدیر واحد
+                                                                         </li>
+                                                                         <li class="nav-item">
+                                                                               <i class="fas fa-clock" style="color: {{ $maadiran->validationHr == 'Yes' ? 'green' : 'orange' }}"></i> اعتبار سنجی
+                                                                         </li>
+                                                                         <li class="nav-item">
+                                                                               <i class="fas fa-check-circle" style="color: {{ $maadiran->validation_managerHr == 'Yes' ? 'green' : 'grey' }}"></i> مدیر منابع انسانی
+                                                                         </li>
+                                                                   </ul>
+                                                             </td>
+                                                             <td>
+                                                                   @if(!($item->status === 'yes'))
+                                                                   <a href="{{ $maadiran->edit_route }}" class="btn btn-light btn-round mb-0" title="ویرایش">
+                                                                         <i class="fas fa-edit"></i>
+                                                                   </a>
+                                                                   @endif
+                                                             </td>
+                                                       </tr>
+
+                                                       @empty
+                                                       <tr>
+                                                             <td colspan="5" class="text-center"></td>
+                                                       </tr>
+                                                       @endforelse
+
+
                                                        @forelse($imprests as $imprest)
                                                        <tr>
                                                              <td>{{ $imprest->type }}</td>

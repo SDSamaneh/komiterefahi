@@ -54,8 +54,8 @@ class ImprestController extends Controller
             'status.required' => 'درخواست را تایید فرمایید'
         ]);
 
-        // بررسی دسترسی کاربر
-        $validRoles = ['admin', 'author', 'managerM', 'managerHr','manager1', 'manager2', 'humanResources', 'subscriber'];
+
+        $validRoles = ['admin', 'author', 'managerM', 'managerHr', 'manager1', 'manager2', 'humanResources', 'subscriber'];
         if (!auth()->user()->hasAnyRole($validRoles)) {
             abort(403, 'دسترسی غیرمجاز');
         }
@@ -84,50 +84,43 @@ class ImprestController extends Controller
     {
         $user = auth()->user();
 
-        switch ($user->role) {
+        if ($user->hasRole('subscriber')) {
 
-            case 'subscriber':
-
-                if ($imprest->accept !== 'Yes') {
-
-                    $request->validate([
-                        'name' => 'required|string|max:255|persian_alpha',
-                        'idCard' => 'required|string|ir_national_id',
-                        'price' => 'required|min:0',
-                        'loc' => 'required|in:یکتاز,اوراسیا',
-                        'status' => 'required|in:No,Yes',
-                    ]);
-
-                    $imprest->update([
-                        'name' => $request->name,
-                        'idCard' => $request->idCard,
-                        'price' => $request->price,
-                        'loc' => $request->loc,
-                        'status' => $request->status,
-                    ]);
-                } else {
-
-                    return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
-                }
-                break;
-
-            case 'managerM':
+            if ($imprest->accept !== 'Yes') {
 
                 $request->validate([
-                    'finalPrice' => 'required|min:0',
-                    'description' => 'nullable|string',
-                    'accept' => 'required|in:Pending,Yes,No',
+                    'name' => 'required|string|max:255|persian_alpha',
+                    'idCard' => 'required|string|ir_national_id',
+                    'price' => 'required|min:0',
+                    'loc' => 'required|in:یکتاز,اوراسیا',
+                    'status' => 'required|in:No,Yes',
                 ]);
+
                 $imprest->update([
-                    'finalPrice' => $request->finalPrice,
-                    'description' => $request->description,
-                    'accept' => $request->accept ?? 'Pending',
+                    'name' => $request->name,
+                    'idCard' => $request->idCard,
+                    'price' => $request->price,
+                    'loc' => $request->loc,
+                    'status' => $request->status,
                 ]);
+            } else {
 
-                break;
+                return redirect()->back()->with('error', 'امکان ویرایش وجود ندارد. درخواست وارد مراحل بعدی شده است.');
+            }
+        }
 
-            default:
-                return redirect()->back()->with('error', 'شما اجازه دسترسی به این عملیات را ندارید.');
+        if ($user->hasAnyRole(['managerM', 'admin'])) {
+
+            $request->validate([
+                'finalPrice' => 'required|min:0',
+                'description' => 'nullable|string',
+                'accept' => 'required|in:Pending,Yes,No',
+            ]);
+            $imprest->update([
+                'finalPrice' => $request->finalPrice,
+                'description' => $request->description,
+                'accept' => $request->accept ?? 'Pending',
+            ]);
         }
 
         return redirect()->back()->with('success', 'تغییرات با موفقیت ذخیره شد.');

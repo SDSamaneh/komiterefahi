@@ -106,10 +106,9 @@
                                                             </td>
                                                             @endif
 
-                                                            {{-- عملیات --}}
-                                                            @if(auth()->check() && (auth()->user()->role === 'admin' ||
-                                                            (auth()->user()->role === 'managerM' && $imprest->status === 'Yes')
-                                                            ))
+
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerM']))
+
                                                             <td>
                                                                   <a href="{{ route('imprest.edit', $imprest->id) }}" class="text-success mb-0 me-2">
                                                                         <i class="fas fa-edit"></i>

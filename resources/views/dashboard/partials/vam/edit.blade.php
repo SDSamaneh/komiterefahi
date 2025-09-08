@@ -272,8 +272,17 @@
                                                             @error('debt_purchase') <small class="text-danger">{{ $message }}</small> @enderror
                                                       </div>
                                                 </div>
+                                                <div class="col-md-2 mt-3">
+                                                      <label class="form-label">شماره درخواست</label>
+                                                      <input name="number" type="text" class="form-control"
+                                                            value="{{ old('number', $vam->number) }}"
+                                                            {{ $canEditHR ? '' : 'readonly' }}>
+                                                      @error('number')
+                                                      <small class="mt-2 d-inline-block text-danger">{{ $message }}</small>
+                                                      @enderror
+                                                </div>
                                                 @if($canEditHR)
-                                                <div class="col-md-4 mt-4 d-flex gap-4">
+                                                <div class="col-md-4 mt-5 d-flex gap-4">
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationHr" value="Pending"
                                                                   {{ old('validationHr', $vam->validationHr) == 'Pending' ? 'checked' : '' }}>
@@ -427,23 +436,6 @@
                                                 <div class="col-md-4 mb-5">
                                                       <label class="form-label">نتیجه بررسی رییس کمیته رفاهی</label>
                                                       <h6 class="form-control-plaintext bg-body-secondary">{{ $vam->validationManager2 === 'Yes' ? 'تأیید شده' : ($vam->validationManager2 === 'No' ? 'عدم تأیید' : ($vam->validationManager2 === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
-                                                </div>
-                                                @endif
-                                                @endif
-
-                                                @if($vam->validationManager2 === 'Yes')
-                                                <hr />
-                                                @if($canEditManager2)
-                                                <div class="col-md-3 mt-3">
-                                                      <label class="form-label">شماره درخواست</label>
-                                                      <input name="number" type="text" class="form-control"
-                                                            value="{{ old('number', $vam->number) }}"
-                                                            {{ $canEditHR ? '' : 'readonly' }}>
-                                                </div>
-                                                @else
-                                                <div class="col-md-4 mb-5">
-                                                      <label class="form-label">شماره درخواست</label>
-                                                      <p class="form-control-plaintext bg-body-secondary">{{ $vam->number }}</p>
                                                 </div>
                                                 @endif
                                                 @endif

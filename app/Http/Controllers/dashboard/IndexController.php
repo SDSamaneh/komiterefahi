@@ -52,7 +52,6 @@ class IndexController extends Controller
             $item->accept = $item->accept ?? null;
             $item->status = $item->status ?? null;
             $item->validationHr = $item->validationHr ?? null;
-            $item->validationManager1 = $item->validationManager1 ?? null;
             $item->edit_route = route('maadiran.edit', $item->id);
             return $item;
         });
@@ -69,9 +68,8 @@ class IndexController extends Controller
         $allRequests = collect()
             ->concat($vams)
             ->concat($services)
-            ->concat($maadirans)
             ->sortByDesc('created_at');
 
-        return view('dashboard.index', compact('user', 'vamCount', 'allRequests', 'imprests', 'serviceCount', 'maadiranCount', 'imprestCount'));
+        return view('dashboard.index', compact('user', 'vamCount', 'allRequests', 'maadirans', 'imprests', 'serviceCount', 'maadiranCount', 'imprestCount'));
     }
 }
