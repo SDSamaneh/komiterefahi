@@ -116,7 +116,8 @@
                                                             </td>
 
 
-                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr']))
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','humanResources','managerHr','manager1','manager2']))
+
                                                             <td>
                                                                   <a href="{{ route('maadiran.edit', $maadiran->id) }}" class="text-success mb-0 me-2">
                                                                         <i class="fas fa-edit"></i>

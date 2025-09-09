@@ -27,7 +27,7 @@ class ServiceController extends Controller
                 $q->where('services.name', 'like', "%$search%")
                     ->orWhere('services.idCard', 'like', "%$search%")
                     ->orWhere('services.price', 'like', "%$search%")
-                    ->orWhere('services.resone', 'like', "%$search%")
+                    ->orWhere('services.category', 'like', "%$search%")
                     ->orWhere('supervisors.name', 'like', "%$search%")
                     ->orWhere('departmans.name', 'like', "%$search%");
             });

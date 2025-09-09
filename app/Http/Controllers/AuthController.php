@@ -28,7 +28,7 @@ class AuthController extends Controller
     {
         $fields = $request->validate([
             'name' => ['required', 'persian_alpha', 'min:3', 'max:255'],
-            'email' => ['required', 'max:255', 'email', 'unique:users,email'],
+            'email' => ['nullable', 'string', 'max:255', 'email', 'unique:users,email'],
             'idCard' => ['required', 'ir_national_id', 'unique:users,idCard'],
             'phone_number' => ['required', 'ir_mobile'],
             'password' => ['required', 'confirmed', 'min:4', 'max:12']
@@ -36,12 +36,11 @@ class AuthController extends Controller
             'name.required' => 'نام و نام خانوادگی خود را وارد کنید',
             'name.min' => 'نام و نام خانوادگی باید حداقل 3 کاراکتر باشد',
             'name.max' => 'نام و نام خانوادگی باید حداکثر 255 کاراکتر باشد',
-            'email.required' => 'ایمیل معتبر خود را وارد کنید',
             'email.max' => 'ایمیل باید حداکثر 255 کاراکتر باشد',
             'email.unique' => 'ایمیل قبلا موجود می باشد',
             'idCard.required' => 'کدملی اجباری می باشد',
             'idCard.unique' => 'کدملی قبلا موجود می باشد',
-            'phone_number.required'=>'شماره همراه اجباری می باشد',
+            'phone_number.required' => 'شماره همراه اجباری می باشد',
             'password.required' => 'رمز عبور خود را وارد کنید',
             'password.min' => 'رمز عبور باید حداقل 8 کاراکتر باشد',
             'password.max' => 'رمز عبور باید حداکثر 12 کاراکتر باشد',
