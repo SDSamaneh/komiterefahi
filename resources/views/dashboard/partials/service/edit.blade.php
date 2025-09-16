@@ -270,6 +270,12 @@
                                                       @error('debt_purchase') <small class="text-danger">{{ $message }}</small> @enderror
 
                                                 </div>
+                                                <div class="col-md-4 mt-3">
+                                                      <label class="form-label">توضیحات</label>
+                                                      <textarea class="form-control" name="descriptionEdari" rows="3" {{ $canEditHR ? '' : 'readonly' }}>
+                                                      {{ old('descriptionEdari', $service->descriptionEdari) }}
+                                                      </textarea>
+                                                </div>
                                                 <div class="col-md-2 mt-3">
                                                       <label class="form-label">شماره درخواست</label>
                                                       <input name="number" type="text" class="form-control"

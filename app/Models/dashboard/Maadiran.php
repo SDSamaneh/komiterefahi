@@ -29,6 +29,7 @@ class Maadiran extends Model
         'debt_fund',
         'debt_purchase',
         'validationDate',
+        'descriptionEdari',
         'descriptionHr',
         'validationHr',
         'validation_managerHr',

@@ -29,6 +29,7 @@ class Vam extends Model
         'debt_purchase',
         'validationDate',
         'number',
+        'descriptionEdari',
         'descriptionHr',
         'validationHr',
         'validation_managerHr',

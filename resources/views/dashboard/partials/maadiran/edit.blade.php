@@ -275,6 +275,12 @@
                                                             @error('debt_purchase') <small class="text-danger">{{ $message }}</small> @enderror
                                                       </div>
                                                 </div>
+                                                <div class="col-md-4 mt-3">
+                                                      <label class="form-label">توضیحات</label>
+                                                      <textarea class="form-control" name="descriptionEdari" rows="3" {{ $canEditHR ? '' : 'readonly' }}>
+                                                      {{ old('descriptionEdari', $maadiran->descriptionEdari) }}
+                                                      </textarea>
+                                                </div>
                                                 @if($canEditHR)
                                                 <div class="col-md-4 mt-4 d-flex gap-4">
                                                       <div class="form-check">

@@ -165,6 +165,7 @@ class VamController extends Controller
                 'debt_purchase' => 'required',
                 'validationDate' => 'required',
                 'number' => 'nullable|regex:/^[0-9-]+$/',
+                'descriptionEdari' => 'nullable|string',
                 'validationHr' => 'required|in:Pending,Yes,No',
             ], [
                 'memberDate.required' => 'تاریخ ورود به سازمان را وارد نمایید',
@@ -187,6 +188,7 @@ class VamController extends Controller
                 'debt_purchase' => $request->debt_purchase,
                 'validationDate' => $request->validationDate,
                 'number' => $request->number,
+                'descriptionEdari' => $request->descriptionEdari,
                 'validationHr' => $request->validationHr ?? 'Pending',
             ]);
         }

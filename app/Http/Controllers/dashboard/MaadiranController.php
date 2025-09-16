@@ -169,6 +169,7 @@ class MaadiranController extends Controller
                 'debt_fund' => 'required|min:0',
                 'debt_purchase' => 'required',
                 'validationDate' => 'required',
+                'descriptionEdari' => 'nullable|string',
                 'validationHr' => 'required|in:Pending,Yes,No',
 
             ], [
@@ -190,6 +191,7 @@ class MaadiranController extends Controller
                 'debt_fund' => $request->debt_fund,
                 'debt_purchase' => $request->debt_purchase,
                 'validationDate' => $request->validationDate,
+                'descriptionEdari' => $request->descriptionEdari,
                 'validationHr' => $request->validationHr ?? 'Pending',
 
             ]);

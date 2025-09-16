@@ -100,7 +100,7 @@
                                                                   <h6 class="course-title mb-0">{{$vam->price}}</h6>
                                                             </td>
                                                             <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->descriptionHr}}</h6>
+                                                                  <h6 class="course-title mb-0">{{$vam->descriptionEdari}}</h6>
                                                             </td>
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{ jdate($vam->created_at)->format('Y/m/d') }}</h6>
