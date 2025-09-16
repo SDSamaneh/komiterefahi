@@ -128,7 +128,8 @@
                                                             <td></td>
                                                             @endif
 
-                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr']) )
+                                                            @if(auth()->check() && auth()->user()->hasAnyRole(['admin','managerHr','humanResources']) )
+
                                                             <td>
                                                                   <div class="d-flex align-items-center">
                                                                         <form action="{{ route('maadiran.destroy', $maadiran->id) }}" method="post">

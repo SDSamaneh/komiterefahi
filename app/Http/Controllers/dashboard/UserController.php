@@ -68,7 +68,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string',
             'idCard' => 'required|ir_national_id|unique:users,idCard,' . $user->id,
-            'email' => 'required|email',
+            'email' => 'nullable|string|email',
             'supervisor_id' => 'nullable|exists:supervisors,id',
             'password' => 'nullable|min:4|confirmed',
         ]);

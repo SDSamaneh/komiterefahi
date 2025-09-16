@@ -31,7 +31,7 @@ class Maadiran extends Model
         'validationDate',
         'descriptionHr',
         'validationHr',
-        'validation_managerHr',       
+        'validation_managerHr',
     ];
 
 
@@ -40,9 +40,10 @@ class Maadiran extends Model
         return $this->belongsTo(Departmans::class, 'departmans_id');
     }
 
+
     public function user()
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // و همچنین هر وام مرتبط است به یک مدیر واحد (اختیاری)

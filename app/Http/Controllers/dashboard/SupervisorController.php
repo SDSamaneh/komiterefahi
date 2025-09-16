@@ -139,6 +139,7 @@ class SupervisorController extends Controller
         })->with('user')->get();
 
         return view('dashboard/supervisorMaadirans', compact('maadirans'));
+    
     }
     public function editMaadiran(Maadiran $maadiran)
     {

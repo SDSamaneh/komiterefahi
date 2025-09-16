@@ -46,7 +46,7 @@
 
       // فرمت کردن مقادیر اولیه
       document.addEventListener('DOMContentLoaded', function() {
-            ['memberPrice', 'lastSalary', 'finalPrice', 'debt', 'price'].forEach(function(idOrName) {
+            ['memberPrice', 'lastSalary', 'finalPrice', 'debt_company', 'debt_madiran', 'debt_fund', 'debt_purchase', 'price'].forEach(function(idOrName) {
                   let input = document.querySelector(`input[name="${idOrName}"]`);
                   if (input && input.value) {
                         input.value = formatNumberWithCommas(input.value);

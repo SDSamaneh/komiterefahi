@@ -39,7 +39,7 @@
                                                       @foreach($services as $service)
                                                       <tr>
                                                             <td>{{ $service->id }}</td>
-                                                            <td>{{ $service->user->name ?? '---' }}</td>
+                                                            <td>{{$service->name}}</td>
                                                             <td>{{$service->idCard}}</td>
                                                             <td>{{$service->price}}</td>
                                                             <td>{{$service->category}}</td>

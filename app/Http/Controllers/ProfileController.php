@@ -21,7 +21,7 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|persian_alpha|min:3|max:255',
             'idCard' => 'required|ir_national_id|unique:users,idCard,' . $user->id,
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'email' => 'nullable|string|email|max:255' . $user->id,
             'phone_number' => 'required|ir_mobile',
             'password' => 'nullable|string|min:4|confirmed',
         ]);

@@ -57,6 +57,7 @@
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
+                                                            <th scope="col" class="border-0">توضیحات</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
                                                             <th scope="col" class="border-0">وضعیت</th>
                                                             <th scope="col" class="border-0">عملیات</th>
@@ -97,6 +98,9 @@
                                                             </td>
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{$vam->price}}</h6>
+                                                            </td>
+                                                            <td>
+                                                                  <h6 class="course-title mb-0">{{$vam->descriptionHr}}</h6>
                                                             </td>
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{ jdate($vam->created_at)->format('Y/m/d') }}</h6>

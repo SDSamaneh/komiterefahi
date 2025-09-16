@@ -76,7 +76,7 @@
                                                                    </ul>
                                                              </td>
                                                              <td>
-                                                                   @if(!($item->status === 'yes'))
+                                                                   @if(!($maadiran->status === 'yes'))
                                                                    <a href="{{ $maadiran->edit_route }}" class="btn btn-light btn-round mb-0" title="ویرایش">
                                                                          <i class="fas fa-edit"></i>
                                                                    </a>
