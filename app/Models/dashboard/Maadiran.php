@@ -44,7 +44,7 @@ class Maadiran extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     // و همچنین هر وام مرتبط است به یک مدیر واحد (اختیاری)

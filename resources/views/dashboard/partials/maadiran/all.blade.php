@@ -58,12 +58,12 @@
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
-                                                            <th scope="col" class="border-0">توضیحات</th>
                                                             <th scope="col" class="border-0">دسته بندی</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
                                                             <th scope="col" class="border-0">وضعیت</th>
                                                             <th scope="col" class="border-0">عملیات</th>
                                                             <th scope="col" class="border-0">حذف</th>
+                                                            <th scope="col" class="border-0">توضیحات</th>
                                                       </tr>
                                                 </thead>
                                                 <tbody class="border-top-0">
@@ -93,9 +93,7 @@
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->price}}</h6>
                                                             </td>
-                                                            <td>
-                                                                  <h6 class="course-title mb-0">{{$maadiran->descriptionEdari}}</h6>
-                                                            </td>
+
                                                             <td>
                                                                   <h6 class="course-title mt-2 mt-md-0 mb-0">{{$maadiran->category}}</h6>
                                                             </td>
@@ -148,6 +146,10 @@
                                                             @else
                                                             <td></td>
                                                             @endif
+
+                                                            <td>
+                                                                  <h6 class="course-title mb-0">{{$maadiran->descriptionEdari}}</h6>
+                                                            </td>
 
                                                       </tr>
 

@@ -57,11 +57,11 @@
                                                             <th scope="col" class="border-0">نام و نام خانوادگی</th>
                                                             <th scope="col" class="border-0">کدملی</th>
                                                             <th scope="col" class="border-0">مبلغ (تومان)</th>
-                                                            <th scope="col" class="border-0">توضیحات</th>
                                                             <th scope="col" class="border-0">تاریخ درخواست</th>
                                                             <th scope="col" class="border-0">وضعیت</th>
                                                             <th scope="col" class="border-0">عملیات</th>
                                                             <th scope="col" class="border-0">حذف</th>
+                                                            <th scope="col" class="border-0">توضیحات</th>
                                                       </tr>
                                                 </thead>
                                                 <tbody class="border-top-0">
@@ -99,9 +99,7 @@
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{$vam->price}}</h6>
                                                             </td>
-                                                            <td>
-                                                                  <h6 class="course-title mb-0">{{$vam->descriptionEdari}}</h6>
-                                                            </td>
+
                                                             <td>
                                                                   <h6 class="course-title mb-0">{{ jdate($vam->created_at)->format('Y/m/d') }}</h6>
                                                             </td>
@@ -124,6 +122,7 @@
                                                                         </li>
                                                                   </ul>
                                                             </td>
+
 
                                                             @if(auth()->check() && auth()->user()->hasAnyRole(['admin','humanResources','managerHr','manager1','manager2']))
 
@@ -151,6 +150,9 @@
                                                             @else
                                                             <td></td>
                                                             @endif
+                                                            <td>
+                                                                  <h6 class="course-title mb-0">{{$vam->descriptionEdari}}</h6>
+                                                            </td>
                                                       </tr>
                                                       @endforeach
                                                       @else

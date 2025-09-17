@@ -317,7 +317,7 @@
                                                 @if($canEditManagerHr)
                                                 <div class="col-md-8 mb-3">
                                                       <label class="form-label">توضیحات</label>
-                                                      <textarea class="form-control" name="descriptionHr" rows="1" {{ $canEditManagerHr ? '' : 'readonly' }}>
+                                                      <textarea class="form-control" name="descriptionHr" rows="3" {{ $canEditManagerHr ? '' : 'readonly' }}>
                                                       {{ old('descriptionHr', $service->descriptionHr) }}
                                                       </textarea>
                                                       @error('descriptionHr')
