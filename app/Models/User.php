@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 use App\Models\dashboard\Imprest;
 use App\Models\dashboard\Maadiran;
+use App\Models\dashboard\NewsModel;
 use App\Models\dashboard\Service;
 use App\Models\dashboard\Supervisor;
 use App\Models\dashboard\Vam;
@@ -68,7 +69,7 @@ class User extends Authenticatable
         // اگر اسم جدول pivot چیز دیگری است، دومین پارامتر را تغییر بده
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
     }
- 
+
     // آیا کاربر نقش مشخص را دارد؟ (به‌صورت کوئری، بدون بارگذاری کل کالکشن)
     public function hasRole(string $role): bool
     {
@@ -108,5 +109,9 @@ class User extends Authenticatable
     public function imprest()
     {
         return $this->belongsTo(Imprest::class, 'author_id');
+    }
+    public function news()
+    {
+        return $this->hasMany(NewsModel::class, 'author_id');
     }
 }

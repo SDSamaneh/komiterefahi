@@ -106,19 +106,24 @@
                                                             <td>
                                                                   <ul class="navbar-nav">
                                                                         <li class="nav-item">
-                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->status == 'Yes' ? 'green' : 'grey' }}"></i> مدیر واحد
+                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->status == 'Yes' ? 'green' :
+                                                                              ($vam->status == 'No' ? 'red' : 'grey') }}"></i> مدیر واحد
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                              <i class="fas fa-clock" style="color: {{ $vam->validationHr == 'Yes' ? 'green' : 'orange' }}"></i> اعتبار سنجی
+                                                                              <i class="fas fa-clock" style="color: {{ $vam->validationHr == 'Yes' ? 'green' : 
+                                                                              ($vam->validationHr == 'No' ? 'red' : 'orange')}}"></i> اعتبار سنجی
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->validation_managerHr == 'Yes' ? 'green' : 'grey' }}"></i> مدیر منابع انسانی
+                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->validation_managerHr == 'Yes' ? 'green' :
+                                                                               ($vam->validation_managerHr == 'No' ? 'red' : 'grey') }}"></i> مدیر منابع انسانی
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->validationManager1 == 'Yes' ? 'green' : 'grey' }}"></i> مدیر مالی
+                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->validationManager1 == 'Yes' ? 'green' :
+                                                                                ($vam->validationManager1 == 'No' ? 'red' : 'grey') }}"></i> مدیر مالی
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->validationManager2 == 'Yes' ? 'green' : 'grey' }}"></i> رییس کمیته
+                                                                              <i class="fas fa-check-circle" style="color: {{ $vam->validationManager2 == 'Yes' ? 'green' : 
+                                                                                    ($vam->validationManager2 == 'No' ? 'red' : 'grey') }}"></i> رییس کمیته
                                                                         </li>
                                                                   </ul>
                                                             </td>

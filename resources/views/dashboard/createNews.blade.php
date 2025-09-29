@@ -5,7 +5,7 @@
       <section class="py-4">
             <div class="container">
                   <div class="row g-4">
-                        @include('dashboard.partials.maadiran.create')
+                        @include('dashboard.partials.news.create')
                   </div>
             </div>
       </section>

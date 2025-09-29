@@ -5,13 +5,14 @@ namespace App\Http\Controllers\dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\dashboard\Imprest;
 use App\Models\dashboard\Maadiran;
+use App\Models\dashboard\NewsModel;
 use App\Models\dashboard\Service;
 use App\Models\dashboard\Vam;
 
 
 class IndexController extends Controller
 {
-    public function index()
+    public function index(NewsModel $news)
     {
         $user = auth()->user(); // گرفتن کاربر لاگین شده
 
@@ -65,11 +66,13 @@ class IndexController extends Controller
         });
 
 
+        $news = NewsModel::latest('news_models.created_at')->paginate(10);
+
         $allRequests = collect()
             ->concat($vams)
             ->concat($services)
             ->sortByDesc('created_at');
 
-        return view('dashboard.index', compact('user', 'vamCount', 'allRequests', 'maadirans', 'imprests', 'serviceCount', 'maadiranCount', 'imprestCount'));
+        return view('dashboard.index', compact('user', 'news', 'vamCount', 'allRequests', 'maadirans', 'imprests', 'serviceCount', 'maadiranCount', 'imprestCount'));
     }
 }

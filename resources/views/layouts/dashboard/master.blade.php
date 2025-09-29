@@ -1,7 +1,9 @@
 @include('dashboard.partials.common.header')
 <!--Header START -->
 @include('dashboard.partials.common.topNav')
-<!-- Header END -->
+
+@include('dashboard.partials.common.sidebar')
+
 <!-- MAIN CONTENT START -->
 @yield('content')
 <!-- MAIN CONTENT END -->

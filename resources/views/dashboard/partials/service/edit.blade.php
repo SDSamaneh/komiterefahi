@@ -171,7 +171,7 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                                @if($service->status === 'Yes')
+
                                                 <div class="col-md-12 mt-4">
                                                       <label class="form-label">مدیر واحد</label>
                                                       <h6 class="badge bg-body-secondary text-black mb-3">تایید می باشد</h6>
@@ -272,9 +272,13 @@
                                                 </div>
                                                 <div class="col-md-4 mt-3">
                                                       <label class="form-label">توضیحات</label>
-                                                      <textarea class="form-control" name="descriptionEdari" rows="3" {{ $canEditHR ? '' : 'readonly' }}>
-                                                      {{ old('descriptionEdari', $service->descriptionEdari) }}
-                                                      </textarea>
+
+                                                      <input type="text"
+                                                            class="form-control"
+                                                            name="descriptionEdari"
+                                                            value="{{ old('descriptionEdari', $service->descriptionEdari) }}"
+                                                            {{ $canEditHR ? '' : 'readonly' }}>
+
                                                 </div>
                                                 <div class="col-md-2 mt-3">
                                                       <label class="form-label">شماره درخواست</label>
@@ -309,7 +313,6 @@
                                                       <h6 class="badge bg-body-secondary text-black mb-3">{{ $service->validationHr === 'Yes' ? 'انجام شد' : ($service->validationHr === 'No' ? 'انجام نشود' : ($service->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
                                                 @endif
-                                                @endif
 
                                                 @if($service->validationHr === 'Yes')
                                                 <hr />
@@ -317,9 +320,12 @@
                                                 @if($canEditManagerHr)
                                                 <div class="col-md-8 mb-3">
                                                       <label class="form-label">توضیحات</label>
-                                                      <textarea class="form-control" name="descriptionHr" rows="3" {{ $canEditManagerHr ? '' : 'readonly' }}>
-                                                      {{ old('descriptionHr', $service->descriptionHr) }}
-                                                      </textarea>
+                                                      <input type="text"
+                                                            class="form-control"
+                                                            name="descriptionHr"
+                                                            value="{{ old('descriptionHr', $service->descriptionHr) }}"
+                                                            {{ $canEditManagerHr ? '' : 'readonly' }}>
+
                                                       @error('descriptionHr')
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror

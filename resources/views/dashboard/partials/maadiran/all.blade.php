@@ -104,14 +104,18 @@
                                                             </td>
                                                             <td>
                                                                   <ul class="navbar-nav">
+                                                                       
                                                                         <li class="nav-item">
-                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->status == 'Yes' ? 'green' : 'grey' }}"></i> مدیر واحد
+                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->status == 'Yes' ? 'green' :
+                                                                              ($maadiran->status == 'No' ? 'red' : 'grey') }}"></i> مدیر واحد
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                              <i class="fas fa-clock" style="color: {{ $maadiran->validationHr == 'Yes' ? 'green' : 'orange' }}"></i> اعتبار سنجی
+                                                                              <i class="fas fa-clock" style="color: {{ $maadiran->validationHr == 'Yes' ? 'green' : 
+                                                                              ($maadiran->validationHr == 'No' ? 'red' : 'orange')}}"></i> اعتبار سنجی
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->validation_managerHr == 'Yes' ? 'green' : 'grey' }}"></i> مدیر منابع انسانی
+                                                                              <i class="fas fa-check-circle" style="color: {{ $maadiran->validation_managerHr == 'Yes' ? 'green' :
+                                                                               ($maadiran->validation_managerHr == 'No' ? 'red' : 'grey') }}"></i> مدیر منابع انسانی
                                                                         </li>
 
                                                                   </ul>

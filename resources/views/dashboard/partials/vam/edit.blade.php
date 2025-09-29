@@ -161,8 +161,6 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-
-                                                @if($vam->status === 'Yes')
                                                 <hr />
                                                 <div class="col-md-12 mt-4">
                                                       <label class="form-label">مدیر واحد</label>
@@ -274,9 +272,11 @@
                                                 </div>
                                                 <div class="col-md-4 mt-3">
                                                       <label class="form-label">توضیحات</label>
-                                                      <textarea class="form-control" name="descriptionEdari" rows="3" {{ $canEditHR ? '' : 'readonly' }}>
-                                                      {{ old('descriptionEdari', $vam->descriptionEdari) }}
-                                                      </textarea>
+                                                      <input type="text"
+                                                            class="form-control"
+                                                            name="descriptionEdari"
+                                                            value="{{ old('descriptionEdari', $vam->descriptionEdari) }}"
+                                                            {{ $canEditHR ? '' : 'readonly' }}>
                                                 </div>
                                                 <div class="col-md-2 mt-3">
                                                       <label class="form-label">شماره درخواست</label>
@@ -302,7 +302,7 @@
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationHr" value="No"
                                                                   {{ old('validationHr', $vam->validationHr) == 'No' ? 'checked' : '' }}>
-                                                            <label class="form-check-label">بررسی نشده</label>
+                                                            <label class="form-check-label">عدم تایید</label>
                                                       </div>
                                                 </div>
                                                 @else
@@ -311,7 +311,7 @@
                                                       <h6 class="badge bg-body-secondary text-black mb-3">{{ $vam->validationHr === 'Yes' ? 'انجام شد' : ($vam->validationHr === 'No' ? 'انجام نشود' : ($vam->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
                                                 @endif
-                                                @endif
+
 
                                                 @if($vam->validationHr === 'Yes')
                                                 <hr />
@@ -319,9 +319,13 @@
                                                 @if($canEditManagerHr)
                                                 <div class="col-md-8 mb-3">
                                                       <label class="form-label">توضیحات</label>
-                                                      <textarea class="form-control" name="descriptionHr" rows="3" {{ $canEditManagerHr ? '' : 'readonly' }}>
-                                                      {{ old('descriptionHr', $vam->descriptionHr) }}
-                                                      </textarea>
+
+                                                      <input type="text"
+                                                            class="form-control"
+                                                            name="descriptionHr"
+                                                            value="{{ old('descriptionHr', $vam->descriptionHr) }}"
+                                                            {{ $canEditManagerHr ? '' : 'readonly' }}>
+
                                                       @error('descriptionHr')
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
                                                       @enderror

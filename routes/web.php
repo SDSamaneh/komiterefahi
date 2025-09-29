@@ -12,10 +12,21 @@ use App\Http\Controllers\dashboard\VamController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserRoleController;
-
+use App\Http\Controllers\dashboard\NewsController;
+use App\Http\Controllers\it\ItUserController;
+use App\Http\Controllers\view\UserNewsController;
+use App\Http\Controllers\view\ViewController;
 use App\Http\Middleware\RoleMiddleware;
 
-Route::redirect('/', '/auth/login');
+
+Route::group([], function () {
+    Route::get('/', [ViewController::class, 'index'])->name('view');
+
+    Route::get('user-news/{news}', [ViewController::class, 'show'])->name('user_news.show');
+
+    Route::get('user-news', [UserNewsController::class, 'index'])->name('user_news.index');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
 
 Route::prefix('/auth')->middleware('guest')->group(function () {
 
@@ -38,12 +49,11 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         Route::resource('vam', VamController::class);
         Route::resource('maadiran', MaadiranController::class);
         Route::resource('imprest', ImprestController::class);
+        Route::resource('news', NewsController::class);
+
         // پروفایل
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
-        // خروج
-        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 
     Route::middleware([RoleMiddleware::class . ':any,admin'])->group(function () {
@@ -70,5 +80,15 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         Route::get('imprests/{imprest}/edit', [SupervisorController::class, 'editImprest'])->name('supervisor.imprest.edit');
         Route::put('imprests/{imprest}', [SupervisorController::class, 'updateImprest'])->name('supervisor.imprest.update');
     });
-
 });
+
+Route::prefix('/it')->middleware('auth')->group(
+    function () {
+
+        Route::middleware([RoleMiddleware::class . ':any,it'])->group(
+            function () {
+                Route::get('/', [ItUserController::class, 'index'])->name('it.user.index');
+            }
+        );
+    }
+);
