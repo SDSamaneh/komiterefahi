@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -68,13 +69,19 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string',
             'idCard' => 'required|ir_national_id|unique:users,idCard,' . $user->id,
-            'email' => 'nullable|string|email',
+            'email' => [
+                'nullable',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($user->id),
+            ],
             'supervisor_id' => 'nullable|exists:supervisors,id',
             'password' => 'nullable|min:4|confirmed',
         ]);
         $user->name = $request->name;
-        $user->email = $request->email;
         $user->idCard = $request->idCard;
+        $user->email = $request->filled('email') ? $request->email : null;
         $user->phone_number = $request->phone_number;
         $user->supervisor_id = $request->supervisor_id;
 

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg">
       <div class="container">
-            <a class="navbar-brand me-3" href="{{route('user_news.index')}}">
+            <a class="navbar-brand me-3" href="{{route('index')}}">
                   <img class="navbar-brand-item light-mode-item" src="{{asset('storage/images/logo.png')}}" alt="logo">
             </a>
             @auth
@@ -34,10 +34,11 @@
                   </ul>
                   @endif
 
-                  @if(auth()->check() && auth()->user()->hasAnyRole(['subscriber','admin']))
+                  @if(auth()->check() && auth()->user()->hasAnyRole(['subscriber','admin','author','manager2', 'manager1','humanResources','managerM','managerHr']))
+
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                              <a class="nav-link" href="{{route('vam.create')}}"><i class="fas fa-wallet"></i> درخواست وام </a>
+                              <a class="nav-link" href="{{route('vam.create')}}"><i class="fas fa-wallet"></i>ثبت درخواست وام</a>
                         </li>
                         <li class="nav-item">
                               <a class="nav-link" href="{{route('service.create')}}"><i class="fas fa-motorcycle"></i> درخواست خرید از کویر</a>
