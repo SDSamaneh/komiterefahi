@@ -36,7 +36,7 @@ class DepartmanController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'name' => ['required', 'persian_alpha'],
+            'name' => ['required'],
 
         ], [
             'name.required' => 'نام و نام خانوادگی خود را وارد کنید',

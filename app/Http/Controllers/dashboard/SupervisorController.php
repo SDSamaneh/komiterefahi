@@ -255,8 +255,8 @@ class SupervisorController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'name' => ['required', 'persian_alpha'],
-            'idCard' => ['required', 'ir_national_id'],
+            'name' => ['required'],
+            'idCard' => ['required'],
             'departmans_id' => ['required', 'exists:departmans,id'],
 
         ], [
@@ -295,7 +295,7 @@ class SupervisorController extends Controller
         // اعتبارسنجی ورودی‌ها
         $fields = $request->validate([
             'name' => 'required|string',
-            'idCard' => 'required|ir_national_id|unique:supervisors,idCard,' . $supervisor->id . ',id',
+            'idCard' => 'required|unique:supervisors,idCard,' . $supervisor->id . ',id',
             'departmans_id' => 'nullable|exists:departmans,id',
         ], [
             'name.required' => 'نام و نام خانوادگی مدیر واحد را وارد کنید',

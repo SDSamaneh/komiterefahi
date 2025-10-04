@@ -103,8 +103,8 @@ class VamController extends Controller
         if ($user->hasRole('subscriber')) {
             if ($vam->status !== 'Yes') {
                 $request->validate([
-                    'name' => 'required|string|max:255|persian_alpha',
-                    'idCard' => 'required|string|ir_national_id',
+                    'name' => 'required|string|max:255',
+                    'idCard' => 'required|string',
                     'price' => 'required|min:0',
                     'departmans_id' => 'required|exists:departmans,id',
                     'supervisors_id' => 'required|exists:supervisors,id',
@@ -131,8 +131,8 @@ class VamController extends Controller
         if ($user->hasAnyRole(['author', 'admin'])) {
 
             $request->validate([
-                'name' => 'required|string|max:255|persian_alpha',
-                'idCard' => 'required|string|ir_national_id',
+                'name' => 'required|string|max:255',
+                'idCard' => 'required|string',
                 'price' => 'required|min:0',
                 'departmans_id' => 'required|exists:departmans,id',
                 'supervisors_id' => 'required|exists:supervisors,id',
