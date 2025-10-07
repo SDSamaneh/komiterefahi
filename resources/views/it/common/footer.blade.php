@@ -3,18 +3,38 @@
 
       </div>
 </footer>
+<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
+
+@error('success')
+@include('notifications.successMessage')
+@enderror()
+
+@if(session()->has('error'))
+@include('notifications.errorMessage')
+@endif
 
 
 
-<!-- پلاگین‌ها -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-date/dist/persian-date.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars/js/OverlayScrollbars.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.27.3/apexcharts.min.js"></script>
+<script src="assets/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
 
-
+<script>
+      document.getElementById('priceInput').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/,/g, ''); // حذف کاماهای قبلی
+            if (!isNaN(value) && value !== '') {
+                  e.target.value = Number(value).toLocaleString(); // فرمت با کاما
+            } else {
+                  e.target.value = '';
+            }
+      });
+</script>
 
 <script>
       function formatNumberWithCommas(x) {
@@ -43,7 +63,9 @@
                   }
             });
       });
+</script>
 
+<script>
       $(document).ready(function() {
             $('.persian-date').persianDatepicker({
                   format: 'YYYY/MM/DD',
@@ -54,6 +76,25 @@
                               locale: 'fa'
                         }
                   }
+            });
+      });
+</script>
+
+<script>
+      document.querySelectorAll('.debt-input').forEach(function(input) {
+            // نمایش جداکننده هزار در حین تایپ
+            input.addEventListener('input', function(e) {
+                  let value = e.target.value.replace(/,/g, '').replace(/[^\d]/g, '');
+                  if (value) {
+                        e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  } else {
+                        e.target.value = '';
+                  }
+            });
+
+            // حذف جداکننده هزار قبل از ارسال فرم
+            input.form && input.form.addEventListener('submit', function() {
+                  input.value = input.value.replace(/,/g, '');
             });
       });
 </script>

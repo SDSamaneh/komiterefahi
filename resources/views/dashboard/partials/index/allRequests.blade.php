@@ -27,19 +27,20 @@
                                                              <td>
                                                                    <ul class="navbar-nav">
                                                                          <li class="nav-item">
-                                                                               <i class="fas fa-check-circle" style="color: {{ $item->status == 'Yes' ? 'green' : 'grey' }}"></i> مدیر واحد
+                                                                               <i class="fas fa-check-circle" style="color: {{ $item->status == 'Yes' ? 'green' :
+                                                                              ($item->status == 'No' ? 'red' : 'grey') }}"></i> مدیر واحد
                                                                          </li>
                                                                          <li class="nav-item">
-                                                                               <i class="fas fa-clock" style="color: {{ $item->validationHr == 'Yes' ? 'green' : 'orange' }}"></i> اعتبار سنجی
+                                                                               <i class="fas fa-clock" style="color: {{ $item->validationHr == 'Yes' ? 'green' :  ($item->validationHr == 'No' ? 'red' : 'orange') }}"></i> اعتبار سنجی
                                                                          </li>
                                                                          <li class="nav-item">
-                                                                               <i class="fas fa-check-circle" style="color: {{ $item->validation_managerHr == 'Yes' ? 'green' : 'grey' }}"></i> مدیر منابع انسانی
+                                                                               <i class="fas fa-check-circle" style="color: {{ $item->validation_managerHr == 'Yes' ? 'green' :  ($item->validation_managerHr == 'No' ? 'red' : 'grey')  }}"></i> مدیر منابع انسانی
                                                                          </li>
                                                                          <li class="nav-item">
-                                                                               <i class="fas fa-check-circle" style="color: {{ $item->validationManager1 == 'Yes' ? 'green' : 'grey' }}"></i> مدیر مالی
+                                                                               <i class="fas fa-check-circle" style="color: {{ $item->validationManager1 == 'Yes' ? 'green' : ($item->validationManager1 == 'No' ? 'red' : 'grey') }}"></i> مدیر مالی
                                                                          </li>
                                                                          <li class="nav-item">
-                                                                               <i class="fas fa-check-circle" style="color: {{ $item->validationManager2 == 'Yes' ? 'green' : 'grey' }}"></i> رییس کمیته
+                                                                               <i class="fas fa-check-circle" style="color: {{ $item->validationManager2 == 'Yes' ? 'green' :  ($item->validationManager2 == 'No' ? 'red' : 'grey') }}"></i> رییس کمیته
                                                                          </li>
                                                                    </ul>
                                                              </td>

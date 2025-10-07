@@ -76,7 +76,7 @@
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">مبلغ درخواستی (تومان)</label>
-                                                      <input name="price" type="text" class="form-control" id="priceInput" value="{{ old('price', $vam->price) }}" {{ $canEditUserFields ? '' : 'readonly' }}>
+                                                      <input name="price" type="text" class="form-control" value="{{ old('price', $vam->price) }}" {{ $canEditUserFields ? '' : 'readonly' }}>
                                                       @error('price') <small class="text-danger">{{ $message }}</small> @enderror
                                                 </div>
                                                 <div class="col-md-3 mb-3">
@@ -224,7 +224,7 @@
                                                                   <tr>
                                                                         <td>وام شرکت</td>
                                                                         <td>
-                                                                              <input type="text" class="form-control debt-input" name="debt_company"
+                                                                              <input type="text" class="form-control" name="debt_company"
                                                                                     value="{{ old('debt_company', $vam->debt_company ?? '') }}"
                                                                                     {{ $canEditHR ? '' : 'readonly' }}>
                                                                         </td>
@@ -232,7 +232,7 @@
                                                                   <tr>
                                                                         <td>مادیران</td>
                                                                         <td>
-                                                                              <input type="text" class="form-control debt-input" name="debt_madiran"
+                                                                              <input type="text" class="form-control" name="debt_madiran"
                                                                                     value="{{ old('debt_madiran', $vam->debt_madiran ?? '') }}"
                                                                                     {{ $canEditHR ? '' : 'readonly' }}>
                                                                         </td>
@@ -240,7 +240,7 @@
                                                                   <tr>
                                                                         <td>وام صندوق</td>
                                                                         <td>
-                                                                              <input type="text" class="form-control debt-input" name="debt_fund"
+                                                                              <input type="text" class="form-control" name="debt_fund"
                                                                                     value="{{ old('debt_fund', $vam->debt_fund ?? '') }}"
                                                                                     {{ $canEditHR ? '' : 'readonly' }}>
                                                                         </td>
@@ -248,7 +248,7 @@
                                                                   <tr>
                                                                         <td>خرید از شرکت</td>
                                                                         <td>
-                                                                              <input type="text" class="form-control debt-input" name="debt_purchase"
+                                                                              <input type="text" class="form-control" name="debt_purchase"
                                                                                     value="{{ old('debt_purchase', $vam->debt_purchase ?? '') }}"
                                                                                     {{ $canEditHR ? '' : 'readonly' }}>
                                                                         </td>

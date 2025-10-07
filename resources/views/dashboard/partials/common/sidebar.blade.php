@@ -76,7 +76,7 @@
                   <a class="nav-link" href="{{route('admin.user_roles.index')}}"> نقش پرسنل</a>
             </li>
             @endif
-           
+
       </ul>
 </nav>
 

@@ -79,7 +79,7 @@
                                                 <div class="col-md-3">
                                                       <div class="mb-3">
                                                             <label class="form-label">مبلغ درخواستی (تومان)</label>
-                                                            <input name="price" type="text" class="form-control" id="priceInput"
+                                                            <input name="price" type="text" class="form-control"
                                                                   value="{{ old('price') }}">
                                                             @error('price')
                                                             <small class="mt-2 d-inline-block text-danger">{{$message}}</small>

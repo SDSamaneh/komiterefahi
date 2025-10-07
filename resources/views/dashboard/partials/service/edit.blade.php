@@ -233,7 +233,7 @@
                                                                   <tr>
                                                                         <td>وام شرکت</td>
                                                                         <td>
-                                                                              <input type="text" class="form-control debt-input" name="debt_company"
+                                                                              <input type="text" class="form-control" name="debt_company"
                                                                                     value="{{ old('debt_company', $service->debt_company ?? '') }}"
                                                                                     {{ $canEditHR ? '' : 'readonly' }}>
                                                                         </td>
@@ -241,7 +241,7 @@
                                                                   <tr>
                                                                         <td>مادیران</td>
                                                                         <td>
-                                                                              <input type="text" class="form-control debt-input" name="debt_madiran"
+                                                                              <input type="text" class="form-control" name="debt_madiran"
                                                                                     value="{{ old('debt_madiran', $service->debt_madiran ?? '') }}"
                                                                                     {{ $canEditHR ? '' : 'readonly' }}>
                                                                         </td>
@@ -249,7 +249,7 @@
                                                                   <tr>
                                                                         <td>وام صندوق</td>
                                                                         <td>
-                                                                              <input type="text" class="form-control debt-input" name="debt_fund"
+                                                                              <input type="text" class="form-control" name="debt_fund"
                                                                                     value="{{ old('debt_fund', $service->debt_fund ?? '') }}"
                                                                                     {{ $canEditHR ? '' : 'readonly' }}>
                                                                         </td>
@@ -257,7 +257,7 @@
                                                                   <tr>
                                                                         <td>خرید از شرکت</td>
                                                                         <td>
-                                                                              <input type="text" class="form-control debt-input" name="debt_purchase"
+                                                                              <input type="text" class="form-control" name="debt_purchase"
                                                                                     value="{{ old('debt_purchase', $service->debt_purchase ?? '') }}"
                                                                                     {{ $canEditHR ? '' : 'readonly' }}>
                                                                         </td>

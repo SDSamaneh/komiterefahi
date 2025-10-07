@@ -8,15 +8,13 @@
       <link rel="icon" type="image/png" href="{{ asset('storage/images/favicon.png') }}">
 
       <meta name="description" content="داشبرد">
-
+     
       @vite(['resources/assets/css/app.css', 'resources/assets/js/app.js'])
 
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.27.3/apexcharts.min.css">
-
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars/css/OverlayScrollbars.min.css">
-      <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars/js/OverlayScrollbars.min.js" defer></script>
-
-
+      <link rel="stylesheet" type="text/css" href="assets/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
+      <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
 
 </head>
 
