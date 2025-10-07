@@ -255,8 +255,8 @@ class SupervisorController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'name' => ['required', 'persian_alpha'],
-            'idCard' => ['required', 'ir_national_id'],
+            'name' => ['required'],
+            'idCard' => ['required'],
             'departmans_id' => ['required', 'exists:departmans,id'],
 
         ], [

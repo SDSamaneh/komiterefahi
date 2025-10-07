@@ -24,8 +24,8 @@ class StoreVam extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|persian_alpha',
-            'idCard' => 'required|ir_national_id',
+            'name' => 'required',
+            'idCard' => 'required',
             'departmans_id' => 'required|exists:departmans,id',
             'supervisors_id' => 'required|exists:supervisors,id',
             'price' => 'required',

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
+use App\Rules\IranianNationalCode;
 
 use function PHPUnit\Framework\callback;
 
@@ -27,10 +28,10 @@ class AuthController extends Controller
     public function register(Request $request): RedirectResponse
     {
         $fields = $request->validate([
-            'name' => ['required', 'persian_alpha', 'min:3', 'max:255'],
+            'name' => ['required', 'min:3', 'max:255'],
             'email' => ['nullable', 'string', 'max:255', 'email', 'unique:users,email'],
-            'idCard' => ['required', 'ir_national_id', 'unique:users,idCard'],
-            'phone_number' => ['required', 'ir_mobile'],
+            'idCard' => ['required', new IranianNationalCode , 'unique:users,idCard'],
+            'phone_number' => ['required'],
             'password' => ['required', 'confirmed', 'min:4', 'max:12']
         ], [
             'name.required' => 'نام و نام خانوادگی خود را وارد کنید',
@@ -74,7 +75,7 @@ class AuthController extends Controller
     {
         $credentials = $request->validate(
             [
-                'idCard' => ['required', 'ir_national_id'],
+                'idCard' => ['required', new IranianNationalCode],
                 'password' => ['required'],
             ],
             [

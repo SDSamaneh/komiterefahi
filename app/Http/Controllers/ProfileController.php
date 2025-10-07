@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Rules\IranianNationalCode;
 
 class ProfileController extends Controller
 {
@@ -19,10 +20,10 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'name' => 'required|persian_alpha|min:3|max:255',
-            'idCard' => 'required|ir_national_id|unique:users,idCard,' . $user->id,
-            'email' => 'nullable|string|email|max:255' . $user->id,
-            'phone_number' => 'required|ir_mobile',
+            'name' => 'required|min:3|max:255',
+            'idCard' => ['required', new IranianNationalCode, 'unique:users,idCard,' . $user->id],
+            'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
+            'phone_number' => 'required',
             'password' => 'nullable|string|min:4|confirmed',
         ]);
 

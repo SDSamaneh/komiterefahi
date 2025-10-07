@@ -41,8 +41,8 @@ class ImprestController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'name' => ['required', 'persian_alpha'],
-            'idCard' => ['required', 'ir_national_id'],
+            'name' => ['required'],
+            'idCard' => ['required'],
             'price' => ['required'],
             'loc' => ['required', 'in:یکتاز,اوراسیا'],
             'status' => ['required', 'in:No,Yes'],
@@ -89,8 +89,8 @@ class ImprestController extends Controller
             if ($imprest->accept !== 'Yes') {
 
                 $request->validate([
-                    'name' => 'required|string|max:255|persian_alpha',
-                    'idCard' => 'required|string|ir_national_id',
+                    'name' => 'required|string|max:255',
+                    'idCard' => 'required|string',
                     'price' => 'required|min:0',
                     'loc' => 'required|in:یکتاز,اوراسیا',
                     'status' => 'required|in:No,Yes',
