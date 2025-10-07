@@ -171,12 +171,7 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                                @if($service->status === 'Yes')
-                                                <div class="col-md-12 mt-4">
-                                                      <label class="form-label">مدیر واحد</label>
-                                                      <h6 class="badge bg-body-secondary text-black mb-3">تایید می باشد</h6>
-
-                                                </div>
+                                           
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                                 <div class="col-md-3 mb-3">
@@ -312,8 +307,7 @@
                                                       <label class="form-label">اعتبارسنجی</label>
                                                       <h6 class="badge bg-body-secondary text-black mb-3">{{ $service->validationHr === 'Yes' ? 'انجام شد' : ($service->validationHr === 'No' ? 'انجام نشود' : ($service->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
-                                                @endif
-                                                @endif
+                                                @endif                                           
 
                                                 @if($service->validationHr === 'Yes')
                                                 <hr />

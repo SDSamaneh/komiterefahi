@@ -162,12 +162,7 @@
                                                       </div>
                                                 </div>
 
-                                                <hr />
-                                                <div class="col-md-12 mt-4">
-                                                      <label class="form-label">مدیر واحد</label>
-                                                      <h6 class="badge bg-body-secondary text-black mb-3">تایید می باشد</h6>
-                                                </div>
-                                                <hr />
+                                                <hr />                                            
                                                 <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">تاریخ ورود به سازمان</label>
