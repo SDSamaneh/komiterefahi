@@ -9,21 +9,7 @@
                               <div class="card-body">
                                     <form action="{{route('service.store')}}" method="post" enctype="multipart/form-data">
                                           @csrf
-                                          <div class="row">
-                                                <div class="col-md-6">
-                                                      @if (session('success'))
-                                                      <div class="alert alert-success">
-                                                            {{ session('success') }}
-                                                      </div>
-                                                      @endif
 
-                                                      @if (session('error'))
-                                                      <div class="alert alert-danger">
-                                                            {{ session('error') }}
-                                                      </div>
-                                                      @endif
-                                                </div>
-                                          </div>
                                           <div class="row">
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">نام و نام خانوادگی</label>

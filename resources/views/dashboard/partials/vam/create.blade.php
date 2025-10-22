@@ -9,21 +9,7 @@
                               <div class="card-body">
                                     <form action="{{route('vam.store')}}" method="post">
                                           @csrf
-                                          <div class="row">
-                                                <div class="col-md-6">
-                                                      @if (session('success'))
-                                                      <div class="alert alert-success">
-                                                            {{ session('success') }}
-                                                      </div>
-                                                      @endif
 
-                                                      @if (session('error'))
-                                                      <div class="alert alert-danger">
-                                                            {{ session('error') }}
-                                                      </div>
-                                                      @endif
-                                                </div>
-                                          </div>
                                           <div class="row">
                                                 <div class="col-md-3">
                                                       <div class="mb-3">

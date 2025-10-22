@@ -97,10 +97,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Service::class, 'author_id');
     }
+
     public function supervisor()
     {
         return $this->belongsTo(Supervisor::class, 'supervisor_id');
     }
+
+    public function subordinates()
+    {
+        return $this->hasMany(User::class, 'supervisor_id');
+    }
+    
     public function maadiran()
     {
         return $this->belongsTo(Maadiran::class, 'author_id');

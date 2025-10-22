@@ -171,7 +171,7 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                           
+
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                                 <div class="col-md-3 mb-3">
@@ -182,6 +182,7 @@
                                                                   placeholder="به طور مثال : 1402/02/30"
                                                                   {{ $canEditHR ? '' : 'readonly' }}
                                                                   autocomplete="off">
+
                                                       </div>
                                                       @error('memberDate')
                                                       <small class="mt-2 d-inline-block text-danger">{{$message}}</small>
@@ -267,7 +268,7 @@
                                                 </div>
                                                 <div class="col-md-4 mt-3">
                                                       <label class="form-label">توضیحات</label>
-                                                     
+
                                                       <input type="text"
                                                             class="form-control"
                                                             name="descriptionEdari"
@@ -305,9 +306,9 @@
                                                 @else
                                                 <div class="col-md-6 mt-4">
                                                       <label class="form-label">اعتبارسنجی</label>
-                                                      <h6 class="badge bg-body-secondary text-black mb-3">{{ $service->validationHr === 'Yes' ? 'انجام شد' : ($service->validationHr === 'No' ? 'انجام نشود' : ($service->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
+                                                      <h6 class="badge bg-body-secondary text-black mb-3">{{ $service->validationHr === 'Yes' ? 'تایید' : ($service->validationHr === 'No' ? 'عدم تایید' : ($service->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
-                                                @endif                                           
+                                                @endif
 
                                                 @if($service->validationHr === 'Yes')
                                                 <hr />

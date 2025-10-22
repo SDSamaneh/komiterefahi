@@ -168,7 +168,7 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-                                          
+
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                                 <div class="col-md-4 mb-3">
@@ -299,16 +299,17 @@
                                                 @else
                                                 <div class="col-md-12">
                                                       <label class="form-label">اعتبارسنجی</label>
-                                                      <h6 class="badge bg-body-secondary text-black mb-3">{{ $maadiran->validationHr === 'Yes' ? 'تأیید شده' : ($maadiran->validationHr === 'No' ? 'عدم تأیید' : ($maadiran->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
-                                                </div>                                           
+                                                      <h6 class="badge bg-body-secondary text-black mb-3">{{ $maadiran->validationHr === 'Yes' ? 'تأیید' : ($maadiran->validationHr === 'No' ? 'عدم تأیید' : ($maadiran->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
+                                                </div>
+                                                @endif
 
                                                 @if($maadiran->validationHr === 'Yes')
                                                 <hr />
                                                 <h4 class="text-center mt-4 mb-4">تاییدیه مدیر منابع انسانی</h4>
                                                 @if($canEditManagerHr)
                                                 <div class="col-md-4 mb-3">
-                                                      <label class="form-label">توضیحات</label>                                                   
-                                                
+                                                      <label class="form-label">توضیحات</label>
+
                                                       <input type="text"
                                                             class="form-control"
                                                             name="descriptionHr"

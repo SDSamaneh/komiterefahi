@@ -1,10 +1,15 @@
-<div class="position-fixed end-0 p-3" style="z-index:50; top:80px;">
-      <div id="successMge" class="toast hide bg-success text-white d-flex justify-center" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-body flex-grow-1">
-                  {{$message}}
 
+
+<div class="position-fixed end-0 p-3" style="z-index: 1055; top: 80px;">
+      <div id="successMge"
+            class="toast align-items-center text-bg-success border-0"
+            role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                  <div class="toast-body">
+                        {{ session('success') ?? $message ?? '' }}
+                  </div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <a class="me-3 m-auto"><i class="fa fa-times text-white"></i></a>
-
       </div>
 </div>

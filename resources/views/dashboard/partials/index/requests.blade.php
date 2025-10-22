@@ -125,22 +125,7 @@
                         </a>
                   </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-                  <div class="card card-body border p-3">
-                        <a href="{{route('supervisor.imprest.index')}}">
-                              <div class="d-flex align-items-center">
-                                    <!-- Icon -->
-                                    <div class="icon-xl fs-1 bg-primary bg-opacity-10 rounded-3">
-                                          <img src="{{asset('storage/images/request-for-proposal.png')}}" alt="request" style="width: 50px;">
-                                    </div>
-                                    <!-- Content -->
-                                    <div class="ms-3">
-                                          <h6 class="mb-0">درخواست مساعده</h6>
-                                    </div>
-                              </div>
-                        </a>
-                  </div>
-            </div>
+  
             @endif
       </div>
 </div>

@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Rules\IranianNationalCode;
 
 class UserController extends Controller
 {
@@ -67,8 +68,8 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string',
-            'idCard' => 'required|ir_national_id|unique:users,idCard,' . $user->id,
-            'email' => 'nullable|string|email',
+            'idCard' => ['required', new IranianNationalCode, 'unique:users,idCard,' . $user->id],
+            'email' => 'nullable|email|unique:users,email,' . $user->id,
             'supervisor_id' => 'nullable|exists:supervisors,id',
             'password' => 'nullable|min:4|confirmed',
         ]);

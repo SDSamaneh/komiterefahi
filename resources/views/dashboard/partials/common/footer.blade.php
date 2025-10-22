@@ -6,14 +6,9 @@
 
 
 
-<!-- پلاگین‌ها -->
-<script src="https://cdn.jsdelivr.net/npm/persian-date/dist/persian-date.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars/js/OverlayScrollbars.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.js"></script>
-
 
 
 <script>
@@ -24,7 +19,6 @@
             return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
 
-      // فرمت کردن مقادیر اولیه
       document.addEventListener('DOMContentLoaded', function() {
             ['memberPrice', 'lastSalary', 'finalPrice', 'debt_company', 'debt_madiran', 'debt_fund', 'debt_purchase', 'price'].forEach(function(idOrName) {
                   let input = document.querySelector(`input[name="${idOrName}"]`);
@@ -44,7 +38,7 @@
             });
       });
 
-      $(document).ready(function() {
+      document.addEventListener('DOMContentLoaded', function() {
             $('.persian-date').persianDatepicker({
                   format: 'YYYY/MM/DD',
                   initialValue: false,
@@ -58,6 +52,15 @@
       });
 </script>
 
+
+@if(session('success'))
+@include('notifications.successMessage', ['message' => session('success')])
+@endif
+
+
+@if(session('error'))
+@include('notifications.errorMessage', ['message' => session('error')])
+@endif
 
 </body>
 

@@ -162,7 +162,7 @@
                                                       </div>
                                                 </div>
 
-                                                <hr />                                            
+                                                <hr />
                                                 <h4 class="text-center mt-4 mb-4">اعتبارسنجی منابع انسانی</h4>
                                                 <div class="col-md-3 mb-3">
                                                       <label class="form-label">تاریخ ورود به سازمان</label>
@@ -293,7 +293,7 @@
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationHr" value="Yes"
                                                                   {{ old('validationHr', $vam->validationHr) == 'Yes' ? 'checked' : '' }}>
-                                                            <label class="form-check-label">انجام شد</label>
+                                                            <label class="form-check-label">تایید</label>
                                                       </div>
                                                       <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="validationHr" value="No"
@@ -304,7 +304,7 @@
                                                 @else
                                                 <div class="col-md-6 mt-4">
                                                       <label class="form-label">اعتبارسنجی</label>
-                                                      <h6 class="badge bg-body-secondary text-black mb-3">{{ $vam->validationHr === 'Yes' ? 'انجام شد' : ($vam->validationHr === 'No' ? 'انجام نشود' : ($vam->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
+                                                      <h6 class="badge bg-body-secondary text-black mb-3">{{ $vam->validationHr === 'Yes' ? 'تایید' : ($vam->validationHr === 'No' ? 'عدم تایید' : ($vam->validationHr === 'Pending' ? 'در حال بررسی' : '---')) }}</h6>
                                                 </div>
                                                 @endif
 

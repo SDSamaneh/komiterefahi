@@ -139,7 +139,6 @@ class SupervisorController extends Controller
         })->with('user')->get();
 
         return view('dashboard/supervisorMaadirans', compact('maadirans'));
-    
     }
     public function editMaadiran(Maadiran $maadiran)
     {
@@ -174,55 +173,6 @@ class SupervisorController extends Controller
             ]);
 
             return redirect()->route('supervisor.maadiran.index')->with('success', 'درخواست با موفقیت به‌روزرسانی شد.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'خطایی در ذخیره‌سازی رخ داده است.');
-        }
-    }
-
-    // imprestRequest
-    public function imprestRequestsForSupervisor()
-    {
-        $supervisorId = $this->supervisorId();
-        // وام‌هایی که نویسنده‌شان کاربری است که supervisor_id آن برابر با این مقدار است
-        $imprest = Imprest::whereHas('user', function ($query) use ($supervisorId) {
-            $query->where('supervisor_id', $supervisorId);
-        })->with('user')->get();
-
-        return view('dashboard/supervisorImprests', compact('imprest'));
-    }
-
-    public function editImprest(Imprest $imprest)
-    {
-        $supervisorId = $this->supervisorId();
-        $supervisors = Supervisor::all();
-        $departmans = Departmans::all();
-
-        if ($imprest->user->supervisor_id !== $supervisorId) {
-            abort(403, 'دسترسی غیرمجاز');
-        }
-
-        return view('dashboard/editSupervisorImprests', compact('imprest', 'supervisors', 'departmans'));
-    }
-
-    public function updateImprest(Request $request, Imprest $imprest)
-    {
-        $supervisorId = $this->supervisorId();
-
-        if ($imprest->user->supervisor_id !== $supervisorId) {
-            abort(403, 'دسترسی غیرمجاز');
-        }
-
-        $request->validate([
-
-            'status' => 'required|in:Pending,Yes,No',
-        ]);
-
-        try {
-            $imprest->update([
-                'status' => $request->status,
-            ]);
-
-            return redirect()->route('supervisor.imprest.index')->with('success', 'درخواست با موفقیت به‌روزرسانی شد.');
         } catch (\Exception $e) {
             return back()->with('error', 'خطایی در ذخیره‌سازی رخ داده است.');
         }
@@ -295,7 +245,7 @@ class SupervisorController extends Controller
         // اعتبارسنجی ورودی‌ها
         $fields = $request->validate([
             'name' => 'required|string',
-            'idCard' => 'required|ir_national_id|unique:supervisors,idCard,' . $supervisor->id . ',id',
+            'idCard' => 'required|unique:supervisors,idCard,' . $supervisor->id . ',id',
             'departmans_id' => 'nullable|exists:departmans,id',
         ], [
             'name.required' => 'نام و نام خانوادگی مدیر واحد را وارد کنید',

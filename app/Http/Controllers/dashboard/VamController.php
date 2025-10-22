@@ -101,7 +101,7 @@ class VamController extends Controller
         ]);
 
         if ($user->hasRole('subscriber')) {
-            if ($vam->status !== 'Yes') {
+            if ($vam->validationHr === 'Pending') {
                 $request->validate([
                     'name' => 'required|string|max:255',
                     'idCard' => 'required|string',

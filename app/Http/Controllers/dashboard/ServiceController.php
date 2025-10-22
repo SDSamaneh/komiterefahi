@@ -55,7 +55,7 @@ class ServiceController extends Controller
             'idCard' => ['required'],
             'departmans_id' => ['required', 'exists:departmans,id'],
             'supervisors_id' => ['required', 'exists:supervisors,id'],
-            'category' => ['required', 'in:خدمات تعمیرگاهی,موتورسیکلت بنزینی, موتورسیکلت برقی,محصولات کودک ,دوچرخه,اکسسوری و لوازم جانبی,تفریحات آبی,چهار چرخ,سایر'],
+            'category' => ['required', 'in:خدمات تعمیرگاهی,موتورسیکلت بنزینی,موتورسیکلت برقی,محصولات کودک,دوچرخه,اکسسوری و لوازم جانبی,تفریحات آبی,چهار چرخ,سایر'],
             'price' => ['required'],
             'descriptionUser' => ['nullable', 'string'],
             'accept' => ['required', 'in:No,Yes'],
@@ -105,7 +105,7 @@ class ServiceController extends Controller
 
         if ($user->hasRole('subscriber')) {
 
-            if ($service->status !== 'Yes') {
+            if ($service->validationHr === 'Pending') {
 
                 $request->validate([
                     'name' => 'required|string|max:255',

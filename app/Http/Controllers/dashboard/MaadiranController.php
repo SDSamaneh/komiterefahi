@@ -107,7 +107,7 @@ class MaadiranController extends Controller
 
         if ($user->hasRole('subscriber')) {
 
-            if ($maadiran->status !== 'Yes') {
+            if ($maadiran->validationHr === 'Pending') {
                 $request->validate([
                     'name' => 'required|string|max:255',
                     'idCard' => 'required|string',

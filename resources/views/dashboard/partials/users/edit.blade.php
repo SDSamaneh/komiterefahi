@@ -30,7 +30,7 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                       <label for="email">ایمیل</label>
-                                                      <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                                                      <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}">
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                       <label for="password">رمز عبور جدید (اختیاری)</label>
